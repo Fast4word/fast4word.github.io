@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dunah PlayZone – Play Free Games Online</title>
+
+  <meta name="description" content="Dunah PlayZone – Play instant free games online. No downloads. Powered by Playgama." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b0f1a">
+
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --panel: #151a2d;
+      --accent: #6cf2c2;
+      --text: #ffffff;
+      --muted: #9aa3c7;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #0b0f1a, #0e1330);
+      color: var(--text);
+    }
+
+    header {
+      padding: 24px 16px;
+      text-align: center;
+      background: radial-gradient(circle at top, #1b2455, #0b0f1a);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.3rem;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      margin-top: 8px;
+      color: var(--muted);
+    }
+
+    .controls {
+      max-width: 1100px;
+      margin: 16px auto;
+      padding: 0 16px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .controls input {
+      flex: 1;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--panel);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.55);
+    }
+
+    .thumb {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      background: #000;
+    }
+
+    .card-body {
+      padding: 12px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .card-meta {
+      font-size: .75rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Modal player */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      width: min(96vw, 1100px);
+      background: #000;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .modal iframe {
+      width: 100%;
+      height: 56.25vw;
+      max-height: 620px;
+      border: none;
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      font-size: 22px;
+      color: #fff;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: .8rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🎮 Dunah PlayZone</h1>
+  <p>Play instantly · No downloads · Powered by Playgama</p>
+</header>
+
+<div class="controls">
+  <input id="search" type="search" placeholder="Search games..." />
+</div>
+
+<main class="grid" id="gameGrid"></main>
+
+<!-- Player modal -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <div class="close" onclick="closeGame()">✕</div>
+    <iframe id="gameFrame" allowfullscreen></iframe>
+  </div>
+</div>
+
+<footer>
+  © Dunah PlayZone · Games embedded from Playgama
+</footer>
+
+<script>
+const grid = document.getElementById("gameGrid");
+const searchInput = document.getElementById("search");
+const modal = document.getElementById("modal");
+const frame = document.getElementById("gameFrame");
+
+let allGames = [];
+
+/* LOAD YOUR FULL JSON */
+fetch("games.json")
+  .then(res => res.json())
+  .then(data => {
+    allGames = data.segments[0].hits;
+    render(allGames);
+  });
+
+function render(list) {
+  grid.innerHTML = "";
+  list.forEach(game => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <img class="thumb" src="${game.images?.[0] || ""}" alt="${game.title}">
+      <div class="card-body">
+        <div class="card-title">${game.title}</div>
+        <div class="card-meta">${(game.genres || []).join(", ")}</div>
+      </div>
+    `;
+
+    card.onclick = () => openGame(game.gameURL);
+    grid.appendChild(card);
+  });
+}
+
+searchInput.addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  render(
+    allGames.filter(g =>
+      g.title.toLowerCase().includes(q) ||
+      (g.genres || []).join(" ").toLowerCase().includes(q)
+    )
+  );
+});
+
+function openGame(url) {
+  frame.src = url;
+  modal.classList.add("active");
+}
+
+function closeGame() {
+  frame.src = "";
+  modal.classList.remove("active");
+}
+</script>
+
+</body>
+</html>
