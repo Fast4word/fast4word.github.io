@@ -1,0 +1,1036 @@
+{
+  "input": {
+    "ageGroups": [],
+    "interests": [],
+    "platforms": [],
+    "supportedLanguages": [],
+    "hasInAppPurchases": false,
+    "horizontal": false,
+    "vertical": false,
+    "search": "parkour"
+  },
+  "sort": {
+    "type": "ranking_default"
+  },
+  "segments": [
+    {
+      "title": "Specially for you",
+      "count": 17,
+      "hits": [
+        {
+          "id": "115754",
+          "slug": "obby-minigames",
+          "title": "Obby: Mini-Games",
+          "description": "Obby: Mini-Games - play against other players and win Cups! Triumph in each mode and stand on the golden winner's pedestal!\n\n🔴 MODES 🔴\n\n🚀 PARKOUR 🚀\nComplete colorful levels on the parkour map and reach the end!\n\n🎯 COLORFUL FLOOR 🎯\nIn this mode, you need to step on tiles whose color is displayed at the top of the screen.\n\n🎯 GLASS BRIDGE 🎯\nAnd in this mode, you need to choose which glass tile to jump on, but one will break, and the other will remain intact.\n\n🎯 FALLING TILES 🎯\nIn this mode, you have to run across tiles, but there's a condition: the tiles you've already run on will fall down and disappear after a second. So, be careful.\n\n☀️ RAIN OF BLOCKS ☀️\nThis mode will unlock as you progress through the game!",
+          "howToPlayText": "🖥️ Desktop:\n\nWASD — Movement\nSpacebar — Jump\nTab — Mouse Cursor\n\n📱 Smartphone:\n\nMovement — Joystick on the left side of the screen\nJump — Button on the bottom right of the screen\nCamera Rotation — Finger movements on the right side of the screen",
+          "gameURL": "https://playgama.com/export/game/obby-minigames?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/obby-minigames",
+          "genres": [
+            "arcade",
+            "adventure",
+            "skill",
+            "3d",
+            "funny",
+            "platform",
+            "obby",
+            "ai_smart_ads",
+            "trending_now_ios",
+            "trending_now_android"
+          ],
+          "tags": [
+            "minigames",
+            "roblox-games",
+            "obstacles-games",
+            "challenging-games",
+            "jumping-games",
+            "agility-games",
+            "timing-games"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/2b49ac41-cd43-4bc9-a3b6-414d7f1d7800/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/5ea5daee-5019-4a61-efe5-498ef14ec700/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "6eaa090d313e801ad413f25bf4e131a2",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "Yes",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/obby-minigames?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "114018",
+          "slug": "obby-1-jump-per-click",
+          "title": "Obby: +1 Jump per Click",
+          "description": "\"Obby: +1 Jump per Click\" – a unique clicker-obby where every click gives you power for incredible jumps!  \n\n🔹 Key Features:  \n✅ Jump Clicker – charge your jump power with clicks and overcome giant chasms! \n✅ Parkour Challenges – complex tracks with moving platforms, traps, and puzzles! \n✅ Character Upgrades – improve jump strength, height, and flight speed! \n✅ Pets – helpers increase jump power and grant special abilities! \n✅ Rebirth System – rebirth to multiply your jumping power!  \n\n🌍 Dynamic gameplay in the style of blocky sandbox games – click, jump, and conquer the heights!  \n\n🔥 Can you reach the maximum height? Click, fly, and become the king of this obby!",
+          "howToPlayText": "Computers:  \n- WASD - control the character.  \n- Space - jump.   \n\nMobile devices:  \n- Joystick - control the character.  \n- Button in the lower right corner - jump.  \n- To rotate the camera, swipe the screen.",
+          "gameURL": "https://playgama.com/export/game/obby-1-jump-per-click?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/obby-1-jump-per-click",
+          "genres": [
+            "arcade",
+            "kids",
+            "3d",
+            "funny",
+            "platform",
+            "obby",
+            "ai_smart_ads",
+            "trending_now_ios",
+            "trending_now_android"
+          ],
+          "tags": [
+            "iphone-games",
+            "roblox-games",
+            "obstacles-games",
+            "jumping-games",
+            "speed-games",
+            "desktop-games",
+            "1-player-games",
+            "incremental-games",
+            "action-adventure",
+            "67-obby"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/87930cfe-9708-416d-95ed-d1bdf5f6a500/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/c002146b-2930-424b-81c6-6a8dd8617500/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "fa6d40c87a73ccabe3a2487aace2a052",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US",
+            "ru-RU"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/obby-1-jump-per-click?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "112602",
+          "slug": "your-obby-parkour",
+          "title": " Your Obby Parkour",
+          "description": "Enter a thrilling world of non-stop challenges! Run, jump, dodge, and conquer in the ultimate parkour platformer! \nSurvive crazy levels — from burning lava and icy slides to water traps and mysterious portals. Watch out for trampolines, spinning traps, and tons of hidden paths!\n\nPlay with friends and travel through fun regions — from simple to brutally hard! Discover the hidden little dragon, collect trophies, and unlock secret shortcuts and bonus zones!\n\nBe careful of:\nDeadly skeletons\nLava-filled volcanoes\nSlippery ice paths\nHorror mazes where it's easy to get lost!\n\nReady to be a true parkour master? Find the fastest paths, conquer extreme stages, and show the world your skills!\n\nPerfect for fans of obby-style maps, parkour games, secrets, adventures, and multiplayer fun!",
+          "howToPlayText": "The goal: get to the end.\n\nControl:\nWASD - movement.\nSpace bar - jump.\nTAB - pause.\nShift - cursor.\nMouse wheel - zoom in/out.\n\nOn the phone:\nUse the game interface.",
+          "gameURL": "https://playgama.com/export/game/your-obby-parkour?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/your-obby-parkour",
+          "genres": [
+            "action",
+            "adventure",
+            "3d",
+            "running",
+            "platform",
+            "obby",
+            "parkour",
+            "mobile",
+            "ai_smart_ads",
+            "trending_now_ios",
+            "trending_now_android"
+          ],
+          "tags": [
+            "multiple-players-games",
+            "obstacle-games",
+            "roblox-games",
+            "challenging-games",
+            "jumping-games",
+            "agility-games",
+            "67-obby"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/66c4e622-f10c-4b86-90cc-c91bf2e78500/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/13141533-79a8-42bd-0236-d2e046fffe00/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "2e76899f8cfee273170b7eb0ac2e4a67",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US",
+            "de-DE",
+            "es-ES",
+            "fr-FR",
+            "pt-PT",
+            "ru-RU",
+            "tr-TR"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": true
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/your-obby-parkour?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "112301",
+          "slug": "speed-per-click-obby",
+          "title": "Speed per Click: Obby",
+          "description": "\"Speed per Click: Obby\" – An exciting clicker-speed simulator in the style of obby and blocky games!  \n\n🔹 Key Features:  \n\n✅ Dynamic clicker – Earn speed with every click and accelerate to incredible levels! \n✅ Obby-style challenges – Overcome parkour tracks with jumps and tricky maneuvers, just like in obby games! \n✅ Progress & rewards – Collect wins, unlock new locations, and upgrade your skills! \n✅ Pets – Buy pets to increase speed per click and beat levels faster! \n✅ Rebirth system – Perform rebirths to gain bonuses and speed up again!  \n\n🌍 Play in the best traditions of obby and blocky parkour – It has everything: clicker mechanics, parkour, adrenaline, and fun!  \n\n🔥 Ready for the challenge? Click, jump, and become the champion of Speed per Click: Obby!",
+          "howToPlayText": "Computers: \n- WASD - control the character. \n- Space - jump.  \n\nMobile devices: \n- Joystick - control the character. \n- Button in the lower right corner - jump. \n- To rotate the camera, swipe the screen.",
+          "gameURL": "https://playgama.com/export/game/speed-per-click-obby?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/speed-per-click-obby",
+          "genres": [
+            "arcade",
+            "kids",
+            "3d",
+            "clicker",
+            "obby",
+            "ai_smart_ads",
+            "partners-top-revenue",
+            "trending_now_ios",
+            "trending_now_android"
+          ],
+          "tags": [
+            "obstacle-games",
+            "exciting-games",
+            "roblox-games",
+            "pet-games",
+            "blocky-games",
+            "challenging-games",
+            "jumping-games",
+            "speed-games",
+            "reward-games",
+            "67-obby"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/2cc932f8-9c03-42ed-dfc3-570cdb5a3b00/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/61b5ec99-a975-4899-e561-237cea4d3600/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "1428537e2e1378369c200ff1e37269c6",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US",
+            "ru-RU"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/speed-per-click-obby?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "99711",
+          "slug": "your-obby-size",
+          "title": "Your Obby Size",
+          "description": "Parkour and size control with secrets and surprises! Jump, run, and reach new heights in this thrilling game! Avoid lava and conquer challenges from easy to extreme!\nCollect enough trophies to unlock secret paths, access new locations, and get unique character skins!\nBeware of monsters guarding certain areas!\nFind shortcuts to the top! Show everyone you're a true parkour master!",
+          "howToPlayText": "Цель: пройти до конца.\n\nУправление:\nQE - менять размер.\nWASD - передвижение.\nПробел - прыжок.\nTAB - пауза.\nShift - курсор.\nКолесико мыши - приблизить/отдалить камеру.\nЗажмите ПКМ, чтобы вращать камерой (при видимом курсоре).\n\nНа телефоне:\nИспользуйте интерфейс игры.",
+          "gameURL": "https://playgama.com/export/game/your-obby-size?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/your-obby-size",
+          "genres": [
+            "adventure",
+            "platform",
+            "co-op",
+            "cool-games",
+            "obby",
+            "classic",
+            "mobile",
+            "ai_smart_ads",
+            "trending_now_ios",
+            "trending_now_android"
+          ],
+          "tags": [
+            "roblox-games",
+            "unity-games-online",
+            "67-obby"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/fbdbd06d-aad7-49ff-7b01-27f1dac23a00/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/98abed1e-72a5-4946-015f-2578b3c8d300/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "178ba2a10c1eb0fb6fc4d2c3d611c4f2",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US",
+            "es-ES",
+            "it-IT",
+            "fr-FR",
+            "pt-PT",
+            "id-ID",
+            "de-DE",
+            "ru-RU",
+            "tr-TR"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": true
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/your-obby-size?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "113938",
+          "slug": "obby-click-and-grow",
+          "title": "Obby: Click and Grow",
+          "description": "\"Obby: Click and Grow\" - an exciting 3D clicker game!  \n\n🌟 Main Gameplay: \nUpgrade your character's size through clicks \nOvercome challenging parkour trials \nUnlock achievements and earn valuable rewards  \n\n🦄 Boost Your Progress: \nCollection of Obby pets - increase size with every click! \nRebirth system - double your trophies and accelerate growth! \nExplore new blocky locations with unique challenges \n\n🏆 Compete with Friends:  \nClaim top positions on the leaderboard \nDaily free gifts and bonuses  \n\n🚀 Game Features: \nBright blocky graphics \nDynamic parkour with platformer elements \nRegular content updates and events \nJoin the world of Obby - where every click brings you closer to greatness! Become the biggest and strongest character in the universe!",
+          "howToPlayText": "Computers: \n- WASD - character movement. \n- Space - jump.  \n\nMobile Devices: \n- Joystick - character movement. \n- Button in the lower right corner - jump. \n- Swipe across the screen to rotate the camera.",
+          "gameURL": "https://playgama.com/export/game/obby-click-and-grow?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/obby-click-and-grow",
+          "genres": [
+            "arcade",
+            "3d",
+            "platform",
+            "clicker",
+            "obby",
+            "physics",
+            "mobile",
+            "ai_smart_ads",
+            "trending_now_ios",
+            "trending_now_android"
+          ],
+          "tags": [
+            "reaction-games",
+            "fullscreen-games",
+            "addictive-games",
+            "noob-games",
+            "roblox-games",
+            "obstacles-games",
+            "jumping-games",
+            "agility-games",
+            "desktop-games",
+            "1-player-games",
+            "grow-games",
+            "incremental-games",
+            "android-games",
+            "67-obby"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/993c4fa3-626d-4e3b-f3fe-f45bb4ddc600/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/5800c643-6d30-4f47-1da0-166f8b70b000/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "6cf4080ae3f146c6a213752f51d00877",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US",
+            "ru-RU"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/obby-click-and-grow?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "99664",
+          "slug": "rooftop-run",
+          "title": "Rooftop Run",
+          "description": "Rooftop Run – Race Across the City! 🏃‍♂️💨\n\nRun, jump, and slide over rooftops in this fast-paced parkour game! Dodge obstacles, smash through barriers, and escape from enemies as you race through exciting levels.\n",
+          "howToPlayText": "🔥 Game Features:\n\nCool Parkour Moves – Jump, roll, and slide to keep running.\n\nFast Levels – Complete thrilling challenges and master your skills.\n\nSimple Controls – Easy to learn, fun to play!\n\n🖥️ Desktop Controls:\n\n↑ (Up Arrow) – Move up\n\n↓ (Down Arrow) – Move down\n\n← (Left Arrow) – Move left\n\n→ (Right Arrow) – Move right\n\nSpacebar – Fire weapon\n\nShift – Activate boost\n\n📱 Mobile Controls:\n\nOn-Screen Joystick – Drag to move\n\nFire Button – Tap to shoot\n\nBoost Button – Tap to go faster\n\nBe the best parkour runner! Play Rooftop Run now and start your adventure! ",
+          "gameURL": "https://playgama.com/export/game/rooftop-run?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/rooftop-run",
+          "genres": [
+            "action",
+            "skill",
+            "running",
+            "platform",
+            "parkour",
+            "mobile",
+            "trending_now_ios"
+          ],
+          "tags": [
+            "casual-games",
+            "obstacle-games",
+            "agility-games",
+            "unity-games-online",
+            "fast-paced-action"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/f6a172bd-52d7-46a2-9180-7f2ea1853300/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/99f03ab5-43ec-4f2e-91e3-461d71a78e00/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "8526b1ddbf6643d086bcc8398a33abcc",
+              "external_url": "",
+              "type": "gameplay"
+            },
+            {
+              "playgama_id": "da98c2ba61f74c94b81141138a274b8b",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": true
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/rooftop-run?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "114255",
+          "slug": "survive-the-disasters-obby",
+          "title": "Survive the Disasters: Obby",
+          "description": "\"Survive the Disasters: Obby\" – A hardcore obby survival simulator set in epic catastrophic events!  \n\nYou will face deadly maps where natural disasters constantly try to destroy you: floods, tsunamis, acid rain, meteor showers, thick fog, scorching lava, and tornadoes! Your goal is to survive at all costs!  \n\n🌪️ Key Features: \n✅ Dynamic Disasters: Each round brings a new combination of natural disasters! \n✅ Parkour Mechanics: Use skills from classic obby games – jump, dodge, and run! \n✅ Bonuses & Boosters: Use starting power-ups to gain an advantage! \n✅ Pets & Progression: Tame helpers, perform rebirths, and increase your power!\n\n🏆 What Awaits You:  \nDozens of maps with unique disasters;  \nVarious survival strategies – outsmart the elements!;  \n\nCan you survive all disasters and become a legend of this obby?",
+          "howToPlayText": "Controls  \n\nComputers: \n- WASD - control the character. \n- Space - jump.  \n\nMobile devices: \n- Joystick - control the character. \n- Button in the lower right corner - jump. \n- To rotate the camera, swipe the screen.",
+          "gameURL": "https://playgama.com/export/game/survive-the-disasters-obby?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/survive-the-disasters-obby",
+          "genres": [
+            "arcade",
+            "adventure",
+            "running",
+            "platform",
+            "cool-games",
+            "popular",
+            "survival",
+            "trending_now_ios",
+            "trending_now_android"
+          ],
+          "tags": [
+            "iphone-games",
+            "exciting-games",
+            "roblox-games",
+            "agility-games",
+            "desktop-games",
+            "1-player-games",
+            "timing-games",
+            "weird-games",
+            "action-adventure",
+            "67-obby"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/6bb049f0-5dd0-4996-f193-f8b2d0a44600/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/156de766-91bc-4f4b-ca82-8dde61c9d100/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "f0a979c76fde71434e9555e09018d87a",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US",
+            "ru-RU"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/survive-the-disasters-obby?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "97550",
+          "slug": "barry-prison-parkour-escape",
+          "title": "Barry Prison: Parkour Escape!",
+          "description": "Join the exhilarating adventure of Barry Prison: Parkour Escape! Navigate complex parkour obstacles, outsmart Warden Barry, and gather items like coins and jetpacks to execute your escape. Play for free on your phone or computer and prove your skills in this ultimate test of freedom!",
+          "howToPlayText": "Controls:\n\n💻Computer:\nMouse - camera rotation\nWASD - movement\nSpace - jump\nEnter - use items\nShift - jetpack\nTab - menu\n\n📱 Mobile device:\nUse the interface buttons on the screen",
+          "gameURL": "https://playgama.com/export/game/barry-prison-parkour-escape?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/barry-prison-parkour-escape",
+          "genres": [
+            "action",
+            "adventure",
+            "skill",
+            "boys",
+            "play_2_earn",
+            "running",
+            "platform",
+            "obby",
+            "escape",
+            "parkour",
+            "mobile",
+            "ai_smart_ads-cloud-save",
+            "trending_now_ios",
+            "trending_now_android"
+          ],
+          "tags": [
+            "obstacle-games",
+            "unity-games-online"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/95d8fa77-c10c-45d0-db5e-a131f52bd300/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/0e2eb11a-2ada-4a2c-b873-946258f69800/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "35208796b19e43a2be975625610a26b0",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/barry-prison-parkour-escape?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "114093",
+          "slug": "poison-candy-obby-1-or-2player",
+          "title": "Poison Candy: Obby 1 Or 2-Player",
+          "description": "\"Poison Candy: Obby 1 Or 2-Player\" – an exciting obby game where you have to outsmart your friend! Can you make your opponent eat the poisonous candy that you chose?  \n\n🎭 Game Features:  \n✅ Detective obby – become a real detective in the world of obby and parkour games! \n✅ Two game modes – play with a friend on one device or compete with a random opponent! \n✅ Strategy and bluffing – skip turns to confuse your opponent and lead them to the poisoned candy! \n✅ Bright graphics – colorful world in the style of your favorite obby games!  \n\n🍭 How to play?  \nChoose a poisonous candy \nUse clever maneuvers to make your opponent eat it \nBecome the king of the party! \nTry the sweetest and most dangerous obby adventure! \nCan you outplay your friend and survive?",
+          "howToPlayText": "Controls  \n\nComputer: \n- WASD - character movement \n- Space - jump  \n\nMobile Devices: \n- Joystick - character movement \n- Button in lower right corner - jump \n- Swipe screen - rotate camera",
+          "gameURL": "https://playgama.com/export/game/poison-candy-obby-1-or-2player?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/poison-candy-obby-1-or-2player",
+          "genres": [
+            "arcade",
+            "two-player",
+            "multiplayer",
+            "platform",
+            "obby",
+            "mobile",
+            "ai_smart_ads"
+          ],
+          "tags": [
+            "casual-games",
+            "multiple-players-games",
+            "roblox-games",
+            "competitive-games",
+            "1-player-games",
+            "android-games",
+            "67-obby"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/3fcd8bc1-bb08-4742-a51e-1df6cd72ec00/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/a6546acb-fdad-4641-9921-b628a25a1400/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "2a82fdc5f1ebd518f71ada03c3cee3b1",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US",
+            "ru-RU"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/poison-candy-obby-1-or-2player?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "113671",
+          "slug": "space-rolling-balls-race",
+          "title": "Space Rolling Balls Race",
+          "description": "Game Title: 🌌 Space Rolling Balls Race 🌠\nProduct Description:\nGet ready for an exciting 3D adventure in Space Rolling Balls Race, a fun, addictive, and fast-paced rolling ball game set in outer space! 🌍✨\nControl your rolling ball through thrilling cosmic tracks filled with obstacles, traps, jumps, and moving platforms. With simple fingertip controls, smooth physics-based gameplay, and catchy background music, every level will test your reflexes, timing, and focus!\n🚀 Features:\n\n\n🎯 Easy to play, hard to master rolling ball gameplay\n\n\n🌠 Challenging 3D levels with cool space environments\n\n\n⚡ Smooth controls and realistic physics\n\n\n🎵 Addictive sound effects and rhythm-based fun\n\n\n🪐 Suitable for all ages — perfect casual game for everyone\n\n\n💫 If you love ball games, rolling games, parkour challenges, or reflex-based runners, Space Rolling Balls Race is the ultimate game for you!\nRoll, dodge, and race your way through space to become the ultimate ball racing master! 🏆",
+          "howToPlayText": "How to Play 🎮\n\n✨ Follow these simple steps to master Space Rolling Balls Race:\n\n🔹 Swipe or drag your finger on the screen to move the ball.\n🔹 Avoid traps and obstacles that appear on the track.\n🔹 Stay on the path — falling off means game over!\n🔹 Collect power-ups to boost your score and progress faster.\n🔹 Keep up with the rhythm — the music helps guide your timing.\n🔹 Challenge yourself to beat your best distance and reaction speed!",
+          "gameURL": "https://playgama.com/export/game/space-rolling-balls-race?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/space-rolling-balls-race",
+          "genres": [
+            "action",
+            "arcade",
+            "adventure",
+            "3d",
+            "running",
+            "ball",
+            "space",
+            "trending_now_android"
+          ],
+          "tags": [
+            "fast-paced-games",
+            "obstacles-games",
+            "touchscreen-games",
+            "rolling-games",
+            "1-player-games"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/99e0efde-9778-4af1-618e-e6947a774a00/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/b34a6869-ade0-49a9-f6dc-1029f0b99200/enlarged"
+          ],
+          "videos": [],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": false,
+            "vertical": true
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/space-rolling-balls-race?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "90495",
+          "slug": "easy-obby-parkour",
+          "title": "Easy Obby Parkour",
+          "description": "Parkour-based game.\nThe nickname of the best player is shown to everyone at the start - beat the game and your nickname will be displayed too.\nChange skins to easily tell players apart.\nAnd check where each portal leads ;)\n\nColorful skins and different character models.\n\nPets (cats, sheep, dragons... they count as pets, right?)\n\nIf the game feels too hard, activate a boost like double jump or others to pass difficult sections.\n\nCheckpoints are not saved - each run must start from the beginning so speed times are fair for all players.",
+          "howToPlayText": "The goal: to collect the last trophy.\nControl:\nWASD - movement.\nSpace bar - jump.\nTAB - pause.\nShift - cursor.\nMouse wheel - zoom in/out.",
+          "gameURL": "https://playgama.com/export/game/easy-obby-parkour?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/easy-obby-parkour",
+          "genres": [
+            "action",
+            "play_2_earn",
+            "obby"
+          ],
+          "tags": [
+            "customization-games",
+            "desktop-games",
+            "borwser-games",
+            "unity-games-online",
+            "67-obby"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/92ab90a9-50cd-4f14-0770-948bfda76400/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/2f02b58c-63be-42e3-9e89-e2d9bfb23a00/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "b9c4beec70b4456d8f6c7d6b775e0591",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US",
+            "es-ES",
+            "fr-FR",
+            "it-IT",
+            "pt-PT",
+            "de-DE",
+            "ru-RU",
+            "tr-TR"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": true
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/easy-obby-parkour?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "90502",
+          "slug": "ultimate-obby-parkour-adventure-online-1c9b-1",
+          "title": "Ultimate Obby Parkour Adventure Online",
+          "description": "Join the thrilling adventure of Ultimate Obby Parkour, a colorful world filled with obstacles and unique challenges across four different realms. Enjoy engaging gameplay and vibrant graphics on both your phone and computer, as you customize your character and strive to become a parkour master.",
+          "howToPlayText": "The goal of the game: complete the game for a while. To change your nickname, click on it and then enter your nickname in the field\n\nControls:\nWASD - move.\nSpace - jump.\nTAB - pause.\nShift - show cursor\nT - emotion panel\nY - dance panel\nMouse wheel forward/backward - zoom in/zoom out the camera.\nHold RMB to rotate the camera (with the cursor visible).\n\nOn the phone:\nUse the game interface.",
+          "gameURL": "https://playgama.com/export/game/ultimate-obby-parkour-adventure-online-1c9b-1?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/ultimate-obby-parkour-adventure-online-1c9b-1",
+          "genres": [
+            "arcade",
+            "adventure",
+            "play_2_earn",
+            "obby"
+          ],
+          "tags": [
+            "iphone-games",
+            "obstacle-games",
+            "jumping-games",
+            "desktop-games",
+            "borwser-games",
+            "android-games",
+            "unity-games-online",
+            "67-obby"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/8b0cb887-deee-4a6f-51fe-57982ce2e400/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/fc403b3b-728e-4b3b-31c5-010c279de700/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "8e5cc041872d49dd909e0c1f38599955",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/ultimate-obby-parkour-adventure-online-1c9b-1?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "86484",
+          "slug": "secret-parkour",
+          "title": "Secret Parkour",
+          "description": "Tower of Hell Parkour with Secrets and Surprises! Jump, run, and reach new heights in this thrilling game! Avoid the lava and conquer all the \"regions\" - from easy to extremely challenging levels!\n\nHidden Waterfall: Discover secret platforms and jump into the waterfall to find a hidden room filled with coins and trophies! Collect enough trophies to unlock the secret wall and gain access to a new portal and a unique character skin!\n\nParkour through City Skyscrapers: Face increasingly difficult challenges, dodge rotating obstacles, and show off your agility!\n\nUse hidden shortcuts to reach the top faster! Show everyone you’re a true parkour master!",
+          "howToPlayText": "The goal: get to the end.\n\nControl:\nWASD - movement.\nSpace bar - jump.\nTAB - pause.\nF - dash.\nShift - cursor.\nMouse wheel - zoom in/out.\n\nOn the phone:\nUse the game interface.",
+          "gameURL": "https://playgama.com/export/game/secret-parkour?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/secret-parkour",
+          "genres": [
+            "arcade",
+            "adventure",
+            "play_2_earn",
+            "obby",
+            "ai_smart_ads"
+          ],
+          "tags": [
+            "obstacle-games",
+            "jumping-games",
+            "desktop-games",
+            "borwser-games",
+            "unity-games-online",
+            "67-obby"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/462f96d5-1bf5-4884-36b6-2de1e1367800/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/8b2672f3-ddf8-4746-8244-28fdfc6bb700/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "1850d4d93fb2c13b170212b055629b04",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US",
+            "es-ES",
+            "it-IT",
+            "fr-FR",
+            "pt-PT",
+            "de-DE",
+            "ru-RU",
+            "tr-TR",
+            "id-ID"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": true
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/secret-parkour?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "114356",
+          "slug": "parkour-runner-3d",
+          "title": "Parkour Runner 3D",
+          "description": "Parkour Runner 3D is a fast-paced action running game where you sprint, jump, slide, and flip through thrilling obstacle courses! Test your reflexes as you race across rooftops, leap between platforms, dodge traps, and perform epic parkour tricks.\nWith smooth controls, lively environments, and challenging levels, every run keeps you on the edge of your seat.\n\nMaster your timing, collect boosts, unlock new characters, and become the ultimate parkour champion!",
+          "howToPlayText": "WASD Controls\n\nW – Jump\nA – Move Left\nS – Slide\nD – Move Right\n\nArrow Key Controls\n\nUp Arrow – Jump\nLeft Arrow – Move Left\nDown Arrow – Slide\nRight Arrow – Move Right\n\nSpecial Abilities\n\nSpace (Single Tap) – Head Booster\nSpace (Double Tap) – Activate Hover Board",
+          "gameURL": "https://playgama.com/export/game/parkour-runner-3d?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/parkour-runner-3d",
+          "genres": [
+            "action",
+            "arcade",
+            "adventure",
+            "3d",
+            "running",
+            "platform",
+            "train",
+            "parkour"
+          ],
+          "tags": [
+            "games-for-pc",
+            "reaction-games",
+            "iphone-games",
+            "fast-paced-games",
+            "casual-games",
+            "fullscreen-games",
+            "hyper-casual-games",
+            "surfers-games",
+            "obstacles-games",
+            "desktop-games",
+            "1-player-games",
+            "indie-games",
+            "android-games"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/bbdc105f-03b9-4c97-c268-f0041d75da00/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/2f8e506b-103e-4cc2-12d8-45583b623600/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "6137c1c8dabb771b8e9c292a6707b7ea",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/parkour-runner-3d?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "99615",
+          "slug": "blocklands-io",
+          "title": "Blockadventure io",
+          "description": "🌍 Welcome to BlockAdventure!\n\nDive into the thrilling world of BlockAdventure, a Minecraft-inspired online multiplayer experience packed with parkour challenges, obby adventures, and endless fun! Explore blocky worlds, compete with other players, and push your skills to the limit. Whether you’re jumping across floating platforms or racing through tricky maps, there’s always something exciting to do.\n\nCustomize your style in the Skin Menu — choose your favorite look and stand out from the crowd as you conquer each obstacle!\n\nAnd the best part? This is just the beginning.\nNew game modes and adventures are already on the way!\n\n🚀 Coming Soon Features\n\t•\t🎮 Mini-Games Hub – Unlock and play various mini-games with friends\n\t•\t🧩 Puzzle-Based Maps – Solve environmental puzzles to progress\n\t•\t👥 Custom Avatars & Skins – Personalize your character even more\n\t•\t🏆 Leaderboard System – Climb the global ranks and show off your skills\n\t•\t🛠️ Level Editor – Build and share your own parkour or obby maps\n\t•\t🌎 New Game Worlds – Unique themes and environments to explore\n\n⸻\n\n🕹️ Controls\n\nDesktop Controls:\n\t•\tW / A / S / D or Arrow Keys: Move\n\t•\tSpacebar: Jump\n\t•\tC: Change camera view\n\t•\tF: Step back (return to checkpoint or previous step)\n\nMobile Controls:\n\t•\tOn-Screen Joystick: Move freely\n\t•\tJump Button: Tap to jump\n\t•\tCamera Button: Toggle camera view\n\t•\tBack Button: Go back to previous checkpoint",
+          "howToPlayText": "🕹️ Controls\n\nDesktop Controls:\n\t•\tW / A / S / D or Arrow Keys: Move\n\t•\tSpacebar: Jump\n\t•\tC: Change camera view\n\t•\tF: Step back (return to checkpoint or previous step)\n\nMobile Controls:\n\t•\tOn-Screen Joystick: Move freely\n\t•\tJump Button: Tap to jump\n\t•\tCamera Button: Toggle camera view\n\t•\tBack Button: Go back to previous checkpoint ",
+          "gameURL": "https://playgama.com/export/game/blocklands-io?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/blocklands-io",
+          "genres": [
+            "adventure",
+            "multiplayer",
+            "minecraft",
+            "construction",
+            "blocks"
+          ],
+          "tags": [
+            "minigames",
+            "customization-games",
+            "voxel-games",
+            "obstacle-games",
+            "blocky-games",
+            "competitive-games",
+            "jumping-games",
+            "sandbox-games",
+            "unity-games-online",
+            "67-obby"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/ec30b8e5-3cd9-4461-add2-e962f499f800/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/6e2c4897-a84c-4a27-0721-b137815bd600/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "344adb6e03274d29bd6cebfe6fac8f95",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Android",
+            "For IOS",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/blocklands-io?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "109413",
+          "slug": "steve-parkour-in-mine",
+          "title": "Steve parkour in mine",
+          "description": "Jump, run, and don’t fall! Help Steve navigate dangerous levels filled with traps, chasms, and true cubic madness.\n\nThe levels keep getting harder, and your reaction speed and jumping precision are your only hope.\n\nThis game is perfect for both beginners and those who consider themselves masters of parkour in virtual worlds.\n\nAre you ready to show what Steve is capable of in the world of parkour?",
+          "howToPlayText": "Use the WASD keys to control the character. Press the spacebar to jump. Use the mouse to control the camera.",
+          "gameURL": "https://playgama.com/export/game/steve-parkour-in-mine?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d",
+          "playgamaGameUrl": "https://playgama.com/game/steve-parkour-in-mine",
+          "genres": [
+            "action",
+            "arcade",
+            "adventure",
+            "skill",
+            "3d",
+            "running",
+            "platform",
+            "minecraft",
+            "parkour",
+            "blocks"
+          ],
+          "tags": [
+            "reaction-games",
+            "obstacle-games",
+            "blocky-games",
+            "jumping-games",
+            "challenge-games",
+            "agility-games",
+            "1-player-games",
+            "mine-games"
+          ],
+          "images": [
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/fe08a564-e746-443f-de9e-25624a291000/enlarged",
+            "https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/60d05203-4ec5-469c-d399-409e382f5200/enlarged"
+          ],
+          "videos": [
+            {
+              "playgama_id": "5db0e18fc83a42cc8ffc4b7e142a77a6",
+              "external_url": "",
+              "type": "gameplay"
+            }
+          ],
+          "mobileReady": [
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/steve-parkour-in-mine?clid=p_849b23d2-b7ae-4a5d-837f-db1d16c4673d' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        }
+      ]
+    }
+  ]
+}
