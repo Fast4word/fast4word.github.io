@@ -196,7 +196,7 @@ let allGames = [];
 fetch("games.json")
   .then(res => res.json())
   .then(data => {
-    allGames = data.segments[0].hits;
+    allgames = data.segments.flatMap(segment => segment.hits);
     render(allGames);
   });
 
