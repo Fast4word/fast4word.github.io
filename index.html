@@ -1,242 +1,353 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Dunah PlayZone – Play Free Games Online</title>
+<meta charset="UTF-8">
+<title>Dunah PlayZone</title>
 
-  <meta name="description" content="Dunah PlayZone – Play instant free games online. No downloads. Powered by Playgama." />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0b0f1a">
+<meta name="description" content="Dunah PlayZone – Play free online games instantly. No downloads.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0f1a">
 
-  <style>
-    :root {
-      --bg: #0b0f1a;
-      --panel: #151a2d;
-      --accent: #6cf2c2;
-      --text: #ffffff;
-      --muted: #9aa3c7;
-    }
+<link rel="manifest" id="manifest">
 
-    * {
-      box-sizing: border-box;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    }
+<style>
+:root {
+  --bg:#0b0f1a;
+  --panel:#151a2d;
+  --accent:#6cf2c2;
+  --text:#fff;
+  --muted:#9aa3c7;
+}
 
-    body {
-      margin: 0;
-      background: linear-gradient(180deg, #0b0f1a, #0e1330);
-      color: var(--text);
-    }
+* { box-sizing:border-box; font-family:system-ui,sans-serif }
 
-    header {
-      padding: 24px 16px;
-      text-align: center;
-      background: radial-gradient(circle at top, #1b2455, #0b0f1a);
-    }
+body {
+  margin:0;
+  background:linear-gradient(180deg,#0b0f1a,#0e1330);
+  color:var(--text);
+  display:flex;
+  min-height:100vh;
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 2.3rem;
-      letter-spacing: 1px;
-    }
+aside {
+  width:220px;
+  background:#0d1225;
+  padding:18px;
+  overflow-y:auto;
+}
 
-    header p {
-      margin-top: 8px;
-      color: var(--muted);
-    }
+aside h2 {
+  margin:0 0 10px;
+  font-size:1.1rem;
+}
 
-    .controls {
-      max-width: 1100px;
-      margin: 16px auto;
-      padding: 0 16px;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+.genre {
+  padding:8px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:.9rem;
+  color:var(--muted);
+}
 
-    .controls input {
-      flex: 1;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: none;
-      font-size: 1rem;
-      outline: none;
-    }
+.genre:hover,
+.genre.active {
+  background:var(--panel);
+  color:var(--accent);
+}
 
-    .grid {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px 16px 40px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 18px;
-    }
+main {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
 
-    .card {
-      background: var(--panel);
-      border-radius: 14px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform .2s ease, box-shadow .2s ease;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
+header {
+  padding:18px;
+  text-align:center;
+}
 
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 16px 40px rgba(0,0,0,.55);
-    }
+header h1 {
+  margin:0;
+  font-size:2rem;
+}
 
-    .thumb {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      background: #000;
-    }
+header p {
+  color:var(--muted);
+}
 
-    .card-body {
-      padding: 12px;
-    }
+.controls {
+  padding:0 18px 18px;
+}
 
-    .card-title {
-      font-size: 1rem;
-      font-weight: 600;
-      margin: 0 0 6px;
-    }
+.controls input {
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  font-size:1rem;
+}
 
-    .card-meta {
-      font-size: .75rem;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+.grid {
+  padding:0 18px 30px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:16px;
+}
 
-    /* Modal player */
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.75);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
+.card {
+  background:var(--panel);
+  border-radius:14px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.2s;
+}
 
-    .modal.active {
-      display: flex;
-    }
+.card:hover {
+  transform:translateY(-5px);
+}
 
-    .modal-content {
-      width: min(96vw, 1100px);
-      background: #000;
-      border-radius: 14px;
-      overflow: hidden;
-      position: relative;
-    }
+.thumb {
+  width:100%;
+  height:140px;
+  object-fit:cover;
+}
 
-    .modal iframe {
-      width: 100%;
-      height: 56.25vw;
-      max-height: 620px;
-      border: none;
-    }
+.card-body {
+  padding:10px;
+}
 
-    .close {
-      position: absolute;
-      top: 10px;
-      right: 14px;
-      font-size: 22px;
-      color: #fff;
-      cursor: pointer;
-      z-index: 10;
-    }
+.card-title {
+  font-weight:600;
+  font-size:.95rem;
+}
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: .8rem;
-      color: var(--muted);
-    }
-  </style>
+.card-meta {
+  font-size:.7rem;
+  color:var(--muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Player modal */
+.modal {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.8);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+}
+
+.modal.active { display:flex }
+
+.modal-content {
+  width:min(96vw,1100px);
+  background:#000;
+  border-radius:14px;
+  position:relative;
+  overflow:hidden;
+}
+
+.modal iframe {
+  width:100%;
+  height:56.25vw;
+  max-height:620px;
+  border:none;
+}
+
+.close {
+  position:absolute;
+  top:10px;
+  right:14px;
+  font-size:22px;
+  cursor:pointer;
+}
+
+/* Mobile */
+@media(max-width:800px){
+  aside{ display:none }
+}
+</style>
 </head>
 <body>
 
+<aside>
+  <h2>Genres</h2>
+  <div class="genre active" id="allGenres">All Games</div>
+  <div id="genreList"></div>
+</aside>
+
+<main>
 <header>
   <h1>🎮 Dunah PlayZone</h1>
-  <p>Play instantly · No downloads · Powered by Playgama</p>
+  <p>Play instantly · No downloads</p>
 </header>
 
 <div class="controls">
-  <input id="search" type="search" placeholder="Search games..." />
+  <input id="search" placeholder="Search games...">
 </div>
 
-<main class="grid" id="gameGrid"></main>
+<div class="grid" id="grid"></div>
+</main>
 
-<!-- Player modal -->
 <div class="modal" id="modal">
   <div class="modal-content">
     <div class="close" onclick="closeGame()">✕</div>
-    <iframe id="gameFrame" allowfullscreen></iframe>
+    <iframe id="frame" allowfullscreen></iframe>
   </div>
 </div>
 
-<footer>
-  © Dunah PlayZone · Games embedded from Playgama
-</footer>
-
 <script>
-const grid = document.getElementById("gameGrid");
-const searchInput = document.getElementById("search");
+/* ======================
+   STATE
+====================== */
+const grid = document.getElementById("grid");
+const search = document.getElementById("search");
+const genreList = document.getElementById("genreList");
+const allBtn = document.getElementById("allGenres");
 const modal = document.getElementById("modal");
-const frame = document.getElementById("gameFrame");
+const frame = document.getElementById("frame");
 
-let allGames = [];
+let games = [];
+let activeGenre = "all";
 
-/* LOAD YOUR FULL JSON */
+/* ======================
+   LOAD & NORMALIZE JSON
+====================== */
 fetch("games.json")
-  .then(res => res.json())
+  .then(r => r.json())
   .then(data => {
-    allgames = data.segments.flatMap(segment => segment.hits);
-    render(allGames);
+
+    let rawGames = [];
+
+    if (Array.isArray(data.hits)) {
+      rawGames = data.hits;
+    } else if (Array.isArray(data.segments)) {
+      rawGames = data.segments.flatMap(s =>
+        s.hits || s.items || []
+      );
+    }
+
+    // Deduplicate by ID
+    games = Object.values(
+      Object.fromEntries(rawGames.map(g => [g.id, g]))
+    );
+
+    activeGenre = "all";
+    buildGenres();
+    render();
+  })
+  .catch(err => {
+    console.error("Failed to load games.json", err);
   });
 
-function render(list) {
-  grid.innerHTML = "";
-  list.forEach(game => {
-    const card = document.createElement("div");
-    card.className = "card";
+/* ======================
+   GENRES
+====================== */
+function buildGenres(){
+  genreList.innerHTML = "";
+  const genres = new Set();
 
-    card.innerHTML = `
-      <img class="thumb" src="${game.images?.[0] || ""}" alt="${game.title}">
-      <div class="card-body">
-        <div class="card-title">${game.title}</div>
-        <div class="card-meta">${(game.genres || []).join(", ")}</div>
-      </div>
-    `;
+  games.forEach(g => (g.genres || []).forEach(x => genres.add(x)));
 
-    card.onclick = () => openGame(game.gameURL);
-    grid.appendChild(card);
+  [...genres].sort().forEach(g => {
+    const div = document.createElement("div");
+    div.className = "genre";
+    div.textContent = g;
+    div.onclick = () => {
+      document.querySelectorAll(".genre").forEach(x => x.classList.remove("active"));
+      div.classList.add("active");
+      activeGenre = g;
+      render();
+    };
+    genreList.appendChild(div);
   });
 }
 
-searchInput.addEventListener("input", e => {
-  const q = e.target.value.toLowerCase();
-  render(
-    allGames.filter(g =>
-      g.title.toLowerCase().includes(q) ||
-      (g.genres || []).join(" ").toLowerCase().includes(q)
-    )
-  );
-});
+allBtn.onclick = () => {
+  document.querySelectorAll(".genre").forEach(x => x.classList.remove("active"));
+  allBtn.classList.add("active");
+  activeGenre = "all";
+  render();
+};
 
-function openGame(url) {
+/* ======================
+   RENDER
+====================== */
+function render(){
+  const q = search.value.toLowerCase();
+  grid.innerHTML = "";
+
+  games
+    .filter(g => {
+      const matchGenre = activeGenre === "all" || g.genres?.includes(activeGenre);
+      const matchText = g.title.toLowerCase().includes(q);
+      return matchGenre && matchText;
+    })
+    .forEach(g => {
+      const c = document.createElement("div");
+      c.className = "card";
+      c.innerHTML = `
+        <img class="thumb" src="${g.images?.[0] || ""}">
+        <div class="card-body">
+          <div class="card-title">${g.title}</div>
+          <div class="card-meta">${(g.genres || []).join(", ")}</div>
+        </div>`;
+      c.onclick = () => openGame(g.gameURL);
+      grid.appendChild(c);
+    });
+}
+
+search.oninput = render;
+
+/* ======================
+   PLAYER
+====================== */
+function openGame(url){
   frame.src = url;
   modal.classList.add("active");
 }
 
-function closeGame() {
+function closeGame(){
   frame.src = "";
   modal.classList.remove("active");
+}
+
+/* ======================
+   PWA (INLINE)
+====================== */
+const manifest = {
+  name: "Dunah PlayZone",
+  short_name: "PlayZone",
+  start_url: ".",
+  display: "standalone",
+  background_color: "#0b0f1a",
+  theme_color: "#0b0f1a"
+};
+
+const blob = new Blob([JSON.stringify(manifest)], {type:"application/json"});
+document.getElementById("manifest").href = URL.createObjectURL(blob);
+
+if ("serviceWorker" in navigator) {
+  const swCode = `
+    self.addEventListener("install", e => {
+      e.waitUntil(
+        caches.open("dunah-playzone").then(c =>
+          c.addAll(["./", "./index.html", "./games.json"])
+        )
+      );
+    });
+    self.addEventListener("fetch", e => {
+      e.respondWith(
+        caches.match(e.request).then(r => r || fetch(e.request))
+      );
+    });
+  `;
+  navigator.serviceWorker.register(
+    URL.createObjectURL(new Blob([swCode], {type:"text/javascript"}))
+  );
 }
 </script>
 
