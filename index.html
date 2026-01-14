@@ -102,9 +102,7 @@ header p {
   transition:.2s;
 }
 
-.card:hover {
-  transform:translateY(-5px);
-}
+.card:hover { transform:translateY(-5px); }
 
 .thumb {
   width:100%;
@@ -112,9 +110,7 @@ header p {
   object-fit:cover;
 }
 
-.card-body {
-  padding:10px;
-}
+.card-body { padding:10px; }
 
 .card-title {
   font-weight:600;
@@ -129,7 +125,6 @@ header p {
   text-overflow:ellipsis;
 }
 
-/* Player modal */
 .modal {
   position:fixed;
   inset:0;
@@ -147,7 +142,6 @@ header p {
   background:#000;
   border-radius:14px;
   position:relative;
-  overflow:hidden;
 }
 
 .modal iframe {
@@ -208,12 +202,11 @@ const frame = document.getElementById("frame");
 
 let games = [];
 let activeGenre = "all";
+let allowedGenres = [];
 
 /* ---------- Helpers ---------- */
 function prettyGenre(slug) {
-  return slug
-    .replace(/-/g, " ")
-    .replace(/\b\w/g, c => c.toUpperCase());
+  return slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
 }
 
 /* ---------- Load Games ---------- */
@@ -234,21 +227,21 @@ fetch("games.json")
     render();
   });
 
-/* ---------- Genres (TOP 10, CLEAN) ---------- */
+/* ---------- Build Top 10 Categories ---------- */
 function buildGenres() {
   genreList.innerHTML = "";
-
   const counts = {};
+
   games.forEach(g =>
     (g.genres || []).forEach(x => counts[x] = (counts[x] || 0) + 1)
   );
 
-  const topGenres = Object.entries(counts)
+  allowedGenres = Object.entries(counts)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10)
     .map(([g]) => g);
 
-  topGenres.forEach(slug => {
+  allowedGenres.forEach(slug => {
     const div = document.createElement("div");
     div.className = "genre";
     div.textContent = prettyGenre(slug);
@@ -281,15 +274,18 @@ function render() {
       return genreOk && textOk;
     })
     .forEach(g => {
+      const visibleGenres = (g.genres || [])
+        .filter(x => allowedGenres.includes(x))
+        .map(prettyGenre)
+        .join(", ");
+
       const c = document.createElement("div");
       c.className = "card";
       c.innerHTML = `
         <img class="thumb" src="${g.images?.[0] || ""}">
         <div class="card-body">
           <div class="card-title">${g.title}</div>
-          <div class="card-meta">
-            ${(g.genres || []).map(prettyGenre).join(", ")}
-          </div>
+          <div class="card-meta">${visibleGenres}</div>
         </div>`;
       c.onclick = () => openGame(g.gameURL);
       grid.appendChild(c);
@@ -303,7 +299,6 @@ function openGame(url){
   frame.src = url;
   modal.classList.add("active");
 }
-
 function closeGame(){
   frame.src = "";
   modal.classList.remove("active");
