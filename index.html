@@ -165,7 +165,6 @@ header p {
   cursor:pointer;
 }
 
-/* Mobile */
 @media(max-width:800px){
   aside{ display:none }
 }
@@ -174,7 +173,7 @@ header p {
 <body>
 
 <aside>
-  <h2>Genres</h2>
+  <h2>Categories</h2>
   <div class="genre active" id="allGenres">All Games</div>
   <div id="genreList"></div>
 </aside>
@@ -200,9 +199,6 @@ header p {
 </div>
 
 <script>
-/* ======================
-   STATE
-====================== */
 const grid = document.getElementById("grid");
 const search = document.getElementById("search");
 const genreList = document.getElementById("genreList");
@@ -213,53 +209,53 @@ const frame = document.getElementById("frame");
 let games = [];
 let activeGenre = "all";
 
-/* ======================
-   LOAD & NORMALIZE JSON
-====================== */
+/* ---------- Helpers ---------- */
+function prettyGenre(slug) {
+  return slug
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+/* ---------- Load Games ---------- */
 fetch("games.json")
   .then(r => r.json())
   .then(data => {
+    let raw = [];
 
-    let rawGames = [];
+    if (Array.isArray(data.hits)) raw = data.hits;
+    else if (Array.isArray(data.segments))
+      raw = data.segments.flatMap(s => s.hits || s.items || []);
 
-    if (Array.isArray(data.hits)) {
-      rawGames = data.hits;
-    } else if (Array.isArray(data.segments)) {
-      rawGames = data.segments.flatMap(s =>
-        s.hits || s.items || []
-      );
-    }
-
-    // Deduplicate by ID
     games = Object.values(
-      Object.fromEntries(rawGames.map(g => [g.id, g]))
+      Object.fromEntries(raw.map(g => [g.id, g]))
     );
 
-    activeGenre = "all";
     buildGenres();
     render();
-  })
-  .catch(err => {
-    console.error("Failed to load games.json", err);
   });
 
-/* ======================
-   GENRES
-====================== */
-function buildGenres(){
+/* ---------- Genres (TOP 10, CLEAN) ---------- */
+function buildGenres() {
   genreList.innerHTML = "";
-  const genres = new Set();
 
-  games.forEach(g => (g.genres || []).forEach(x => genres.add(x)));
+  const counts = {};
+  games.forEach(g =>
+    (g.genres || []).forEach(x => counts[x] = (counts[x] || 0) + 1)
+  );
 
-  [...genres].sort().forEach(g => {
+  const topGenres = Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([g]) => g);
+
+  topGenres.forEach(slug => {
     const div = document.createElement("div");
     div.className = "genre";
-    div.textContent = g;
+    div.textContent = prettyGenre(slug);
     div.onclick = () => {
       document.querySelectorAll(".genre").forEach(x => x.classList.remove("active"));
       div.classList.add("active");
-      activeGenre = g;
+      activeGenre = slug;
       render();
     };
     genreList.appendChild(div);
@@ -273,18 +269,16 @@ allBtn.onclick = () => {
   render();
 };
 
-/* ======================
-   RENDER
-====================== */
-function render(){
+/* ---------- Render ---------- */
+function render() {
   const q = search.value.toLowerCase();
   grid.innerHTML = "";
 
   games
     .filter(g => {
-      const matchGenre = activeGenre === "all" || g.genres?.includes(activeGenre);
-      const matchText = g.title.toLowerCase().includes(q);
-      return matchGenre && matchText;
+      const genreOk = activeGenre === "all" || g.genres?.includes(activeGenre);
+      const textOk = g.title.toLowerCase().includes(q);
+      return genreOk && textOk;
     })
     .forEach(g => {
       const c = document.createElement("div");
@@ -293,7 +287,9 @@ function render(){
         <img class="thumb" src="${g.images?.[0] || ""}">
         <div class="card-body">
           <div class="card-title">${g.title}</div>
-          <div class="card-meta">${(g.genres || []).join(", ")}</div>
+          <div class="card-meta">
+            ${(g.genres || []).map(prettyGenre).join(", ")}
+          </div>
         </div>`;
       c.onclick = () => openGame(g.gameURL);
       grid.appendChild(c);
@@ -302,9 +298,7 @@ function render(){
 
 search.oninput = render;
 
-/* ======================
-   PLAYER
-====================== */
+/* ---------- Player ---------- */
 function openGame(url){
   frame.src = url;
   modal.classList.add("active");
@@ -315,9 +309,7 @@ function closeGame(){
   modal.classList.remove("active");
 }
 
-/* ======================
-   PWA (INLINE)
-====================== */
+/* ---------- PWA ---------- */
 const manifest = {
   name: "Dunah PlayZone",
   short_name: "PlayZone",
@@ -327,26 +319,20 @@ const manifest = {
   theme_color: "#0b0f1a"
 };
 
-const blob = new Blob([JSON.stringify(manifest)], {type:"application/json"});
-document.getElementById("manifest").href = URL.createObjectURL(blob);
+document.getElementById("manifest").href =
+  URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type:"application/json"}));
 
 if ("serviceWorker" in navigator) {
-  const swCode = `
-    self.addEventListener("install", e => {
-      e.waitUntil(
-        caches.open("dunah-playzone").then(c =>
-          c.addAll(["./", "./index.html", "./games.json"])
-        )
-      );
-    });
-    self.addEventListener("fetch", e => {
-      e.respondWith(
-        caches.match(e.request).then(r => r || fetch(e.request))
-      );
-    });
-  `;
   navigator.serviceWorker.register(
-    URL.createObjectURL(new Blob([swCode], {type:"text/javascript"}))
+    URL.createObjectURL(new Blob([`
+      self.addEventListener("install",e=>{
+        e.waitUntil(caches.open("dunah-playzone")
+          .then(c=>c.addAll(["./","./index.html","./games.json"])));
+      });
+      self.addEventListener("fetch",e=>{
+        e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));
+      });
+    `], {type:"text/javascript"}))
   );
 }
 </script>
