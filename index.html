@@ -134,26 +134,18 @@ aside.active{transform:translateX(0)}
   transform:scale(1.15);
 }
 
-/* Modal */
-.modal{
+/* Fullscreen game container */
+#gameContainer{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.9);
+  background:#000;
   display:none;
-  z-index:50;
+  z-index:100;
 }
-.modal.active{display:block}
-.modal iframe{
+#gameContainer iframe{
   width:100%;
   height:100%;
   border:none;
-}
-.close{
-  position:absolute;
-  top:10px;
-  right:14px;
-  font-size:26px;
-  z-index:60;
 }
 </style>
 </head>
@@ -178,9 +170,8 @@ aside.active{transform:translateX(0)}
 
 <div class="grid" id="grid"></div>
 
-<div class="modal" id="modal">
-  <div class="close" onclick="closeGame()">✕</div>
-  <iframe id="frame" allowfullscreen></iframe>
+<div id="gameContainer">
+  <iframe id="gameFrame" allowfullscreen></iframe>
 </div>
 
 <script>
@@ -189,19 +180,23 @@ const search=document.getElementById("search");
 const genreList=document.getElementById("genreList");
 const sidebar=document.getElementById("sidebar");
 const backdrop=document.getElementById("backdrop");
-const modal=document.getElementById("modal");
-const frame=document.getElementById("frame");
+const gameContainer=document.getElementById("gameContainer");
+const gameFrame=document.getElementById("gameFrame");
 
 let games=[];
 let activeGenre="all";
 let allowedGenres=[];
 let favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
 
+/* Sidebar */
 function openMenu(){sidebar.classList.add("active");backdrop.classList.add("active")}
 function closeMenu(){sidebar.classList.remove("active");backdrop.classList.remove("active")}
 
-function prettyGenre(s){return s.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase())}
+function prettyGenre(s){
+  return s.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+}
 
+/* Load games */
 fetch("games.json").then(r=>r.json()).then(data=>{
   let raw=[];
   if(Array.isArray(data.hits)) raw=data.hits;
@@ -212,6 +207,7 @@ fetch("games.json").then(r=>r.json()).then(data=>{
   render();
 });
 
+/* Genres */
 function buildGenres(){
   const c={};
   games.forEach(g=>(g.genres||[]).forEach(x=>c[x]=(c[x]||0)+1));
@@ -231,9 +227,10 @@ function setActive(el){
   el.classList.add("active");
 }
 
-document.getElementById("allGenres").onclick=()=>{setActive(allGenres);activeGenre="all";render()};
-document.getElementById("favFilter").onclick=()=>{setActive(favFilter);activeGenre="favourites";render()};
+allGenres.onclick=()=>{setActive(allGenres);activeGenre="all";render()};
+favFilter.onclick=()=>{setActive(favFilter);activeGenre="favourites";render()};
 
+/* Favourites */
 function toggleFavourite(id){
   favourites=favourites.includes(id)
     ? favourites.filter(x=>x!==id)
@@ -242,19 +239,26 @@ function toggleFavourite(id){
   render();
 }
 
+/* Render */
 function render(){
   const q=search.value.toLowerCase();
   grid.innerHTML="";
   games.filter(g=>{
-    if(activeGenre==="favourites") return favourites.includes(g.id)&&g.title.toLowerCase().includes(q);
-    return (activeGenre==="all"||g.genres?.includes(activeGenre))&&g.title.toLowerCase().includes(q);
+    if(activeGenre==="favourites")
+      return favourites.includes(g.id)&&g.title.toLowerCase().includes(q);
+    return (activeGenre==="all"||g.genres?.includes(activeGenre))
+      && g.title.toLowerCase().includes(q);
   }).forEach(g=>{
-    const tags=(g.genres||[]).filter(x=>allowedGenres.includes(x)).map(prettyGenre).join(", ");
+    const tags=(g.genres||[])
+      .filter(x=>allowedGenres.includes(x))
+      .map(prettyGenre)
+      .join(", ");
     const fav=favourites.includes(g.id);
     const c=document.createElement("div");
     c.className="card";
     c.innerHTML=`
-      <div class="fav-btn ${fav?"active":""}" onclick="event.stopPropagation();toggleFavourite('${g.id}')">
+      <div class="fav-btn ${fav?"active":""}"
+        onclick="event.stopPropagation();toggleFavourite('${g.id}')">
         ${fav?"❤️":"🤍"}
       </div>
       <img class="thumb" src="${g.images?.[0]||""}">
@@ -262,17 +266,46 @@ function render(){
         <div class="card-title">${g.title}</div>
         <div class="card-meta">${tags}</div>
       </div>`;
-    c.onclick=()=>{frame.src=g.gameURL;modal.classList.add("active")};
+    c.onclick=()=>openGame(g.gameURL);
     grid.appendChild(c);
   });
 }
 
+/* Fullscreen game logic */
+function openGame(url){
+  gameFrame.src=url;
+  gameContainer.style.display="block";
+
+  if(gameContainer.requestFullscreen)
+    gameContainer.requestFullscreen();
+  else if(gameContainer.webkitRequestFullscreen)
+    gameContainer.webkitRequestFullscreen();
+}
+
+/* Exit when fullscreen exits */
+document.addEventListener("fullscreenchange",exitHandler);
+document.addEventListener("webkitfullscreenchange",exitHandler);
+
+function exitHandler(){
+  if(!document.fullscreenElement && !document.webkitFullscreenElement){
+    gameFrame.src="";
+    gameContainer.style.display="none";
+  }
+}
+
 search.oninput=render;
-function closeGame(){frame.src="";modal.classList.remove("active")}
 
 /* PWA */
-const manifest={name:"Dunah PlayZone",short_name:"PlayZone",start_url:".",display:"standalone",background_color:"#0b0f1a",theme_color:"#0b0f1a"};
-document.getElementById("manifest").href=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:"application/json"}));
+const manifest={
+  name:"Dunah PlayZone",
+  short_name:"PlayZone",
+  start_url:".",
+  display:"standalone",
+  background_color:"#0b0f1a",
+  theme_color:"#0b0f1a"
+};
+document.getElementById("manifest").href=
+  URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:"application/json"}));
 </script>
 
 </body>
