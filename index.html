@@ -5,7 +5,7 @@
 <title>Dunah PlayZone</title>
 
 <meta name="description" content="Dunah PlayZone – Play free online games instantly. No downloads.">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0b0f1a">
 
 <link rel="manifest" id="manifest">
@@ -25,84 +25,106 @@ body {
   margin:0;
   background:linear-gradient(180deg,#0b0f1a,#0e1330);
   color:var(--text);
-  display:flex;
   min-height:100vh;
 }
 
-aside {
-  width:220px;
-  background:#0d1225;
-  padding:18px;
-  overflow-y:auto;
-}
-
-aside h2 {
-  margin:0 0 10px;
-  font-size:1.1rem;
-}
-
-.genre {
-  padding:8px 10px;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:.9rem;
-  color:var(--muted);
-}
-
-.genre:hover,
-.genre.active {
-  background:var(--panel);
-  color:var(--accent);
-}
-
-main {
-  flex:1;
-  display:flex;
-  flex-direction:column;
-}
-
+/* ---------- Header ---------- */
 header {
-  padding:18px;
-  text-align:center;
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:#0d1225;
+  padding:12px 14px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.menu-btn {
+  font-size:22px;
+  cursor:pointer;
+  padding:6px 10px;
 }
 
 header h1 {
   margin:0;
-  font-size:2rem;
+  font-size:1.2rem;
+  flex:1;
 }
 
-header p {
+header input {
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+}
+
+/* ---------- Sidebar ---------- */
+aside {
+  position:fixed;
+  inset:0 auto 0 0;
+  width:260px;
+  background:#0d1225;
+  padding:18px;
+  transform:translateX(-100%);
+  transition:.25s;
+  z-index:30;
+  overflow-y:auto;
+}
+
+aside.active { transform:translateX(0); }
+
+.backdrop {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  z-index:25;
+}
+
+.backdrop.active { display:block; }
+
+aside h2 {
+  margin:0 0 12px;
+}
+
+.genre {
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:6px;
+  font-size:1rem;
+  cursor:pointer;
   color:var(--muted);
 }
 
-.controls {
-  padding:0 18px 18px;
+.genre.active,
+.genre:hover {
+  background:var(--panel);
+  color:var(--accent);
 }
 
-.controls input {
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:none;
-  font-size:1rem;
-}
-
+/* ---------- Grid ---------- */
 .grid {
-  padding:0 18px 30px;
+  padding:14px;
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-  gap:16px;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
 }
 
+@media(min-width:600px){
+  .grid{ grid-template-columns:repeat(3,1fr); }
+}
+@media(min-width:900px){
+  .grid{ grid-template-columns:repeat(4,1fr); }
+}
+
+/* ---------- Cards ---------- */
 .card {
   background:var(--panel);
   border-radius:14px;
   overflow:hidden;
   cursor:pointer;
-  transition:.2s;
 }
-
-.card:hover { transform:translateY(-5px); }
 
 .thumb {
   width:100%;
@@ -120,34 +142,30 @@ header p {
 .card-meta {
   font-size:.7rem;
   color:var(--muted);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
 
+/* ---------- Modal ---------- */
 .modal {
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.8);
+  background:rgba(0,0,0,.9);
   display:none;
   align-items:center;
   justify-content:center;
-  z-index:1000;
+  z-index:50;
 }
 
 .modal.active { display:flex }
 
 .modal-content {
-  width:min(96vw,1100px);
+  width:100%;
+  height:100%;
   background:#000;
-  border-radius:14px;
-  position:relative;
 }
 
 .modal iframe {
   width:100%;
-  height:56.25vw;
-  max-height:620px;
+  height:100%;
   border:none;
 }
 
@@ -155,39 +173,35 @@ header p {
   position:absolute;
   top:10px;
   right:14px;
-  font-size:22px;
-  cursor:pointer;
-}
-
-@media(max-width:800px){
-  aside{ display:none }
+  font-size:26px;
+  z-index:60;
 }
 </style>
 </head>
 <body>
 
-<aside>
+<header>
+  <div class="menu-btn" onclick="openMenu()">☰</div>
+  <h1>Dunah PlayZone</h1>
+</header>
+
+<header style="background:none; padding:0 14px 14px">
+  <input id="search" placeholder="Search games...">
+</header>
+
+<div class="backdrop" id="backdrop" onclick="closeMenu()"></div>
+
+<aside id="sidebar">
   <h2>Categories</h2>
   <div class="genre active" id="allGenres">All Games</div>
   <div id="genreList"></div>
 </aside>
 
-<main>
-<header>
-  <h1>🎮 Dunah PlayZone</h1>
-  <p>Play instantly · No downloads</p>
-</header>
-
-<div class="controls">
-  <input id="search" placeholder="Search games...">
-</div>
-
 <div class="grid" id="grid"></div>
-</main>
 
 <div class="modal" id="modal">
+  <div class="close" onclick="closeGame()">✕</div>
   <div class="modal-content">
-    <div class="close" onclick="closeGame()">✕</div>
     <iframe id="frame" allowfullscreen></iframe>
   </div>
 </div>
@@ -197,6 +211,8 @@ const grid = document.getElementById("grid");
 const search = document.getElementById("search");
 const genreList = document.getElementById("genreList");
 const allBtn = document.getElementById("allGenres");
+const sidebar = document.getElementById("sidebar");
+const backdrop = document.getElementById("backdrop");
 const modal = document.getElementById("modal");
 const frame = document.getElementById("frame");
 
@@ -204,132 +220,118 @@ let games = [];
 let activeGenre = "all";
 let allowedGenres = [];
 
-/* ---------- Helpers ---------- */
-function prettyGenre(slug) {
-  return slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+function openMenu(){
+  sidebar.classList.add("active");
+  backdrop.classList.add("active");
+}
+function closeMenu(){
+  sidebar.classList.remove("active");
+  backdrop.classList.remove("active");
 }
 
-/* ---------- Load Games ---------- */
-fetch("games.json")
-  .then(r => r.json())
-  .then(data => {
-    let raw = [];
+function prettyGenre(slug){
+  return slug.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+}
 
-    if (Array.isArray(data.hits)) raw = data.hits;
-    else if (Array.isArray(data.segments))
-      raw = data.segments.flatMap(s => s.hits || s.items || []);
+/* Load games */
+fetch("games.json")
+  .then(r=>r.json())
+  .then(data=>{
+    let raw=[];
+    if(Array.isArray(data.hits)) raw=data.hits;
+    else if(Array.isArray(data.segments))
+      raw=data.segments.flatMap(s=>s.hits||s.items||[]);
 
     games = Object.values(
-      Object.fromEntries(raw.map(g => [g.id, g]))
+      Object.fromEntries(raw.map(g=>[g.id,g]))
     );
 
     buildGenres();
     render();
   });
 
-/* ---------- Build Top 10 Categories ---------- */
-function buildGenres() {
-  genreList.innerHTML = "";
-  const counts = {};
-
-  games.forEach(g =>
-    (g.genres || []).forEach(x => counts[x] = (counts[x] || 0) + 1)
-  );
+function buildGenres(){
+  const counts={};
+  games.forEach(g=>(g.genres||[]).forEach(x=>counts[x]=(counts[x]||0)+1));
 
   allowedGenres = Object.entries(counts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10)
-    .map(([g]) => g);
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,10)
+    .map(([g])=>g);
 
-  allowedGenres.forEach(slug => {
-    const div = document.createElement("div");
-    div.className = "genre";
-    div.textContent = prettyGenre(slug);
-    div.onclick = () => {
-      document.querySelectorAll(".genre").forEach(x => x.classList.remove("active"));
-      div.classList.add("active");
-      activeGenre = slug;
+  genreList.innerHTML="";
+  allowedGenres.forEach(slug=>{
+    const d=document.createElement("div");
+    d.className="genre";
+    d.textContent=prettyGenre(slug);
+    d.onclick=()=>{
+      document.querySelectorAll(".genre").forEach(x=>x.classList.remove("active"));
+      d.classList.add("active");
+      activeGenre=slug;
+      closeMenu();
       render();
     };
-    genreList.appendChild(div);
+    genreList.appendChild(d);
   });
 }
 
-allBtn.onclick = () => {
-  document.querySelectorAll(".genre").forEach(x => x.classList.remove("active"));
+allBtn.onclick=()=>{
+  document.querySelectorAll(".genre").forEach(x=>x.classList.remove("active"));
   allBtn.classList.add("active");
-  activeGenre = "all";
+  activeGenre="all";
+  closeMenu();
   render();
 };
 
-/* ---------- Render ---------- */
-function render() {
-  const q = search.value.toLowerCase();
-  grid.innerHTML = "";
+function render(){
+  const q=search.value.toLowerCase();
+  grid.innerHTML="";
 
-  games
-    .filter(g => {
-      const genreOk = activeGenre === "all" || g.genres?.includes(activeGenre);
-      const textOk = g.title.toLowerCase().includes(q);
-      return genreOk && textOk;
-    })
-    .forEach(g => {
-      const visibleGenres = (g.genres || [])
-        .filter(x => allowedGenres.includes(x))
-        .map(prettyGenre)
-        .join(", ");
+  games.filter(g=>{
+    const okGenre=activeGenre==="all"||g.genres?.includes(activeGenre);
+    const okText=g.title.toLowerCase().includes(q);
+    return okGenre&&okText;
+  }).forEach(g=>{
+    const tags=(g.genres||[])
+      .filter(x=>allowedGenres.includes(x))
+      .map(prettyGenre)
+      .join(", ");
 
-      const c = document.createElement("div");
-      c.className = "card";
-      c.innerHTML = `
-        <img class="thumb" src="${g.images?.[0] || ""}">
-        <div class="card-body">
-          <div class="card-title">${g.title}</div>
-          <div class="card-meta">${visibleGenres}</div>
-        </div>`;
-      c.onclick = () => openGame(g.gameURL);
-      grid.appendChild(c);
-    });
+    const c=document.createElement("div");
+    c.className="card";
+    c.innerHTML=`
+      <img class="thumb" src="${g.images?.[0]||""}">
+      <div class="card-body">
+        <div class="card-title">${g.title}</div>
+        <div class="card-meta">${tags}</div>
+      </div>`;
+    c.onclick=()=>openGame(g.gameURL);
+    grid.appendChild(c);
+  });
 }
 
-search.oninput = render;
+search.oninput=render;
 
-/* ---------- Player ---------- */
 function openGame(url){
-  frame.src = url;
+  frame.src=url;
   modal.classList.add("active");
 }
 function closeGame(){
-  frame.src = "";
+  frame.src="";
   modal.classList.remove("active");
 }
 
-/* ---------- PWA ---------- */
-const manifest = {
-  name: "Dunah PlayZone",
-  short_name: "PlayZone",
-  start_url: ".",
-  display: "standalone",
-  background_color: "#0b0f1a",
-  theme_color: "#0b0f1a"
+/* PWA */
+const manifest={
+  name:"Dunah PlayZone",
+  short_name:"PlayZone",
+  start_url:".",
+  display:"standalone",
+  background_color:"#0b0f1a",
+  theme_color:"#0b0f1a"
 };
-
-document.getElementById("manifest").href =
-  URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type:"application/json"}));
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register(
-    URL.createObjectURL(new Blob([`
-      self.addEventListener("install",e=>{
-        e.waitUntil(caches.open("dunah-playzone")
-          .then(c=>c.addAll(["./","./index.html","./games.json"])));
-      });
-      self.addEventListener("fetch",e=>{
-        e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));
-      });
-    `], {type:"text/javascript"}))
-  );
-}
+document.getElementById("manifest").href=
+  URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:"application/json"}));
 </script>
 
 </body>
