@@ -17,6 +17,7 @@
   --accent:#6cf2c2;
   --text:#fff;
   --muted:#9aa3c7;
+  --danger:#ff6b6b;
 }
 
 * { box-sizing:border-box; font-family:system-ui,sans-serif }
@@ -52,7 +53,11 @@ header h1 {
   flex:1;
 }
 
-header input {
+.search-wrap {
+  padding:10px 14px;
+}
+
+.search-wrap input {
   width:100%;
   padding:10px;
   border-radius:10px;
@@ -95,6 +100,9 @@ aside h2 {
   font-size:1rem;
   cursor:pointer;
   color:var(--muted);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
 .genre.active,
@@ -124,6 +132,7 @@ aside h2 {
   border-radius:14px;
   overflow:hidden;
   cursor:pointer;
+  position:relative;
 }
 
 .thumb {
@@ -142,6 +151,26 @@ aside h2 {
 .card-meta {
   font-size:.7rem;
   color:var(--muted);
+}
+
+/* Favourite button */
+.fav-btn {
+  position:absolute;
+  top:8px;
+  right:8px;
+  font-size:18px;
+  background:rgba(0,0,0,.6);
+  border-radius:50%;
+  width:32px;
+  height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+}
+
+.fav-btn.active {
+  color:var(--danger);
 }
 
 /* ---------- Modal ---------- */
@@ -185,15 +214,16 @@ aside h2 {
   <h1>Dunah PlayZone</h1>
 </header>
 
-<header style="background:none; padding:0 14px 14px">
+<div class="search-wrap">
   <input id="search" placeholder="Search games...">
-</header>
+</div>
 
 <div class="backdrop" id="backdrop" onclick="closeMenu()"></div>
 
 <aside id="sidebar">
   <h2>Categories</h2>
   <div class="genre active" id="allGenres">All Games</div>
+  <div class="genre" id="favFilter">⭐ Favourites</div>
   <div id="genreList"></div>
 </aside>
 
@@ -211,6 +241,7 @@ const grid = document.getElementById("grid");
 const search = document.getElementById("search");
 const genreList = document.getElementById("genreList");
 const allBtn = document.getElementById("allGenres");
+const favBtn = document.getElementById("favFilter");
 const sidebar = document.getElementById("sidebar");
 const backdrop = document.getElementById("backdrop");
 const modal = document.getElementById("modal");
@@ -219,6 +250,7 @@ const frame = document.getElementById("frame");
 let games = [];
 let activeGenre = "all";
 let allowedGenres = [];
+let favourites = JSON.parse(localStorage.getItem("favourites") || "[]");
 
 function openMenu(){
   sidebar.classList.add("active");
@@ -265,8 +297,7 @@ function buildGenres(){
     d.className="genre";
     d.textContent=prettyGenre(slug);
     d.onclick=()=>{
-      document.querySelectorAll(".genre").forEach(x=>x.classList.remove("active"));
-      d.classList.add("active");
+      setActive(d);
       activeGenre=slug;
       closeMenu();
       render();
@@ -275,19 +306,42 @@ function buildGenres(){
   });
 }
 
-allBtn.onclick=()=>{
+function setActive(el){
   document.querySelectorAll(".genre").forEach(x=>x.classList.remove("active"));
-  allBtn.classList.add("active");
+  el.classList.add("active");
+}
+
+allBtn.onclick=()=>{
+  setActive(allBtn);
   activeGenre="all";
   closeMenu();
   render();
 };
+
+favBtn.onclick=()=>{
+  setActive(favBtn);
+  activeGenre="favourites";
+  closeMenu();
+  render();
+};
+
+function toggleFavourite(id){
+  if(favourites.includes(id))
+    favourites=favourites.filter(x=>x!==id);
+  else favourites.push(id);
+
+  localStorage.setItem("favourites",JSON.stringify(favourites));
+  render();
+}
 
 function render(){
   const q=search.value.toLowerCase();
   grid.innerHTML="";
 
   games.filter(g=>{
+    if(activeGenre==="favourites")
+      return favourites.includes(g.id) && g.title.toLowerCase().includes(q);
+
     const okGenre=activeGenre==="all"||g.genres?.includes(activeGenre);
     const okText=g.title.toLowerCase().includes(q);
     return okGenre&&okText;
@@ -300,6 +354,10 @@ function render(){
     const c=document.createElement("div");
     c.className="card";
     c.innerHTML=`
+      <div class="fav-btn ${favourites.includes(g.id)?"active":""}"
+        onclick="event.stopPropagation(); toggleFavourite('${g.id}')">
+        ❤
+      </div>
       <img class="thumb" src="${g.images?.[0]||""}">
       <div class="card-body">
         <div class="card-title">${g.title}</div>
