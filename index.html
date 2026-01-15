@@ -4,33 +4,32 @@
 <meta charset="UTF-8">
 <title>Dunah PlayZone</title>
 
-<meta name="description" content="Dunah PlayZone – Play free online games instantly. No downloads.">
+<meta name="description" content="Dunah PlayZone – Play free online games instantly.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0b0f1a">
 
 <link rel="manifest" id="manifest">
 
 <style>
-:root {
+:root{
   --bg:#0b0f1a;
   --panel:#151a2d;
   --accent:#6cf2c2;
   --text:#fff;
   --muted:#9aa3c7;
-  --danger:#ff6b6b;
+  --danger:#ff5c5c;
 }
 
-* { box-sizing:border-box; font-family:system-ui,sans-serif }
+*{box-sizing:border-box;font-family:system-ui,sans-serif}
 
-body {
+body{
   margin:0;
   background:linear-gradient(180deg,#0b0f1a,#0e1330);
   color:var(--text);
-  min-height:100vh;
 }
 
-/* ---------- Header ---------- */
-header {
+/* Header */
+header{
   position:sticky;
   top:0;
   z-index:20;
@@ -41,31 +40,19 @@ header {
   align-items:center;
 }
 
-.menu-btn {
-  font-size:22px;
-  cursor:pointer;
-  padding:6px 10px;
-}
+.menu-btn{font-size:22px;cursor:pointer}
+header h1{margin:0;font-size:1.2rem;flex:1}
 
-header h1 {
-  margin:0;
-  font-size:1.2rem;
-  flex:1;
-}
-
-.search-wrap {
-  padding:10px 14px;
-}
-
-.search-wrap input {
+.search-wrap{padding:10px 14px}
+.search-wrap input{
   width:100%;
   padding:10px;
   border-radius:10px;
   border:none;
 }
 
-/* ---------- Sidebar ---------- */
-aside {
+/* Sidebar */
+aside{
   position:fixed;
   inset:0 auto 0 0;
   width:260px;
@@ -76,129 +63,92 @@ aside {
   z-index:30;
   overflow-y:auto;
 }
+aside.active{transform:translateX(0)}
 
-aside.active { transform:translateX(0); }
-
-.backdrop {
+.backdrop{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.6);
   display:none;
   z-index:25;
 }
+.backdrop.active{display:block}
 
-.backdrop.active { display:block; }
-
-aside h2 {
-  margin:0 0 12px;
-}
-
-.genre {
+.genre{
   padding:12px;
   border-radius:10px;
   margin-bottom:6px;
-  font-size:1rem;
   cursor:pointer;
   color:var(--muted);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
 }
-
-.genre.active,
-.genre:hover {
+.genre.active,.genre:hover{
   background:var(--panel);
   color:var(--accent);
 }
 
-/* ---------- Grid ---------- */
-.grid {
+/* Grid */
+.grid{
   padding:14px;
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:14px;
 }
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:900px){.grid{grid-template-columns:repeat(4,1fr)}}
 
-@media(min-width:600px){
-  .grid{ grid-template-columns:repeat(3,1fr); }
-}
-@media(min-width:900px){
-  .grid{ grid-template-columns:repeat(4,1fr); }
-}
-
-/* ---------- Cards ---------- */
-.card {
+/* Cards */
+.card{
   background:var(--panel);
   border-radius:14px;
   overflow:hidden;
   cursor:pointer;
   position:relative;
 }
-
-.thumb {
+.thumb{
   width:100%;
   height:140px;
   object-fit:cover;
 }
+.card-body{padding:10px}
+.card-title{font-weight:600;font-size:.95rem}
+.card-meta{font-size:.7rem;color:var(--muted)}
 
-.card-body { padding:10px; }
-
-.card-title {
-  font-weight:600;
-  font-size:.95rem;
-}
-
-.card-meta {
-  font-size:.7rem;
-  color:var(--muted);
-}
-
-/* Favourite button */
-.fav-btn {
+/* Favourite */
+.fav-btn{
   position:absolute;
   top:8px;
   right:8px;
-  font-size:18px;
-  background:rgba(0,0,0,.6);
-  border-radius:50%;
   width:32px;
   height:32px;
+  border-radius:50%;
+  background:rgba(0,0,0,.6);
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#fff;
+  font-size:18px;
+  transition:.15s;
 }
-
-.fav-btn.active {
+.fav-btn.active{
   color:var(--danger);
+  box-shadow:0 0 8px rgba(255,92,92,.8);
+  transform:scale(1.15);
 }
 
-/* ---------- Modal ---------- */
-.modal {
+/* Modal */
+.modal{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.9);
   display:none;
-  align-items:center;
-  justify-content:center;
   z-index:50;
 }
-
-.modal.active { display:flex }
-
-.modal-content {
-  width:100%;
-  height:100%;
-  background:#000;
-}
-
-.modal iframe {
+.modal.active{display:block}
+.modal iframe{
   width:100%;
   height:100%;
   border:none;
 }
-
-.close {
+.close{
   position:absolute;
   top:10px;
   right:14px;
@@ -221,7 +171,6 @@ aside h2 {
 <div class="backdrop" id="backdrop" onclick="closeMenu()"></div>
 
 <aside id="sidebar">
-  <h2>Categories</h2>
   <div class="genre active" id="allGenres">All Games</div>
   <div class="genre" id="favFilter">⭐ Favourites</div>
   <div id="genreList"></div>
@@ -231,77 +180,48 @@ aside h2 {
 
 <div class="modal" id="modal">
   <div class="close" onclick="closeGame()">✕</div>
-  <div class="modal-content">
-    <iframe id="frame" allowfullscreen></iframe>
-  </div>
+  <iframe id="frame" allowfullscreen></iframe>
 </div>
 
 <script>
-const grid = document.getElementById("grid");
-const search = document.getElementById("search");
-const genreList = document.getElementById("genreList");
-const allBtn = document.getElementById("allGenres");
-const favBtn = document.getElementById("favFilter");
-const sidebar = document.getElementById("sidebar");
-const backdrop = document.getElementById("backdrop");
-const modal = document.getElementById("modal");
-const frame = document.getElementById("frame");
+const grid=document.getElementById("grid");
+const search=document.getElementById("search");
+const genreList=document.getElementById("genreList");
+const sidebar=document.getElementById("sidebar");
+const backdrop=document.getElementById("backdrop");
+const modal=document.getElementById("modal");
+const frame=document.getElementById("frame");
 
-let games = [];
-let activeGenre = "all";
-let allowedGenres = [];
-let favourites = JSON.parse(localStorage.getItem("favourites") || "[]");
+let games=[];
+let activeGenre="all";
+let allowedGenres=[];
+let favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
 
-function openMenu(){
-  sidebar.classList.add("active");
-  backdrop.classList.add("active");
-}
-function closeMenu(){
-  sidebar.classList.remove("active");
-  backdrop.classList.remove("active");
-}
+function openMenu(){sidebar.classList.add("active");backdrop.classList.add("active")}
+function closeMenu(){sidebar.classList.remove("active");backdrop.classList.remove("active")}
 
-function prettyGenre(slug){
-  return slug.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
-}
+function prettyGenre(s){return s.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase())}
 
-/* Load games */
-fetch("games.json")
-  .then(r=>r.json())
-  .then(data=>{
-    let raw=[];
-    if(Array.isArray(data.hits)) raw=data.hits;
-    else if(Array.isArray(data.segments))
-      raw=data.segments.flatMap(s=>s.hits||s.items||[]);
-
-    games = Object.values(
-      Object.fromEntries(raw.map(g=>[g.id,g]))
-    );
-
-    buildGenres();
-    render();
-  });
+fetch("games.json").then(r=>r.json()).then(data=>{
+  let raw=[];
+  if(Array.isArray(data.hits)) raw=data.hits;
+  else if(Array.isArray(data.segments))
+    raw=data.segments.flatMap(s=>s.hits||s.items||[]);
+  games=Object.values(Object.fromEntries(raw.map(g=>[g.id,g])));
+  buildGenres();
+  render();
+});
 
 function buildGenres(){
-  const counts={};
-  games.forEach(g=>(g.genres||[]).forEach(x=>counts[x]=(counts[x]||0)+1));
-
-  allowedGenres = Object.entries(counts)
-    .sort((a,b)=>b[1]-a[1])
-    .slice(0,10)
-    .map(([g])=>g);
-
+  const c={};
+  games.forEach(g=>(g.genres||[]).forEach(x=>c[x]=(c[x]||0)+1));
+  allowedGenres=Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,10).map(x=>x[0]);
   genreList.innerHTML="";
   allowedGenres.forEach(slug=>{
     const d=document.createElement("div");
     d.className="genre";
     d.textContent=prettyGenre(slug);
-    d.onclick=()=>{
-      setActive(d);
-      activeGenre=slug;
-      closeMenu();
-      render();
-    };
+    d.onclick=()=>{setActive(d);activeGenre=slug;closeMenu();render()};
     genreList.appendChild(d);
   });
 }
@@ -311,25 +231,13 @@ function setActive(el){
   el.classList.add("active");
 }
 
-allBtn.onclick=()=>{
-  setActive(allBtn);
-  activeGenre="all";
-  closeMenu();
-  render();
-};
-
-favBtn.onclick=()=>{
-  setActive(favBtn);
-  activeGenre="favourites";
-  closeMenu();
-  render();
-};
+document.getElementById("allGenres").onclick=()=>{setActive(allGenres);activeGenre="all";render()};
+document.getElementById("favFilter").onclick=()=>{setActive(favFilter);activeGenre="favourites";render()};
 
 function toggleFavourite(id){
-  if(favourites.includes(id))
-    favourites=favourites.filter(x=>x!==id);
-  else favourites.push(id);
-
+  favourites=favourites.includes(id)
+    ? favourites.filter(x=>x!==id)
+    : [...favourites,id];
   localStorage.setItem("favourites",JSON.stringify(favourites));
   render();
 }
@@ -337,59 +245,34 @@ function toggleFavourite(id){
 function render(){
   const q=search.value.toLowerCase();
   grid.innerHTML="";
-
   games.filter(g=>{
-    if(activeGenre==="favourites")
-      return favourites.includes(g.id) && g.title.toLowerCase().includes(q);
-
-    const okGenre=activeGenre==="all"||g.genres?.includes(activeGenre);
-    const okText=g.title.toLowerCase().includes(q);
-    return okGenre&&okText;
+    if(activeGenre==="favourites") return favourites.includes(g.id)&&g.title.toLowerCase().includes(q);
+    return (activeGenre==="all"||g.genres?.includes(activeGenre))&&g.title.toLowerCase().includes(q);
   }).forEach(g=>{
-    const tags=(g.genres||[])
-      .filter(x=>allowedGenres.includes(x))
-      .map(prettyGenre)
-      .join(", ");
-
+    const tags=(g.genres||[]).filter(x=>allowedGenres.includes(x)).map(prettyGenre).join(", ");
+    const fav=favourites.includes(g.id);
     const c=document.createElement("div");
     c.className="card";
     c.innerHTML=`
-      <div class="fav-btn ${favourites.includes(g.id)?"active":""}"
-        onclick="event.stopPropagation(); toggleFavourite('${g.id}')">
-        ❤
+      <div class="fav-btn ${fav?"active":""}" onclick="event.stopPropagation();toggleFavourite('${g.id}')">
+        ${fav?"❤️":"🤍"}
       </div>
       <img class="thumb" src="${g.images?.[0]||""}">
       <div class="card-body">
         <div class="card-title">${g.title}</div>
         <div class="card-meta">${tags}</div>
       </div>`;
-    c.onclick=()=>openGame(g.gameURL);
+    c.onclick=()=>{frame.src=g.gameURL;modal.classList.add("active")};
     grid.appendChild(c);
   });
 }
 
 search.oninput=render;
-
-function openGame(url){
-  frame.src=url;
-  modal.classList.add("active");
-}
-function closeGame(){
-  frame.src="";
-  modal.classList.remove("active");
-}
+function closeGame(){frame.src="";modal.classList.remove("active")}
 
 /* PWA */
-const manifest={
-  name:"Dunah PlayZone",
-  short_name:"PlayZone",
-  start_url:".",
-  display:"standalone",
-  background_color:"#0b0f1a",
-  theme_color:"#0b0f1a"
-};
-document.getElementById("manifest").href=
-  URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:"application/json"}));
+const manifest={name:"Dunah PlayZone",short_name:"PlayZone",start_url:".",display:"standalone",background_color:"#0b0f1a",theme_color:"#0b0f1a"};
+document.getElementById("manifest").href=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:"application/json"}));
 </script>
 
 </body>
