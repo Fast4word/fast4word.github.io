@@ -47,22 +47,11 @@ header{
   gap:10px;
 }
 
-.menu-btn{
-  font-size:22px;
-  cursor:pointer;
-}
-
-header h1{
-  margin:0;
-  font-size:1.2rem;
-  flex:1;
-}
+.menu-btn{font-size:22px;cursor:pointer}
+header h1{margin:0;font-size:1.2rem;flex:1}
 
 /* Search */
-.search-wrap{
-  padding:10px 14px;
-}
-
+.search-wrap{padding:10px 14px}
 .search-wrap input{
   width:100%;
   padding:10px;
@@ -84,7 +73,6 @@ aside{
   transition:.25s;
   z-index:30;
 }
-
 aside.active{transform:translateX(0)}
 
 .backdrop{
@@ -103,9 +91,7 @@ aside.active{transform:translateX(0)}
   cursor:pointer;
   color:var(--muted);
 }
-
-.genre.active,
-.genre:hover{
+.genre.active,.genre:hover{
   background:var(--panel);
   color:var(--accent);
 }
@@ -117,13 +103,8 @@ aside.active{transform:translateX(0)}
   grid-template-columns:repeat(2,1fr);
   gap:14px;
 }
-
-@media(min-width:600px){
-  .grid{grid-template-columns:repeat(3,1fr)}
-}
-@media(min-width:900px){
-  .grid{grid-template-columns:repeat(4,1fr)}
-}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:900px){.grid{grid-template-columns:repeat(4,1fr)}}
 
 /* Cards */
 .card{
@@ -133,26 +114,14 @@ aside.active{transform:translateX(0)}
   cursor:pointer;
   position:relative;
 }
-
 .thumb{
   width:100%;
   height:140px;
   object-fit:cover;
 }
-
-.card-body{
-  padding:10px;
-}
-
-.card-title{
-  font-weight:600;
-  font-size:.95rem;
-}
-
-.card-meta{
-  font-size:.7rem;
-  color:var(--muted);
-}
+.card-body{padding:10px}
+.card-title{font-weight:600;font-size:.95rem}
+.card-meta{font-size:.7rem;color:var(--muted)}
 
 /* Favourite */
 .fav-btn{
@@ -169,14 +138,13 @@ aside.active{transform:translateX(0)}
   font-size:18px;
   transition:.15s;
 }
-
 .fav-btn.active{
   color:var(--fav);
   box-shadow:0 0 8px rgba(255,92,92,.7);
   transform:scale(1.15);
 }
 
-/* Game View (tab fullscreen) */
+/* Game View */
 #gameView{
   position:fixed;
   inset:0;
@@ -184,14 +152,13 @@ aside.active{transform:translateX(0)}
   display:none;
   z-index:100;
 }
-
 #gameView iframe{
   width:100%;
   height:100%;
   border:none;
 }
 
-/* Hide site UI when playing */
+/* Hide UI while playing */
 body.playing header,
 body.playing .search-wrap,
 body.playing .grid,
@@ -227,65 +194,49 @@ body.playing .backdrop{
 </div>
 
 <script>
-const grid = document.getElementById("grid");
-const search = document.getElementById("search");
-const genreList = document.getElementById("genreList");
-const sidebar = document.getElementById("sidebar");
-const backdrop = document.getElementById("backdrop");
-const gameView = document.getElementById("gameView");
-const gameFrame = document.getElementById("gameFrame");
+const grid=document.getElementById("grid");
+const search=document.getElementById("search");
+const genreList=document.getElementById("genreList");
+const sidebar=document.getElementById("sidebar");
+const backdrop=document.getElementById("backdrop");
+const gameView=document.getElementById("gameView");
+const gameFrame=document.getElementById("gameFrame");
 
-let games = [];
-let activeGenre = "all";
-let allowedGenres = [];
-let favourites = JSON.parse(localStorage.getItem("favourites") || "[]");
+let games=[];
+let activeGenre="all";
+let allowedGenres=[];
+let favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
 
-function openMenu(){
-  sidebar.classList.add("active");
-  backdrop.classList.add("active");
-}
-function closeMenu(){
-  sidebar.classList.remove("active");
-  backdrop.classList.remove("active");
-}
+/* Sidebar */
+function openMenu(){sidebar.classList.add("active");backdrop.classList.add("active")}
+function closeMenu(){sidebar.classList.remove("active");backdrop.classList.remove("active")}
 
-function prettyGenre(slug){
-  return slug.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+function prettyGenre(s){
+  return s.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
 }
 
 /* Load games */
-fetch("games.json")
-.then(r=>r.json())
-.then(data=>{
+fetch("games.json").then(r=>r.json()).then(data=>{
   let raw=[];
   if(Array.isArray(data.hits)) raw=data.hits;
   else if(Array.isArray(data.segments))
     raw=data.segments.flatMap(s=>s.hits||s.items||[]);
-  games = Object.values(Object.fromEntries(raw.map(g=>[g.id,g])));
+  games=Object.values(Object.fromEntries(raw.map(g=>[g.id,g])));
   buildGenres();
   render();
 });
 
-/* Build genres */
+/* Genres */
 function buildGenres(){
-  const counts={};
-  games.forEach(g=>(g.genres||[]).forEach(x=>counts[x]=(counts[x]||0)+1));
-  allowedGenres = Object.entries(counts)
-    .sort((a,b)=>b[1]-a[1])
-    .slice(0,10)
-    .map(x=>x[0]);
-
+  const c={};
+  games.forEach(g=>(g.genres||[]).forEach(x=>c[x]=(c[x]||0)+1));
+  allowedGenres=Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,10).map(x=>x[0]);
   genreList.innerHTML="";
   allowedGenres.forEach(slug=>{
     const d=document.createElement("div");
     d.className="genre";
     d.textContent=prettyGenre(slug);
-    d.onclick=()=>{
-      setActive(d);
-      activeGenre=slug;
-      closeMenu();
-      render();
-    };
+    d.onclick=()=>{setActive(d);activeGenre=slug;closeMenu();render()};
     genreList.appendChild(d);
   });
 }
@@ -298,14 +249,16 @@ function setActive(el){
 allGenres.onclick=()=>{setActive(allGenres);activeGenre="all";render()};
 favFilter.onclick=()=>{setActive(favFilter);activeGenre="favourites";render()};
 
+/* Favourites */
 function toggleFavourite(id){
-  favourites = favourites.includes(id)
+  favourites=favourites.includes(id)
     ? favourites.filter(x=>x!==id)
     : [...favourites,id];
   localStorage.setItem("favourites",JSON.stringify(favourites));
   render();
 }
 
+/* Render */
 function render(){
   const q=search.value.toLowerCase();
   grid.innerHTML="";
@@ -337,25 +290,26 @@ function render(){
   });
 }
 
-/* Game handling */
+/* ---- GAME NAVIGATION (FIXED) ---- */
 function openGame(url){
-  gameFrame.src = url;
+  gameFrame.src=url;
   document.body.classList.add("playing");
   gameView.style.display="block";
+
+  // Push exactly ONE state
   history.pushState({playing:true},"");
 }
 
-function closeGame(fromPop=false){
+function closeGame(){
   document.body.classList.remove("playing");
   gameView.style.display="none";
   gameFrame.src="";
-  if(!fromPop) history.back();
 }
 
 /* Mobile back button */
 window.addEventListener("popstate",()=>{
   if(document.body.classList.contains("playing")){
-    closeGame(true);
+    closeGame();
   }
 });
 
@@ -368,7 +322,7 @@ document.addEventListener("keydown",e=>{
 
 search.oninput=render;
 
-/* PWA manifest */
+/* PWA */
 const manifest={
   name:"Dunah PlayZone",
   short_name:"PlayZone",
@@ -377,7 +331,7 @@ const manifest={
   background_color:"#0b0f1a",
   theme_color:"#0b0f1a"
 };
-document.getElementById("manifest").href =
+document.getElementById("manifest").href=
   URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:"application/json"}));
 </script>
 
