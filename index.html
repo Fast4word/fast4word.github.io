@@ -220,6 +220,16 @@ fetch("games.json").then(r=>r.json()).then(data=>{
   else if(Array.isArray(data.segments))
     raw=data.segments.flatMap(s=>s.hits||s.items||[]);
   games=Object.values(Object.fromEntries(raw.map(g=>[g.id,g])));
+
+  // ---------- ADD BALL BURST ----------
+  games.push({
+    id: "ball-burst",
+    title: "Ball Burst",
+    images: ["https://img.gamepix.com/games/ball-burst/icon/ball-burst.png?w=105"],
+    genres: ["arcade", "action"],
+    gameURL: "https://play.gamepix.com/ball-burst/embed?sid=1"
+  });
+
   buildGenres();
   render();
 });
