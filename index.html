@@ -4,13 +4,12 @@
 <meta charset="UTF-8">
 <title>Dunah PlayZone</title>
 
-<meta name="description" content="Dunah PlayZone – Play free online games instantly.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0b0f1a">
+<meta name="description" content="Play free online games instantly on Dunah PlayZone.">
 
 <link rel="manifest" id="manifest">
 
-<!-- SVG Favicon -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
   <rect width='100' height='100' rx='22' fill='%230b0f1a'/>
@@ -23,12 +22,12 @@
   --bg:#0b0f1a;
   --panel:#151a2d;
   --accent:#6cf2c2;
-  --text:#fff;
+  --text:#ffffff;
   --muted:#9aa3c7;
-  --danger:#ff5c5c;
+  --fav:#ff5c5c;
 }
 
-*{box-sizing:border-box;font-family:system-ui,sans-serif}
+*{box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
 
 body{
   margin:0;
@@ -44,14 +43,26 @@ header{
   background:#0d1225;
   padding:12px 14px;
   display:flex;
-  gap:10px;
   align-items:center;
+  gap:10px;
 }
 
-.menu-btn{font-size:22px;cursor:pointer}
-header h1{margin:0;font-size:1.2rem;flex:1}
+.menu-btn{
+  font-size:22px;
+  cursor:pointer;
+}
 
-.search-wrap{padding:10px 14px}
+header h1{
+  margin:0;
+  font-size:1.2rem;
+  flex:1;
+}
+
+/* Search */
+.search-wrap{
+  padding:10px 14px;
+}
+
 .search-wrap input{
   width:100%;
   padding:10px;
@@ -62,15 +73,18 @@ header h1{margin:0;font-size:1.2rem;flex:1}
 /* Sidebar */
 aside{
   position:fixed;
-  inset:0 auto 0 0;
+  top:0;
+  bottom:0;
+  left:0;
   width:260px;
   background:#0d1225;
   padding:18px;
+  overflow-y:auto;
   transform:translateX(-100%);
   transition:.25s;
   z-index:30;
-  overflow-y:auto;
 }
+
 aside.active{transform:translateX(0)}
 
 .backdrop{
@@ -89,7 +103,9 @@ aside.active{transform:translateX(0)}
   cursor:pointer;
   color:var(--muted);
 }
-.genre.active,.genre:hover{
+
+.genre.active,
+.genre:hover{
   background:var(--panel);
   color:var(--accent);
 }
@@ -101,8 +117,13 @@ aside.active{transform:translateX(0)}
   grid-template-columns:repeat(2,1fr);
   gap:14px;
 }
-@media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:900px){.grid{grid-template-columns:repeat(4,1fr)}}
+
+@media(min-width:600px){
+  .grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(min-width:900px){
+  .grid{grid-template-columns:repeat(4,1fr)}
+}
 
 /* Cards */
 .card{
@@ -112,14 +133,26 @@ aside.active{transform:translateX(0)}
   cursor:pointer;
   position:relative;
 }
+
 .thumb{
   width:100%;
   height:140px;
   object-fit:cover;
 }
-.card-body{padding:10px}
-.card-title{font-weight:600;font-size:.95rem}
-.card-meta{font-size:.7rem;color:var(--muted)}
+
+.card-body{
+  padding:10px;
+}
+
+.card-title{
+  font-weight:600;
+  font-size:.95rem;
+}
+
+.card-meta{
+  font-size:.7rem;
+  color:var(--muted);
+}
 
 /* Favourite */
 .fav-btn{
@@ -136,13 +169,14 @@ aside.active{transform:translateX(0)}
   font-size:18px;
   transition:.15s;
 }
+
 .fav-btn.active{
-  color:var(--danger);
-  box-shadow:0 0 8px rgba(255,92,92,.8);
+  color:var(--fav);
+  box-shadow:0 0 8px rgba(255,92,92,.7);
   transform:scale(1.15);
 }
 
-/* ---- Tab-Fullscreen Game View ---- */
+/* Game View (tab fullscreen) */
 #gameView{
   position:fixed;
   inset:0;
@@ -157,7 +191,7 @@ aside.active{transform:translateX(0)}
   border:none;
 }
 
-/* Hide site UI while playing */
+/* Hide site UI when playing */
 body.playing header,
 body.playing .search-wrap,
 body.playing .grid,
@@ -189,52 +223,69 @@ body.playing .backdrop{
 <div class="grid" id="grid"></div>
 
 <div id="gameView">
-  <iframe id="gameFrame" allow="autoplay; fullscreen; payment"></iframe>
+  <iframe id="gameFrame" allow="autoplay; payment; fullscreen"></iframe>
 </div>
 
 <script>
-const grid=document.getElementById("grid");
-const search=document.getElementById("search");
-const genreList=document.getElementById("genreList");
-const sidebar=document.getElementById("sidebar");
-const backdrop=document.getElementById("backdrop");
-const gameView=document.getElementById("gameView");
-const gameFrame=document.getElementById("gameFrame");
+const grid = document.getElementById("grid");
+const search = document.getElementById("search");
+const genreList = document.getElementById("genreList");
+const sidebar = document.getElementById("sidebar");
+const backdrop = document.getElementById("backdrop");
+const gameView = document.getElementById("gameView");
+const gameFrame = document.getElementById("gameFrame");
 
-let games=[];
-let activeGenre="all";
-let allowedGenres=[];
-let favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
+let games = [];
+let activeGenre = "all";
+let allowedGenres = [];
+let favourites = JSON.parse(localStorage.getItem("favourites") || "[]");
 
-function openMenu(){sidebar.classList.add("active");backdrop.classList.add("active")}
-function closeMenu(){sidebar.classList.remove("active");backdrop.classList.remove("active")}
+function openMenu(){
+  sidebar.classList.add("active");
+  backdrop.classList.add("active");
+}
+function closeMenu(){
+  sidebar.classList.remove("active");
+  backdrop.classList.remove("active");
+}
 
-function prettyGenre(s){
-  return s.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+function prettyGenre(slug){
+  return slug.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
 }
 
 /* Load games */
-fetch("games.json").then(r=>r.json()).then(data=>{
+fetch("games.json")
+.then(r=>r.json())
+.then(data=>{
   let raw=[];
   if(Array.isArray(data.hits)) raw=data.hits;
   else if(Array.isArray(data.segments))
     raw=data.segments.flatMap(s=>s.hits||s.items||[]);
-  games=Object.values(Object.fromEntries(raw.map(g=>[g.id,g])));
+  games = Object.values(Object.fromEntries(raw.map(g=>[g.id,g])));
   buildGenres();
   render();
 });
 
-/* Genres */
+/* Build genres */
 function buildGenres(){
-  const c={};
-  games.forEach(g=>(g.genres||[]).forEach(x=>c[x]=(c[x]||0)+1));
-  allowedGenres=Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,10).map(x=>x[0]);
+  const counts={};
+  games.forEach(g=>(g.genres||[]).forEach(x=>counts[x]=(counts[x]||0)+1));
+  allowedGenres = Object.entries(counts)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,10)
+    .map(x=>x[0]);
+
   genreList.innerHTML="";
   allowedGenres.forEach(slug=>{
     const d=document.createElement("div");
     d.className="genre";
     d.textContent=prettyGenre(slug);
-    d.onclick=()=>{setActive(d);activeGenre=slug;closeMenu();render()};
+    d.onclick=()=>{
+      setActive(d);
+      activeGenre=slug;
+      closeMenu();
+      render();
+    };
     genreList.appendChild(d);
   });
 }
@@ -247,16 +298,14 @@ function setActive(el){
 allGenres.onclick=()=>{setActive(allGenres);activeGenre="all";render()};
 favFilter.onclick=()=>{setActive(favFilter);activeGenre="favourites";render()};
 
-/* Favourites */
 function toggleFavourite(id){
-  favourites=favourites.includes(id)
+  favourites = favourites.includes(id)
     ? favourites.filter(x=>x!==id)
     : [...favourites,id];
   localStorage.setItem("favourites",JSON.stringify(favourites));
   render();
 }
 
-/* Render */
 function render(){
   const q=search.value.toLowerCase();
   grid.innerHTML="";
@@ -288,27 +337,38 @@ function render(){
   });
 }
 
-/* Open / close game (tab fullscreen) */
+/* Game handling */
 function openGame(url){
-  gameFrame.src=url;
+  gameFrame.src = url;
   document.body.classList.add("playing");
   gameView.style.display="block";
   history.pushState({playing:true},"");
 }
 
-window.addEventListener("popstate",()=>{
-  closeGame();
-});
-
-function closeGame(){
+function closeGame(fromPop=false){
   document.body.classList.remove("playing");
   gameView.style.display="none";
   gameFrame.src="";
+  if(!fromPop) history.back();
 }
+
+/* Mobile back button */
+window.addEventListener("popstate",()=>{
+  if(document.body.classList.contains("playing")){
+    closeGame(true);
+  }
+});
+
+/* Desktop ESC */
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape" && document.body.classList.contains("playing")){
+    closeGame();
+  }
+});
 
 search.oninput=render;
 
-/* PWA */
+/* PWA manifest */
 const manifest={
   name:"Dunah PlayZone",
   short_name:"PlayZone",
@@ -317,7 +377,7 @@ const manifest={
   background_color:"#0b0f1a",
   theme_color:"#0b0f1a"
 };
-document.getElementById("manifest").href=
+document.getElementById("manifest").href =
   URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:"application/json"}));
 </script>
 
