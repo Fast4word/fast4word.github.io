@@ -26,9 +26,7 @@
   --muted:#9aa3c7;
   --fav:#ff5c5c;
 }
-
 *{box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
-
 body{
   margin:0;
   background:linear-gradient(180deg,#0b0f1a,#0e1330);
@@ -37,60 +35,37 @@ body{
 
 /* Header */
 header{
-  position:sticky;
-  top:0;
-  z-index:20;
+  position:sticky;top:0;z-index:20;
   background:#0d1225;
   padding:12px 14px;
-  display:flex;
-  align-items:center;
-  gap:10px;
+  display:flex;align-items:center;gap:10px;
 }
 .menu-btn{font-size:22px;cursor:pointer}
 header h1{margin:0;font-size:1.2rem;flex:1}
 
 /* Search */
 .search-wrap{padding:10px 14px}
-.search-wrap input{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:none;
-}
+.search-wrap input{width:100%;padding:10px;border-radius:10px;border:none}
 
 /* Sidebar */
 aside{
-  position:fixed;
-  top:0;bottom:0;left:0;
-  width:260px;
-  background:#0d1225;
-  padding:18px;
-  overflow-y:auto;
-  transform:translateX(-100%);
-  transition:.25s;
-  z-index:30;
+  position:fixed;top:0;bottom:0;left:0;
+  width:260px;background:#0d1225;padding:18px;
+  overflow-y:auto;transform:translateX(-100%);
+  transition:.25s;z-index:30;
 }
 aside.active{transform:translateX(0)}
-
 .backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  display:none;
-  z-index:25;
+  position:fixed;inset:0;background:rgba(0,0,0,.6);
+  display:none;z-index:25;
 }
 .backdrop.active{display:block}
-
 .genre{
-  padding:12px;
-  border-radius:10px;
-  margin-bottom:6px;
-  cursor:pointer;
-  color:var(--muted);
+  padding:12px;border-radius:10px;margin-bottom:6px;
+  cursor:pointer;color:var(--muted);
 }
 .genre.active,.genre:hover{
-  background:var(--panel);
-  color:var(--accent);
+  background:var(--panel);color:var(--accent);
 }
 
 /* Grid */
@@ -111,29 +86,18 @@ aside.active{transform:translateX(0)}
   cursor:pointer;
   position:relative;
 }
-.thumb{
-  width:100%;
-  height:140px;
-  object-fit:cover;
-}
+.thumb{width:100%;height:140px;object-fit:cover}
 .card-body{padding:10px}
 .card-title{font-weight:600;font-size:.95rem}
 .card-meta{font-size:.7rem;color:var(--muted)}
 
 /* Favourite */
 .fav-btn{
-  position:absolute;
-  top:8px;
-  right:8px;
-  width:32px;
-  height:32px;
-  border-radius:50%;
+  position:absolute;top:8px;right:8px;
+  width:32px;height:32px;border-radius:50%;
   background:rgba(0,0,0,.6);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
-  transition:.15s;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;transition:.15s;
 }
 .fav-btn.active{
   color:var(--fav);
@@ -141,19 +105,12 @@ aside.active{transform:translateX(0)}
   transform:scale(1.15);
 }
 
-/* Game View (tab fullscreen) */
+/* Game View */
 #gameView{
-  position:fixed;
-  inset:0;
-  background:#000;
-  display:none;
-  z-index:100;
+  position:fixed;inset:0;background:#000;
+  display:none;z-index:100;
 }
-#gameView iframe{
-  width:100%;
-  height:100%;
-  border:none;
-}
+#gameView iframe{width:100%;height:100%;border:none}
 
 /* Hide UI while playing */
 body.playing header,
@@ -187,14 +144,12 @@ body.playing .backdrop{
 <div class="grid" id="grid"></div>
 
 <div id="gameView">
-  <iframe id="gameFrame" allow="autoplay; payment; fullscreen"></iframe>
+  <iframe id="gameFrame" allow="autoplay; fullscreen; keyboard; payment"></iframe>
 </div>
 
 <script>
-// ---------- BASE STATE ----------
-history.replaceState(null, "");
+history.replaceState(null,"");
 
-// ---------- ELEMENTS ----------
 const grid=document.getElementById("grid");
 const search=document.getElementById("search");
 const genreList=document.getElementById("genreList");
@@ -208,30 +163,38 @@ let activeGenre="all";
 let allowedGenres=[];
 let favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
 
-// ---------- SIDEBAR ----------
 function openMenu(){sidebar.classList.add("active");backdrop.classList.add("active")}
 function closeMenu(){sidebar.classList.remove("active");backdrop.classList.remove("active")}
 function prettyGenre(s){return s.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase())}
 
-// ---------- LOAD GAMES ----------
+/* Load games */
 fetch("games.json").then(r=>r.json()).then(data=>{
   let raw=[];
   if(Array.isArray(data.hits)) raw=data.hits;
   else if(Array.isArray(data.segments))
     raw=data.segments.flatMap(s=>s.hits||s.items||[]);
+
   games=Object.values(Object.fromEntries(raw.map(g=>[g.id,g])));
+
+  /* ADD FORTZONE */
+  games.unshift({
+    id:"fortzone",
+    title:"FortZone Battle Royale",
+    genres:["battle-royale","action","shooter"],
+    images:["https://cdn.jsdelivr.net/gh/placeholder-art/fortnite-style.jpg"],
+    customIframe:true,
+    iframeSrc:"https://playgama.com"
+  });
+
   buildGenres();
   render();
 });
 
-// ---------- GENRES ----------
+/* Genres */
 function buildGenres(){
   const c={};
   games.forEach(g=>(g.genres||[]).forEach(x=>c[x]=(c[x]||0)+1));
-  allowedGenres=Object.entries(c)
-    .sort((a,b)=>b[1]-a[1])
-    .slice(0,10)
-    .map(x=>x[0]);
+  allowedGenres=Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,10).map(x=>x[0]);
   genreList.innerHTML="";
   allowedGenres.forEach(slug=>{
     const d=document.createElement("div");
@@ -241,25 +204,21 @@ function buildGenres(){
     genreList.appendChild(d);
   });
 }
-
 function setActive(el){
   document.querySelectorAll(".genre").forEach(x=>x.classList.remove("active"));
   el.classList.add("active");
 }
-
 allGenres.onclick=()=>{setActive(allGenres);activeGenre="all";render()};
 favFilter.onclick=()=>{setActive(favFilter);activeGenre="favourites";render()};
 
-// ---------- FAVOURITES ----------
+/* Favourites */
 function toggleFavourite(id){
-  favourites=favourites.includes(id)
-    ? favourites.filter(x=>x!==id)
-    : [...favourites,id];
+  favourites=favourites.includes(id)?favourites.filter(x=>x!==id):[...favourites,id];
   localStorage.setItem("favourites",JSON.stringify(favourites));
   render();
 }
 
-// ---------- RENDER ----------
+/* Render */
 function render(){
   const q=search.value.toLowerCase();
   grid.innerHTML="";
@@ -269,16 +228,12 @@ function render(){
     return (activeGenre==="all"||g.genres?.includes(activeGenre))
       && g.title.toLowerCase().includes(q);
   }).forEach(g=>{
-    const tags=(g.genres||[])
-      .filter(x=>allowedGenres.includes(x))
-      .map(prettyGenre)
-      .join(", ");
+    const tags=(g.genres||[]).filter(x=>allowedGenres.includes(x)).map(prettyGenre).join(", ");
     const fav=favourites.includes(g.id);
     const c=document.createElement("div");
     c.className="card";
     c.innerHTML=`
-      <div class="fav-btn ${fav?"active":""}"
-        onclick="event.stopPropagation();toggleFavourite('${g.id}')">
+      <div class="fav-btn ${fav?"active":""}" onclick="event.stopPropagation();toggleFavourite('${g.id}')">
         ${fav?"❤️":"🤍"}
       </div>
       <img class="thumb" src="${g.images?.[0]||""}">
@@ -286,17 +241,21 @@ function render(){
         <div class="card-title">${g.title}</div>
         <div class="card-meta">${tags}</div>
       </div>`;
-    c.onclick=()=>openGame(g.gameURL);
+    c.onclick=()=>openGame(g);
     grid.appendChild(c);
   });
 }
 
-// ---------- GAME NAV (HARDENED) ----------
-function openGame(url){
-  gameFrame.src=url;
+/* Game navigation */
+function openGame(game){
   gameView.style.display="block";
   document.body.classList.add("playing");
-  history.pushState(null, "");
+  if(game.customIframe){
+    gameFrame.src=game.iframeSrc;
+  }else{
+    gameFrame.src=game.gameURL;
+  }
+  history.pushState(null,"");
 }
 
 function closeGame(){
@@ -305,23 +264,17 @@ function closeGame(){
   gameFrame.src="";
 }
 
-// Back button: ALWAYS exit game if playing
 window.addEventListener("popstate",()=>{
-  if(document.body.classList.contains("playing")){
-    closeGame();
-  }
+  if(document.body.classList.contains("playing")) closeGame();
 });
 
-// ESC key
 document.addEventListener("keydown",e=>{
-  if(e.key==="Escape" && document.body.classList.contains("playing")){
-    closeGame();
-  }
+  if(e.key==="Escape" && document.body.classList.contains("playing")) closeGame();
 });
 
 search.oninput=render;
 
-// ---------- PWA ----------
+/* PWA */
 const manifest={
   name:"Dunah PlayZone",
   short_name:"PlayZone",
