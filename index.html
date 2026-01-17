@@ -176,15 +176,7 @@ fetch("games.json").then(r=>r.json()).then(data=>{
 
   games=Object.values(Object.fromEntries(raw.map(g=>[g.id,g])));
 
-  /* ADD FORTZONE */
-  games.unshift({
-    id:"fortzone",
-    title:"FortZone Battle Royale",
-    genres:["battle-royale","action","shooter"],
-    images:["https://cdn.jsdelivr.net/gh/placeholder-art/fortnite-style.jpg"],
-    customIframe:true,
-    iframeSrc:"https://playgama.com"
-  });
+
 
   buildGenres();
   render();
