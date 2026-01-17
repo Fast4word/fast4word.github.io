@@ -194,6 +194,10 @@ body.playing .backdrop{
 </div>
 
 <script>
+// ---------- HISTORY BASE ----------
+history.replaceState({ playing:false }, "");
+
+// ---------- ELEMENTS ----------
 const grid=document.getElementById("grid");
 const search=document.getElementById("search");
 const genreList=document.getElementById("genreList");
@@ -207,7 +211,7 @@ let activeGenre="all";
 let allowedGenres=[];
 let favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
 
-/* Sidebar */
+// ---------- SIDEBAR ----------
 function openMenu(){sidebar.classList.add("active");backdrop.classList.add("active")}
 function closeMenu(){sidebar.classList.remove("active");backdrop.classList.remove("active")}
 
@@ -215,7 +219,7 @@ function prettyGenre(s){
   return s.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
 }
 
-/* Load games */
+// ---------- LOAD GAMES ----------
 fetch("games.json").then(r=>r.json()).then(data=>{
   let raw=[];
   if(Array.isArray(data.hits)) raw=data.hits;
@@ -226,7 +230,7 @@ fetch("games.json").then(r=>r.json()).then(data=>{
   render();
 });
 
-/* Genres */
+// ---------- GENRES ----------
 function buildGenres(){
   const c={};
   games.forEach(g=>(g.genres||[]).forEach(x=>c[x]=(c[x]||0)+1));
@@ -249,7 +253,7 @@ function setActive(el){
 allGenres.onclick=()=>{setActive(allGenres);activeGenre="all";render()};
 favFilter.onclick=()=>{setActive(favFilter);activeGenre="favourites";render()};
 
-/* Favourites */
+// ---------- FAVOURITES ----------
 function toggleFavourite(id){
   favourites=favourites.includes(id)
     ? favourites.filter(x=>x!==id)
@@ -258,7 +262,7 @@ function toggleFavourite(id){
   render();
 }
 
-/* Render */
+// ---------- RENDER ----------
 function render(){
   const q=search.value.toLowerCase();
   grid.innerHTML="";
@@ -290,14 +294,12 @@ function render(){
   });
 }
 
-/* ---- GAME NAVIGATION (FIXED) ---- */
+// ---------- GAME NAV ----------
 function openGame(url){
   gameFrame.src=url;
-  document.body.classList.add("playing");
   gameView.style.display="block";
-
-  // Push exactly ONE state
-  history.pushState({playing:true},"");
+  document.body.classList.add("playing");
+  history.pushState({ playing:true }, "");
 }
 
 function closeGame(){
@@ -306,14 +308,16 @@ function closeGame(){
   gameFrame.src="";
 }
 
-/* Mobile back button */
-window.addEventListener("popstate",()=>{
-  if(document.body.classList.contains("playing")){
+// Mobile back
+window.addEventListener("popstate",e=>{
+  if(e.state && e.state.playing){
+    // Ignore
+  } else {
     closeGame();
   }
 });
 
-/* Desktop ESC */
+// Desktop ESC
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape" && document.body.classList.contains("playing")){
     closeGame();
@@ -322,7 +326,7 @@ document.addEventListener("keydown",e=>{
 
 search.oninput=render;
 
-/* PWA */
+// ---------- PWA ----------
 const manifest={
   name:"Dunah PlayZone",
   short_name:"PlayZone",
