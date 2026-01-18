@@ -6,9 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0b0f1a">
-<meta name="description" content="Play free online games instantly on Dunah PlayZone.">
-
-<link rel="manifest" id="manifest">
 
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
@@ -22,7 +19,7 @@
   --bg:#0b0f1a;
   --panel:#151a2d;
   --accent:#6cf2c2;
-  --text:#ffffff;
+  --text:#fff;
   --muted:#9aa3c7;
   --fav:#ff5c5c;
 }
@@ -31,85 +28,33 @@
 
 body{
   margin:0;
-  background:linear-gradient(180deg,#0b0f1a,#0e1330);
+  background:radial-gradient(circle at top,#101a3a,#0b0f1a);
   color:var(--text);
 }
 
 /* Header */
 header{
-  position:sticky;
-  top:0;
-  z-index:20;
-  background:#0d1225;
-  padding:12px 14px;
-  display:flex;
-  align-items:center;
-  gap:10px;
+  position:sticky;top:0;z-index:20;
+  background:linear-gradient(180deg,#0d1225,#0b0f1a);
+  padding:14px;
+  display:flex;align-items:center;
 }
-.menu-btn{font-size:22px;cursor:pointer}
 header h1{margin:0;font-size:1.2rem;flex:1}
-.search-btn{font-size:20px;cursor:pointer}
+.menu-btn,.search-btn{font-size:22px;cursor:pointer}
 
 /* Search */
-.search-wrap{
-  padding:10px 14px;
-  display:none;
-}
+.search-wrap{padding:12px;display:none}
 .search-wrap.active{display:block}
 .search-wrap input{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:none;
-}
-
-/* Sidebar */
-aside{
-  position:fixed;
-  top:0;bottom:0;left:0;
-  width:260px;
-  background:#0d1225;
-  padding:18px;
-  overflow-y:auto;
-  transform:translateX(-100%);
-  transition:.25s;
-  z-index:30;
-}
-aside.active{transform:translateX(0)}
-
-.backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  display:none;
-  z-index:25;
-}
-.backdrop.active{display:block}
-
-.genre{
-  padding:12px;
-  border-radius:10px;
-  margin-bottom:6px;
-  cursor:pointer;
-  color:var(--muted);
-}
-.genre.active,.genre:hover{
-  background:var(--panel);
-  color:var(--accent);
+  width:100%;padding:12px;border-radius:12px;border:none;
 }
 
 /* Sections */
-.section{
-  padding:14px 14px 0;
-}
-.section h2{
-  margin:0 0 10px;
-  font-size:1.1rem;
-}
+.section{padding:16px}
+.section h2{margin:0 0 12px;font-size:1.15rem}
 
 /* Grid */
 .grid{
-  padding:14px;
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:14px;
@@ -120,81 +65,63 @@ aside.active{transform:translateX(0)}
 /* Cards */
 .card{
   background:var(--panel);
-  border-radius:14px;
+  border-radius:16px;
   overflow:hidden;
-  cursor:pointer;
   position:relative;
+  cursor:pointer;
 }
 .thumb{width:100%;height:140px;object-fit:cover}
 .card-body{padding:10px}
 .card-title{font-weight:600;font-size:.95rem}
-.card-meta{font-size:.7rem;color:var(--muted)}
 
 /* Favourite */
 .fav-btn{
-  position:absolute;
-  top:8px;
-  right:8px;
-  width:32px;
-  height:32px;
-  border-radius:50%;
-  background:rgba(0,0,0,.6);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
-  transition:.15s;
+  position:absolute;top:8px;right:8px;
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(0,0,0,.55);
+  display:flex;align-items:center;justify-content:center;
 }
-.fav-btn.active{
-  color:var(--fav);
-  box-shadow:0 0 8px rgba(255,92,92,.7);
-  transform:scale(1.15);
-}
+.fav-btn.active{color:var(--fav)}
 
-/* Game View */
+/* Game view */
 #gameView{
-  position:fixed;
-  inset:0;
-  background:#000;
-  display:none;
-  z-index:100;
+  position:fixed;inset:0;background:#000;
+  display:none;z-index:100;
 }
 #gameView iframe{width:100%;height:100%;border:none}
 
-/* Bottom Nav (mobile) */
+/* Bottom nav */
 .bottom-nav{
   position:fixed;
   bottom:0;left:0;right:0;
+  height:64px;
   background:#0d1225;
   display:flex;
   justify-content:space-around;
-  padding:8px 0;
+  align-items:center;
   z-index:40;
 }
 .bottom-nav button{
-  background:none;
-  border:none;
+  background:none;border:none;
   color:var(--muted);
-  font-size:.75rem;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  font-size:.7rem;
 }
+.bottom-nav button span{font-size:22px;line-height:1}
 .bottom-nav button.active{color:var(--accent)}
 
-/* Hide UI while playing */
 body.playing header,
 body.playing .search-wrap,
-body.playing .grid,
 body.playing .section,
-body.playing aside,
-body.playing .backdrop,
-body.playing .bottom-nav{
-  display:none !important;
-}
+body.playing .bottom-nav{display:none}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="menu-btn" onclick="openMenu()">☰</div>
+  <div class="menu-btn">☰</div>
   <h1>Dunah PlayZone</h1>
   <div class="search-btn" onclick="toggleSearch()">🔍</div>
 </header>
@@ -203,15 +130,6 @@ body.playing .bottom-nav{
   <input id="search" placeholder="Search games...">
 </div>
 
-<div class="backdrop" id="backdrop" onclick="closeMenu()"></div>
-
-<aside id="sidebar">
-  <div class="genre active" id="allGenres">All Games</div>
-  <div class="genre" id="favFilter">⭐ Favourites</div>
-  <div id="genreList"></div>
-</aside>
-
-<!-- HOME -->
 <div id="homeTab">
   <div class="section">
     <h2>Featured</h2>
@@ -223,135 +141,89 @@ body.playing .bottom-nav{
   </div>
 </div>
 
-<!-- GAMES -->
-<div class="grid" id="grid" style="display:none"></div>
+<div class="section" id="gamesTab" style="display:none">
+  <div class="grid" id="grid"></div>
+</div>
 
 <div id="gameView">
   <iframe id="gameFrame" allow="autoplay; payment; fullscreen"></iframe>
 </div>
 
 <div class="bottom-nav">
-  <button id="tabHome" class="active" onclick="setTab('home')">Home</button>
-  <button id="tabFav" onclick="setTab('fav')">Favourites</button>
-  <button id="tabGames" onclick="setTab('games')">Games</button>
+  <button onclick="setTab('games')"><span>🎮</span>Games</button>
+  <button class="active" onclick="setTab('home')"><span>🏠</span>Home</button>
+  <button onclick="setTab('fav')"><span>❤️</span>Favourites</button>
 </div>
 
 <script>
-history.replaceState(null,"");
+let games=[],favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
+let tab="home";
 
-const grid=document.getElementById("grid");
-const featuredGrid=document.getElementById("featuredGrid");
-const recommendedGrid=document.getElementById("recommendedGrid");
-const search=document.getElementById("search");
-const searchWrap=document.getElementById("searchWrap");
-
-let games=[];
-let favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
-let currentTab="home";
-
-/* UI helpers */
-function toggleSearch(){searchWrap.classList.toggle("active")}
-function setTab(tab){
-  currentTab=tab;
-  document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
-  document.getElementById("tab"+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add("active");
-  document.getElementById("homeTab").style.display=tab==="home"?"block":"none";
-  grid.style.display=tab==="games"||tab==="fav"?"grid":"none";
-  render();
-}
-
-/* Load games */
-fetch("games.json").then(r=>r.json()).then(data=>{
-  let raw=[];
-  if(Array.isArray(data.hits)) raw=data.hits;
-  else if(Array.isArray(data.segments))
-    raw=data.segments.flatMap(s=>s.hits||s.items||[]);
-  games=Object.values(Object.fromEntries(raw.map(g=>[g.id,g])));
-
+fetch("games.json").then(r=>r.json()).then(d=>{
+  games=(d.hits||[]).map(g=>g);
   games.push({
     id:"ball-burst",
     title:"Ball Burst",
     images:["https://img.gamepix.com/games/ball-burst/icon/ball-burst.png?w=105"],
-    genres:["arcade","action"],
     gameURL:"https://play.gamepix.com/ball-burst/embed?sid=1"
   });
-
   render();
 });
 
-/* Featured logic */
-function getFeatured(){
-  const week=Math.floor(Date.now()/(1000*60*60*24*7));
-  if(week%10<7) return games.find(g=>g.id==="ball-burst");
-  return games[week%games.length];
+function toggleSearch(){searchWrap.classList.toggle("active")}
+
+function setTab(t){
+  tab=t;
+  document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
+  document.querySelector(`.bottom-nav button:nth-child(${t==="games"?1:t==="home"?2:3})`).classList.add("active");
+  homeTab.style.display=t==="home"?"block":"none";
+  gamesTab.style.display=t!=="home"?"block":"none";
+  render();
 }
 
-/* Render cards */
-function renderCards(list, el){
+/* Featured logic */
+function getFeatured(){
+  const week=Math.floor(Date.now()/604800000);
+  const list=[games.find(g=>g.id==="ball-burst")];
+  const others=games.filter(g=>g.id!=="ball-burst");
+  list.push(others[week%others.length]);
+  list.push(others[(week+3)%others.length]);
+  return list.filter(Boolean);
+}
+
+function renderCards(list,el){
   el.innerHTML="";
   list.forEach(g=>{
     const fav=favourites.includes(g.id);
     const c=document.createElement("div");
     c.className="card";
     c.innerHTML=`
-      <div class="fav-btn ${fav?"active":""}" onclick="event.stopPropagation();toggleFavourite('${g.id}')">
-        ${fav?"❤️":"🤍"}
-      </div>
+      <div class="fav-btn ${fav?"active":""}">❤</div>
       <img class="thumb" src="${g.images?.[0]||""}">
-      <div class="card-body">
-        <div class="card-title">${g.title}</div>
-      </div>`;
+      <div class="card-body"><div class="card-title">${g.title}</div></div>`;
     c.onclick=()=>openGame(g.gameURL);
     el.appendChild(c);
   });
 }
 
 function render(){
-  if(currentTab==="home"){
+  if(tab==="home"){
     const featured=getFeatured();
-    renderCards(featured?[featured]:[], featuredGrid);
-    renderCards(games.filter(g=>g.id!==featured?.id).slice(0,6), recommendedGrid);
+    renderCards(featured,featuredGrid);
+    renderCards(games.filter(g=>!featured.includes(g)).slice(0,6),recommendedGrid);
   }else{
-    const list=currentTab==="fav"
-      ? games.filter(g=>favourites.includes(g.id))
-      : games;
-    renderCards(list, grid);
+    const list=tab==="fav"?games.filter(g=>favourites.includes(g.id)):games;
+    renderCards(list,grid);
   }
 }
 
-/* Favourites */
-function toggleFavourite(id){
-  favourites=favourites.includes(id)?favourites.filter(x=>x!==id):[...favourites,id];
-  localStorage.setItem("favourites",JSON.stringify(favourites));
-  render();
-}
-
-/* Game nav */
 function openGame(url){
   gameFrame.src=url;
   gameView.style.display="block";
   document.body.classList.add("playing");
   history.pushState(null,"");
 }
-function closeGame(){
-  document.body.classList.remove("playing");
-  gameView.style.display="none";
-  gameFrame.src="";
-}
-window.addEventListener("popstate",()=>{if(document.body.classList.contains("playing"))closeGame()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&document.body.classList.contains("playing"))closeGame()});
-
-/* PWA */
-const manifest={
-  name:"Dunah PlayZone",
-  short_name:"PlayZone",
-  start_url:".",
-  display:"standalone",
-  background_color:"#0b0f1a",
-  theme_color:"#0b0f1a"
-};
-document.getElementById("manifest").href=
-  URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:"application/json"}));
+window.addEventListener("popstate",()=>{if(document.body.classList.contains("playing"))location.reload()});
 </script>
 
 </body>
