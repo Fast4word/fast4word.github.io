@@ -157,6 +157,20 @@ body.playing .section,
 body.playing .bottom-nav,
 body.playing aside,
 body.playing .backdrop{display:none}
+
+/* Adblock overlay */
+#adblockOverlay{
+  position:fixed;
+  inset:0;
+  background:#0b0f1a;
+  color:#fff;
+  display:none;
+  z-index:1000;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:24px;
+}
 </style>
 </head>
 <body>
@@ -206,6 +220,32 @@ body.playing .backdrop{display:none}
   <button onclick="setTab('fav')"><span>❤️</span>Favourites</button>
 </div>
 
+<!-- Adblock overlay -->
+<div id="adblockOverlay">
+  <div>
+    <h2>Ad Blocker Detected</h2>
+    <p style="color:#9aa3c7">
+      Dunah PlayZone is free thanks to ads.<br>
+      Please disable your ad blocker to play games.
+    </p>
+    <button onclick="location.reload()" style="
+      margin-top:20px;
+      padding:12px 18px;
+      border:none;
+      border-radius:10px;
+      background:#6cf2c2;
+      color:#000;
+      font-weight:600;
+      cursor:pointer;
+    ">
+      I Disabled My Ad Blocker
+    </button>
+  </div>
+</div>
+
+<!-- Adblock bait -->
+<div class="adsbox" style="height:1px;width:1px;position:absolute;left:-9999px"></div>
+
 <script>
 history.replaceState(null,"");
 
@@ -219,13 +259,24 @@ const search=document.getElementById("search");
 const searchWrap=document.getElementById("searchWrap");
 const gameView=document.getElementById("gameView");
 const gameFrame=document.getElementById("gameFrame");
+const adblockOverlay=document.getElementById("adblockOverlay");
 
 let games=[];
 let favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
 let genrePlays=JSON.parse(localStorage.getItem("genrePlays")||"{}");
+let allowedGenres=[];
 let tab="home";
 let activeGenre="all";
-let allowedGenres=[];
+let adBlocked=false;
+
+/* Adblock detect */
+function detectAdBlock(){
+  const bait=document.querySelector(".adsbox");
+  if(!bait||bait.offsetHeight===0){
+    adBlocked=true;
+  }
+}
+window.addEventListener("load",()=>setTimeout(detectAdBlock,300));
 
 /* UI */
 function toggleSearch(){searchWrap.classList.toggle("active")}
@@ -262,14 +313,11 @@ fetch("games.json").then(r=>r.json()).then(data=>{
   render();
 });
 
-/* Build TOP 10 genres */
+/* Genres (top 10) */
 function buildGenres(){
-  const counts={};
-  games.forEach(g=>(g.genres||[]).forEach(x=>counts[x]=(counts[x]||0)+1));
-  allowedGenres=Object.entries(counts)
-    .sort((a,b)=>b[1]-a[1])
-    .slice(0,10)
-    .map(x=>x[0]);
+  const c={};
+  games.forEach(g=>(g.genres||[]).forEach(x=>c[x]=(c[x]||0)+1));
+  allowedGenres=Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,10).map(x=>x[0]);
 
   genreList.innerHTML="";
   allowedGenres.forEach(slug=>{
@@ -292,7 +340,7 @@ function getFeatured(){
   return [bb, others[week%others.length], others[(week+3)%others.length]].filter(Boolean);
 }
 
-/* Recommended (based on top genres only) */
+/* Recommended */
 function getRecommended(){
   const favGenres=Object.entries(genrePlays)
     .filter(([g])=>allowedGenres.includes(g))
@@ -301,9 +349,7 @@ function getRecommended(){
     .map(x=>x[0]);
 
   let rec=games.filter(g=>g.genres?.some(gen=>favGenres.includes(gen)));
-  if(rec.length<6){
-    rec=rec.concat(games.filter(g=>!rec.includes(g)));
-  }
+  if(rec.length<6) rec=rec.concat(games.filter(g=>!rec.includes(g)));
   return rec.slice(0,6);
 }
 
@@ -349,8 +395,13 @@ function toggleFavourite(id){
   render();
 }
 
-/* Game open */
+/* Game open (GATED) */
 function openGame(game){
+  if(adBlocked){
+    adblockOverlay.style.display="flex";
+    return;
+  }
+
   (game.genres||[]).forEach(g=>{
     if(allowedGenres.includes(g))
       genrePlays[g]=(genrePlays[g]||0)+1;
