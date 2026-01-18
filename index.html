@@ -23,7 +23,9 @@
   --muted:#9aa3c7;
   --fav:#ff5c5c;
 }
+
 *{box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+
 body{
   margin:0;
   background:linear-gradient(180deg,#0b0f1a,#0e1330);
@@ -32,22 +34,81 @@ body{
 
 /* Header */
 header{
-  position:sticky;top:0;z-index:20;
+  position:sticky;
+  top:0;
+  z-index:20;
   background:#0d1225;
   padding:14px;
-  display:flex;align-items:center;
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
-.menu-btn,.search-btn{font-size:22px;cursor:pointer}
-header h1{margin:0;font-size:1.2rem;flex:1}
+.menu-btn,.search-btn{
+  font-size:22px;
+  cursor:pointer;
+  padding:4px;
+}
+header h1{
+  margin:0;
+  font-size:1.2rem;
+  flex:1;
+}
 
 /* Search */
-.search-wrap{display:none;padding:12px}
+.search-wrap{
+  display:none;
+  padding:12px;
+}
 .search-wrap.active{display:block}
-.search-wrap input{width:100%;padding:12px;border-radius:12px;border:none}
+.search-wrap input{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+}
+
+/* Sidebar */
+aside{
+  position:fixed;
+  top:0;bottom:0;left:0;
+  width:260px;
+  background:#0d1225;
+  padding:18px;
+  overflow-y:auto;
+  transform:translateX(-100%);
+  transition:.25s;
+  z-index:50;
+}
+aside.active{transform:translateX(0)}
+
+.backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  z-index:45;
+}
+.backdrop.active{display:block}
+
+.genre{
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:6px;
+  cursor:pointer;
+  color:var(--muted);
+}
+.genre.active,.genre:hover{
+  background:var(--panel);
+  color:var(--accent);
+}
 
 /* Sections */
-.section{padding:14px}
-.section h2{margin:0 0 10px}
+.section{
+  padding:14px;
+}
+.section h2{
+  margin:0 0 10px;
+}
 
 /* Grid */
 .grid{
@@ -66,23 +127,36 @@ header h1{margin:0;font-size:1.2rem;flex:1}
   cursor:pointer;
   position:relative;
 }
-.thumb{width:100%;height:140px;object-fit:cover}
+.thumb{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+}
 .card-body{padding:10px}
 .card-title{font-weight:600;font-size:.95rem}
 
 /* Favourite */
 .fav-btn{
-  position:absolute;top:8px;right:8px;
-  width:32px;height:32px;border-radius:50%;
+  position:absolute;
+  top:8px;
+  right:8px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
   background:rgba(0,0,0,.6);
-  display:flex;align-items:center;justify-content:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 .fav-btn.active{color:var(--fav)}
 
 /* Game View */
 #gameView{
-  position:fixed;inset:0;background:#000;
-  display:none;z-index:100;
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:none;
+  z-index:100;
 }
 #gameView iframe{width:100%;height:100%;border:none}
 
@@ -98,25 +172,36 @@ header h1{margin:0;font-size:1.2rem;flex:1}
   z-index:40;
 }
 .bottom-nav button{
-  background:none;border:none;
+  background:none;
+  border:none;
   color:var(--muted);
-  display:flex;flex-direction:column;
+  display:flex;
+  flex-direction:column;
   align-items:center;
   font-size:.7rem;
 }
 .bottom-nav button span{font-size:22px}
 .bottom-nav button.active{color:var(--accent)}
 
+/* Reserve space so pages scroll */
+.page{
+  padding-bottom:80px;
+}
+
 body.playing header,
 body.playing .search-wrap,
 body.playing .section,
-body.playing .bottom-nav{display:none}
+body.playing .bottom-nav,
+body.playing aside,
+body.playing .backdrop{
+  display:none;
+}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="menu-btn">☰</div>
+  <div class="menu-btn" onclick="openMenu()">☰</div>
   <h1>Dunah PlayZone</h1>
   <div class="search-btn" onclick="toggleSearch()">🔍</div>
 </header>
@@ -125,8 +210,16 @@ body.playing .bottom-nav{display:none}
   <input id="search" placeholder="Search games...">
 </div>
 
+<div class="backdrop" id="backdrop" onclick="closeMenu()"></div>
+
+<aside id="sidebar">
+  <div class="genre active" id="filterAll">All Games</div>
+  <div class="genre" id="filterFav">⭐ Favourites</div>
+  <div id="genreList"></div>
+</aside>
+
 <!-- HOME -->
-<div id="homeTab">
+<div id="homeTab" class="page">
   <div class="section">
     <h2>Featured</h2>
     <div class="grid" id="featuredGrid"></div>
@@ -138,8 +231,10 @@ body.playing .bottom-nav{display:none}
 </div>
 
 <!-- GAMES / FAV -->
-<div class="section" id="gamesTab" style="display:none">
-  <div class="grid" id="grid"></div>
+<div id="gamesTab" class="page" style="display:none">
+  <div class="section">
+    <div class="grid" id="grid"></div>
+  </div>
 </div>
 
 <div id="gameView">
@@ -158,6 +253,9 @@ history.replaceState(null,"");
 const featuredGrid=document.getElementById("featuredGrid");
 const recommendedGrid=document.getElementById("recommendedGrid");
 const grid=document.getElementById("grid");
+const sidebar=document.getElementById("sidebar");
+const backdrop=document.getElementById("backdrop");
+const genreList=document.getElementById("genreList");
 const search=document.getElementById("search");
 const searchWrap=document.getElementById("searchWrap");
 const gameView=document.getElementById("gameView");
@@ -166,9 +264,13 @@ const gameFrame=document.getElementById("gameFrame");
 let games=[];
 let favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
 let tab="home";
+let activeGenre="all";
+let allowedGenres=[];
 
-/* Search */
+/* UI */
 function toggleSearch(){searchWrap.classList.toggle("active")}
+function openMenu(){sidebar.classList.add("active");backdrop.classList.add("active")}
+function closeMenu(){sidebar.classList.remove("active");backdrop.classList.remove("active")}
 
 /* Tabs */
 function setTab(t){
@@ -192,13 +294,51 @@ fetch("games.json").then(r=>r.json()).then(data=>{
     id:"ball-burst",
     title:"Ball Burst",
     images:["https://img.gamepix.com/games/ball-burst/icon/ball-burst.png?w=105"],
+    genres:["arcade","action"],
     gameURL:"https://play.gamepix.com/ball-burst/embed?sid=1"
   });
 
+  buildGenres();
   render();
 });
 
-/* Featured logic */
+/* Genres */
+function buildGenres(){
+  const c={};
+  games.forEach(g=>(g.genres||[]).forEach(x=>c[x]=(c[x]||0)+1));
+  allowedGenres=Object.entries(c)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,10)
+    .map(x=>x[0]);
+
+  genreList.innerHTML="";
+  allowedGenres.forEach(slug=>{
+    const d=document.createElement("div");
+    d.className="genre";
+    d.textContent=slug.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+    d.onclick=()=>{
+      activeGenre=slug;
+      document.querySelectorAll(".genre").forEach(x=>x.classList.remove("active"));
+      d.classList.add("active");
+      closeMenu();
+      setTab("games");
+    };
+    genreList.appendChild(d);
+  });
+
+  filterAll.onclick=()=>{
+    activeGenre="all";
+    setTab("games");
+    closeMenu();
+  };
+  filterFav.onclick=()=>{
+    activeGenre="favourites";
+    setTab("fav");
+    closeMenu();
+  };
+}
+
+/* Featured */
 function getFeatured(){
   const week=Math.floor(Date.now()/604800000);
   const featured=[games.find(g=>g.id==="ball-burst")];
@@ -226,6 +366,7 @@ function renderCards(list,el){
 
 function render(){
   const q=search.value.toLowerCase();
+
   if(tab==="home"){
     const featured=getFeatured();
     renderCards(featured,featuredGrid);
@@ -234,9 +375,10 @@ function render(){
       recommendedGrid
     );
   }else{
-    const list=tab==="fav"
-      ? games.filter(g=>favourites.includes(g.id))
-      : games.filter(g=>g.title.toLowerCase().includes(q));
+    let list=games.filter(g=>g.title.toLowerCase().includes(q));
+    if(tab==="fav") list=list.filter(g=>favourites.includes(g.id));
+    if(activeGenre!=="all"&&activeGenre!=="favourites")
+      list=list.filter(g=>g.genres?.includes(activeGenre));
     renderCards(list,grid);
   }
 }
@@ -264,6 +406,8 @@ window.addEventListener("popstate",()=>{
     gameFrame.src="";
   }
 });
+
+search.oninput=render;
 </script>
 
 </body>
