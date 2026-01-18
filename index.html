@@ -43,22 +43,11 @@ header{
   align-items:center;
   gap:12px;
 }
-.menu-btn,.search-btn{
-  font-size:22px;
-  cursor:pointer;
-  padding:4px;
-}
-header h1{
-  margin:0;
-  font-size:1.2rem;
-  flex:1;
-}
+.menu-btn,.search-btn{font-size:22px;cursor:pointer}
+header h1{margin:0;font-size:1.2rem;flex:1}
 
 /* Search */
-.search-wrap{
-  display:none;
-  padding:12px;
-}
+.search-wrap{display:none;padding:12px}
 .search-wrap.active{display:block}
 .search-wrap input{
   width:100%;
@@ -80,21 +69,16 @@ aside{
   z-index:50;
 }
 aside.active{transform:translateX(0)}
-
 .backdrop{
-  position:fixed;
-  inset:0;
+  position:fixed;inset:0;
   background:rgba(0,0,0,.6);
   display:none;
   z-index:45;
 }
 .backdrop.active{display:block}
-
 .genre{
-  padding:12px;
-  border-radius:10px;
-  margin-bottom:6px;
-  cursor:pointer;
+  padding:12px;border-radius:10px;
+  margin-bottom:6px;cursor:pointer;
   color:var(--muted);
 }
 .genre.active,.genre:hover{
@@ -103,12 +87,8 @@ aside.active{transform:translateX(0)}
 }
 
 /* Sections */
-.section{
-  padding:14px;
-}
-.section h2{
-  margin:0 0 10px;
-}
+.section{padding:14px}
+.section h2{margin:0 0 10px}
 
 /* Grid */
 .grid{
@@ -127,29 +107,20 @@ aside.active{transform:translateX(0)}
   cursor:pointer;
   position:relative;
 }
-.thumb{
-  width:100%;
-  height:140px;
-  object-fit:cover;
-}
+.thumb{width:100%;height:140px;object-fit:cover}
 .card-body{padding:10px}
 .card-title{font-weight:600;font-size:.95rem}
 
-/* Favourite button (FIXED) */
+/* Favourite */
 .fav-btn{
   position:absolute;
-  top:8px;
-  right:8px;
-  width:34px;
-  height:34px;
+  top:8px;right:8px;
+  width:34px;height:34px;
   border-radius:50%;
   background:rgba(0,0,0,.55);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
-  color:#ccc;
-  transition:transform .15s, background .15s, box-shadow .15s;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:#ccc;
+  transition:.15s;
 }
 .fav-btn.active{
   background:rgba(255,92,92,.15);
@@ -157,44 +128,27 @@ aside.active{transform:translateX(0)}
   box-shadow:0 0 10px rgba(255,92,92,.7);
   transform:scale(1.15);
 }
-@media (hover:hover){
-  .fav-btn:hover{transform:scale(1.1)}
-}
 
 /* Game View */
-#gameView{
-  position:fixed;
-  inset:0;
-  background:#000;
-  display:none;
-  z-index:100;
-}
+#gameView{position:fixed;inset:0;background:#000;display:none;z-index:100}
 #gameView iframe{width:100%;height:100%;border:none}
 
 /* Bottom Nav */
 .bottom-nav{
-  position:fixed;
-  bottom:0;left:0;right:0;
-  height:64px;
-  background:#0d1225;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
+  position:fixed;bottom:0;left:0;right:0;
+  height:64px;background:#0d1225;
+  display:flex;justify-content:space-around;align-items:center;
   z-index:40;
 }
 .bottom-nav button{
-  background:none;
-  border:none;
+  background:none;border:none;
   color:var(--muted);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  display:flex;flex-direction:column;align-items:center;
   font-size:.7rem;
 }
 .bottom-nav button span{font-size:22px}
 .bottom-nav button.active{color:var(--accent)}
 
-/* Scroll space */
 .page{padding-bottom:80px}
 
 body.playing header,
@@ -202,9 +156,7 @@ body.playing .search-wrap,
 body.playing .section,
 body.playing .bottom-nav,
 body.playing aside,
-body.playing .backdrop{
-  display:none;
-}
+body.playing .backdrop{display:none}
 </style>
 </head>
 <body>
@@ -227,7 +179,6 @@ body.playing .backdrop{
   <div id="genreList"></div>
 </aside>
 
-<!-- HOME -->
 <div id="homeTab" class="page">
   <div class="section">
     <h2>Featured</h2>
@@ -239,7 +190,6 @@ body.playing .backdrop{
   </div>
 </div>
 
-<!-- GAMES -->
 <div id="gamesTab" class="page" style="display:none">
   <div class="section">
     <div class="grid" id="grid"></div>
@@ -272,9 +222,9 @@ const gameFrame=document.getElementById("gameFrame");
 
 let games=[];
 let favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
+let genrePlays=JSON.parse(localStorage.getItem("genrePlays")||"{}");
 let tab="home";
 let activeGenre="all";
-let allowedGenres=[];
 
 /* UI */
 function toggleSearch(){searchWrap.classList.toggle("active")}
@@ -315,27 +265,42 @@ fetch("games.json").then(r=>r.json()).then(data=>{
 function buildGenres(){
   const c={};
   games.forEach(g=>(g.genres||[]).forEach(x=>c[x]=(c[x]||0)+1));
-  allowedGenres=Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,10).map(x=>x[0]);
-
   genreList.innerHTML="";
-  allowedGenres.forEach(slug=>{
+  Object.keys(c).slice(0,10).forEach(slug=>{
     const d=document.createElement("div");
     d.className="genre";
     d.textContent=slug.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
     d.onclick=()=>{activeGenre=slug;setTab("games");closeMenu()};
     genreList.appendChild(d);
   });
-
   filterAll.onclick=()=>{activeGenre="all";setTab("games");closeMenu()};
   filterFav.onclick=()=>{activeGenre="favourites";setTab("fav");closeMenu()};
 }
 
-/* Featured logic */
+/* Featured */
 function getFeatured(){
   const week=Math.floor(Date.now()/604800000);
   const bb=games.find(g=>g.id==="ball-burst");
   const others=games.filter(g=>g.id!=="ball-burst");
-  return [bb, others[week%others.length], others[(week+2)%others.length]].filter(Boolean);
+  return [bb, others[week%others.length], others[(week+3)%others.length]].filter(Boolean);
+}
+
+/* Recommended (SMART) */
+function getRecommended(){
+  const favGenres=Object.entries(genrePlays)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,2)
+    .map(x=>x[0]);
+
+  let rec=games.filter(g=>
+    g.genres?.some(gen=>favGenres.includes(gen))
+  );
+
+  if(rec.length<6){
+    rec=rec.concat(games.filter(g=>!rec.includes(g)));
+  }
+
+  return rec.slice(0,6);
 }
 
 /* Render */
@@ -347,12 +312,12 @@ function renderCards(list,el){
     c.className="card";
     c.innerHTML=`
       <div class="fav-btn ${fav?"active":""}"
-           onclick="event.stopPropagation();toggleFavourite('${g.id}')">
+        onclick="event.stopPropagation();toggleFavourite('${g.id}')">
         ${fav?"❤️":"🤍"}
       </div>
       <img class="thumb" src="${g.images?.[0]||""}">
       <div class="card-body"><div class="card-title">${g.title}</div></div>`;
-    c.onclick=()=>openGame(g.gameURL);
+    c.onclick=()=>openGame(g);
     el.appendChild(c);
   });
 }
@@ -360,9 +325,8 @@ function renderCards(list,el){
 function render(){
   const q=search.value.toLowerCase();
   if(tab==="home"){
-    const f=getFeatured();
-    renderCards(f,featuredGrid);
-    renderCards(games.filter(g=>!f.includes(g)&&g.title.toLowerCase().includes(q)).slice(0,6),recommendedGrid);
+    renderCards(getFeatured(),featuredGrid);
+    renderCards(getRecommended().filter(g=>g.title.toLowerCase().includes(q)),recommendedGrid);
   }else{
     let list=games.filter(g=>g.title.toLowerCase().includes(q));
     if(tab==="fav") list=list.filter(g=>favourites.includes(g.id));
@@ -381,13 +345,19 @@ function toggleFavourite(id){
   render();
 }
 
-/* Game nav */
-function openGame(url){
-  gameFrame.src=url;
+/* Game open */
+function openGame(game){
+  (game.genres||[]).forEach(g=>{
+    genrePlays[g]=(genrePlays[g]||0)+1;
+  });
+  localStorage.setItem("genrePlays",JSON.stringify(genrePlays));
+
+  gameFrame.src=game.gameURL;
   gameView.style.display="block";
   document.body.classList.add("playing");
   history.pushState(null,"");
 }
+
 window.addEventListener("popstate",()=>{
   if(document.body.classList.contains("playing")){
     document.body.classList.remove("playing");
