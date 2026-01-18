@@ -48,9 +48,14 @@ header{
 }
 .menu-btn{font-size:22px;cursor:pointer}
 header h1{margin:0;font-size:1.2rem;flex:1}
+.search-btn{font-size:20px;cursor:pointer}
 
 /* Search */
-.search-wrap{padding:10px 14px}
+.search-wrap{
+  padding:10px 14px;
+  display:none;
+}
+.search-wrap.active{display:block}
 .search-wrap input{
   width:100%;
   padding:10px;
@@ -93,6 +98,15 @@ aside.active{transform:translateX(0)}
   color:var(--accent);
 }
 
+/* Sections */
+.section{
+  padding:14px 14px 0;
+}
+.section h2{
+  margin:0 0 10px;
+  font-size:1.1rem;
+}
+
 /* Grid */
 .grid{
   padding:14px;
@@ -111,11 +125,7 @@ aside.active{transform:translateX(0)}
   cursor:pointer;
   position:relative;
 }
-.thumb{
-  width:100%;
-  height:140px;
-  object-fit:cover;
-}
+.thumb{width:100%;height:140px;object-fit:cover}
 .card-body{padding:10px}
 .card-title{font-weight:600;font-size:.95rem}
 .card-meta{font-size:.7rem;color:var(--muted)}
@@ -141,7 +151,7 @@ aside.active{transform:translateX(0)}
   transform:scale(1.15);
 }
 
-/* Game View (tab fullscreen) */
+/* Game View */
 #gameView{
   position:fixed;
   inset:0;
@@ -149,18 +159,34 @@ aside.active{transform:translateX(0)}
   display:none;
   z-index:100;
 }
-#gameView iframe{
-  width:100%;
-  height:100%;
-  border:none;
+#gameView iframe{width:100%;height:100%;border:none}
+
+/* Bottom Nav (mobile) */
+.bottom-nav{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  background:#0d1225;
+  display:flex;
+  justify-content:space-around;
+  padding:8px 0;
+  z-index:40;
 }
+.bottom-nav button{
+  background:none;
+  border:none;
+  color:var(--muted);
+  font-size:.75rem;
+}
+.bottom-nav button.active{color:var(--accent)}
 
 /* Hide UI while playing */
 body.playing header,
 body.playing .search-wrap,
 body.playing .grid,
+body.playing .section,
 body.playing aside,
-body.playing .backdrop{
+body.playing .backdrop,
+body.playing .bottom-nav{
   display:none !important;
 }
 </style>
@@ -170,9 +196,10 @@ body.playing .backdrop{
 <header>
   <div class="menu-btn" onclick="openMenu()">☰</div>
   <h1>Dunah PlayZone</h1>
+  <div class="search-btn" onclick="toggleSearch()">🔍</div>
 </header>
 
-<div class="search-wrap">
+<div class="search-wrap" id="searchWrap">
   <input id="search" placeholder="Search games...">
 </div>
 
@@ -184,36 +211,56 @@ body.playing .backdrop{
   <div id="genreList"></div>
 </aside>
 
-<div class="grid" id="grid"></div>
+<!-- HOME -->
+<div id="homeTab">
+  <div class="section">
+    <h2>Featured</h2>
+    <div class="grid" id="featuredGrid"></div>
+  </div>
+  <div class="section">
+    <h2>Recommended</h2>
+    <div class="grid" id="recommendedGrid"></div>
+  </div>
+</div>
+
+<!-- GAMES -->
+<div class="grid" id="grid" style="display:none"></div>
 
 <div id="gameView">
   <iframe id="gameFrame" allow="autoplay; payment; fullscreen"></iframe>
 </div>
 
-<script>
-// ---------- BASE STATE ----------
-history.replaceState(null, "");
+<div class="bottom-nav">
+  <button id="tabHome" class="active" onclick="setTab('home')">Home</button>
+  <button id="tabFav" onclick="setTab('fav')">Favourites</button>
+  <button id="tabGames" onclick="setTab('games')">Games</button>
+</div>
 
-// ---------- ELEMENTS ----------
+<script>
+history.replaceState(null,"");
+
 const grid=document.getElementById("grid");
+const featuredGrid=document.getElementById("featuredGrid");
+const recommendedGrid=document.getElementById("recommendedGrid");
 const search=document.getElementById("search");
-const genreList=document.getElementById("genreList");
-const sidebar=document.getElementById("sidebar");
-const backdrop=document.getElementById("backdrop");
-const gameView=document.getElementById("gameView");
-const gameFrame=document.getElementById("gameFrame");
+const searchWrap=document.getElementById("searchWrap");
 
 let games=[];
-let activeGenre="all";
-let allowedGenres=[];
 let favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
+let currentTab="home";
 
-// ---------- SIDEBAR ----------
-function openMenu(){sidebar.classList.add("active");backdrop.classList.add("active")}
-function closeMenu(){sidebar.classList.remove("active");backdrop.classList.remove("active")}
-function prettyGenre(s){return s.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase())}
+/* UI helpers */
+function toggleSearch(){searchWrap.classList.toggle("active")}
+function setTab(tab){
+  currentTab=tab;
+  document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById("tab"+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add("active");
+  document.getElementById("homeTab").style.display=tab==="home"?"block":"none";
+  grid.style.display=tab==="games"||tab==="fav"?"grid":"none";
+  render();
+}
 
-// ---------- LOAD GAMES ----------
+/* Load games */
 fetch("games.json").then(r=>r.json()).then(data=>{
   let raw=[];
   if(Array.isArray(data.hits)) raw=data.hits;
@@ -221,117 +268,80 @@ fetch("games.json").then(r=>r.json()).then(data=>{
     raw=data.segments.flatMap(s=>s.hits||s.items||[]);
   games=Object.values(Object.fromEntries(raw.map(g=>[g.id,g])));
 
-  // ---------- ADD BALL BURST ----------
   games.push({
-    id: "ball-burst",
-    title: "Ball Burst",
-    images: ["https://img.gamepix.com/games/ball-burst/icon/ball-burst.png?w=105"],
-    genres: ["arcade", "action"],
-    gameURL: "https://play.gamepix.com/ball-burst/embed?sid=1"
+    id:"ball-burst",
+    title:"Ball Burst",
+    images:["https://img.gamepix.com/games/ball-burst/icon/ball-burst.png?w=105"],
+    genres:["arcade","action"],
+    gameURL:"https://play.gamepix.com/ball-burst/embed?sid=1"
   });
 
-  buildGenres();
   render();
 });
 
-// ---------- GENRES ----------
-function buildGenres(){
-  const c={};
-  games.forEach(g=>(g.genres||[]).forEach(x=>c[x]=(c[x]||0)+1));
-  allowedGenres=Object.entries(c)
-    .sort((a,b)=>b[1]-a[1])
-    .slice(0,10)
-    .map(x=>x[0]);
-  genreList.innerHTML="";
-  allowedGenres.forEach(slug=>{
-    const d=document.createElement("div");
-    d.className="genre";
-    d.textContent=prettyGenre(slug);
-    d.onclick=()=>{setActive(d);activeGenre=slug;closeMenu();render()};
-    genreList.appendChild(d);
-  });
+/* Featured logic */
+function getFeatured(){
+  const week=Math.floor(Date.now()/(1000*60*60*24*7));
+  if(week%10<7) return games.find(g=>g.id==="ball-burst");
+  return games[week%games.length];
 }
 
-function setActive(el){
-  document.querySelectorAll(".genre").forEach(x=>x.classList.remove("active"));
-  el.classList.add("active");
-}
-
-allGenres.onclick=()=>{setActive(allGenres);activeGenre="all";render()};
-favFilter.onclick=()=>{setActive(favFilter);activeGenre="favourites";render()};
-
-// ---------- FAVOURITES ----------
-function toggleFavourite(id){
-  favourites=favourites.includes(id)
-    ? favourites.filter(x=>x!==id)
-    : [...favourites,id];
-  localStorage.setItem("favourites",JSON.stringify(favourites));
-  render();
-}
-
-// ---------- RENDER ----------
-function render(){
-  const q=search.value.toLowerCase();
-  grid.innerHTML="";
-  games.filter(g=>{
-    if(activeGenre==="favourites")
-      return favourites.includes(g.id)&&g.title.toLowerCase().includes(q);
-    return (activeGenre==="all"||g.genres?.includes(activeGenre))
-      && g.title.toLowerCase().includes(q);
-  }).forEach(g=>{
-    const tags=(g.genres||[])
-      .filter(x=>allowedGenres.includes(x))
-      .map(prettyGenre)
-      .join(", ");
+/* Render cards */
+function renderCards(list, el){
+  el.innerHTML="";
+  list.forEach(g=>{
     const fav=favourites.includes(g.id);
     const c=document.createElement("div");
     c.className="card";
     c.innerHTML=`
-      <div class="fav-btn ${fav?"active":""}"
-        onclick="event.stopPropagation();toggleFavourite('${g.id}')">
+      <div class="fav-btn ${fav?"active":""}" onclick="event.stopPropagation();toggleFavourite('${g.id}')">
         ${fav?"❤️":"🤍"}
       </div>
       <img class="thumb" src="${g.images?.[0]||""}">
       <div class="card-body">
         <div class="card-title">${g.title}</div>
-        <div class="card-meta">${tags}</div>
       </div>`;
     c.onclick=()=>openGame(g.gameURL);
-    grid.appendChild(c);
+    el.appendChild(c);
   });
 }
 
-// ---------- GAME NAV (HARDENED) ----------
+function render(){
+  if(currentTab==="home"){
+    const featured=getFeatured();
+    renderCards(featured?[featured]:[], featuredGrid);
+    renderCards(games.filter(g=>g.id!==featured?.id).slice(0,6), recommendedGrid);
+  }else{
+    const list=currentTab==="fav"
+      ? games.filter(g=>favourites.includes(g.id))
+      : games;
+    renderCards(list, grid);
+  }
+}
+
+/* Favourites */
+function toggleFavourite(id){
+  favourites=favourites.includes(id)?favourites.filter(x=>x!==id):[...favourites,id];
+  localStorage.setItem("favourites",JSON.stringify(favourites));
+  render();
+}
+
+/* Game nav */
 function openGame(url){
   gameFrame.src=url;
   gameView.style.display="block";
   document.body.classList.add("playing");
-  history.pushState(null, "");
+  history.pushState(null,"");
 }
-
 function closeGame(){
   document.body.classList.remove("playing");
   gameView.style.display="none";
   gameFrame.src="";
 }
+window.addEventListener("popstate",()=>{if(document.body.classList.contains("playing"))closeGame()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&document.body.classList.contains("playing"))closeGame()});
 
-// Back button: ALWAYS exit game if playing
-window.addEventListener("popstate",()=>{
-  if(document.body.classList.contains("playing")){
-    closeGame();
-  }
-});
-
-// ESC key
-document.addEventListener("keydown",e=>{
-  if(e.key==="Escape" && document.body.classList.contains("playing")){
-    closeGame();
-  }
-});
-
-search.oninput=render;
-
-// ---------- PWA ----------
+/* PWA */
 const manifest={
   name:"Dunah PlayZone",
   short_name:"PlayZone",
