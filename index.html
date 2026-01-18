@@ -23,35 +23,31 @@
   --muted:#9aa3c7;
   --fav:#ff5c5c;
 }
-
 *{box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
-
 body{
   margin:0;
-  background:radial-gradient(circle at top,#101a3a,#0b0f1a);
+  background:linear-gradient(180deg,#0b0f1a,#0e1330);
   color:var(--text);
 }
 
 /* Header */
 header{
   position:sticky;top:0;z-index:20;
-  background:linear-gradient(180deg,#0d1225,#0b0f1a);
+  background:#0d1225;
   padding:14px;
   display:flex;align-items:center;
 }
-header h1{margin:0;font-size:1.2rem;flex:1}
 .menu-btn,.search-btn{font-size:22px;cursor:pointer}
+header h1{margin:0;font-size:1.2rem;flex:1}
 
 /* Search */
-.search-wrap{padding:12px;display:none}
+.search-wrap{display:none;padding:12px}
 .search-wrap.active{display:block}
-.search-wrap input{
-  width:100%;padding:12px;border-radius:12px;border:none;
-}
+.search-wrap input{width:100%;padding:12px;border-radius:12px;border:none}
 
 /* Sections */
-.section{padding:16px}
-.section h2{margin:0 0 12px;font-size:1.15rem}
+.section{padding:14px}
+.section h2{margin:0 0 10px}
 
 /* Grid */
 .grid{
@@ -65,10 +61,10 @@ header h1{margin:0;font-size:1.2rem;flex:1}
 /* Cards */
 .card{
   background:var(--panel);
-  border-radius:16px;
+  border-radius:14px;
   overflow:hidden;
-  position:relative;
   cursor:pointer;
+  position:relative;
 }
 .thumb{width:100%;height:140px;object-fit:cover}
 .card-body{padding:10px}
@@ -77,20 +73,20 @@ header h1{margin:0;font-size:1.2rem;flex:1}
 /* Favourite */
 .fav-btn{
   position:absolute;top:8px;right:8px;
-  width:34px;height:34px;border-radius:50%;
-  background:rgba(0,0,0,.55);
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(0,0,0,.6);
   display:flex;align-items:center;justify-content:center;
 }
 .fav-btn.active{color:var(--fav)}
 
-/* Game view */
+/* Game View */
 #gameView{
   position:fixed;inset:0;background:#000;
   display:none;z-index:100;
 }
 #gameView iframe{width:100%;height:100%;border:none}
 
-/* Bottom nav */
+/* Bottom Nav */
 .bottom-nav{
   position:fixed;
   bottom:0;left:0;right:0;
@@ -104,12 +100,11 @@ header h1{margin:0;font-size:1.2rem;flex:1}
 .bottom-nav button{
   background:none;border:none;
   color:var(--muted);
-  display:flex;
-  flex-direction:column;
+  display:flex;flex-direction:column;
   align-items:center;
   font-size:.7rem;
 }
-.bottom-nav button span{font-size:22px;line-height:1}
+.bottom-nav button span{font-size:22px}
 .bottom-nav button.active{color:var(--accent)}
 
 body.playing header,
@@ -130,6 +125,7 @@ body.playing .bottom-nav{display:none}
   <input id="search" placeholder="Search games...">
 </div>
 
+<!-- HOME -->
 <div id="homeTab">
   <div class="section">
     <h2>Featured</h2>
@@ -141,6 +137,7 @@ body.playing .bottom-nav{display:none}
   </div>
 </div>
 
+<!-- GAMES / FAV -->
 <div class="section" id="gamesTab" style="display:none">
   <div class="grid" id="grid"></div>
 </div>
@@ -156,22 +153,24 @@ body.playing .bottom-nav{display:none}
 </div>
 
 <script>
-let games=[],favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
+history.replaceState(null,"");
+
+const featuredGrid=document.getElementById("featuredGrid");
+const recommendedGrid=document.getElementById("recommendedGrid");
+const grid=document.getElementById("grid");
+const search=document.getElementById("search");
+const searchWrap=document.getElementById("searchWrap");
+const gameView=document.getElementById("gameView");
+const gameFrame=document.getElementById("gameFrame");
+
+let games=[];
+let favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
 let tab="home";
 
-fetch("games.json").then(r=>r.json()).then(d=>{
-  games=(d.hits||[]).map(g=>g);
-  games.push({
-    id:"ball-burst",
-    title:"Ball Burst",
-    images:["https://img.gamepix.com/games/ball-burst/icon/ball-burst.png?w=105"],
-    gameURL:"https://play.gamepix.com/ball-burst/embed?sid=1"
-  });
-  render();
-});
-
+/* Search */
 function toggleSearch(){searchWrap.classList.toggle("active")}
 
+/* Tabs */
 function setTab(t){
   tab=t;
   document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
@@ -181,16 +180,35 @@ function setTab(t){
   render();
 }
 
+/* Load games safely */
+fetch("games.json").then(r=>r.json()).then(data=>{
+  let raw=[];
+  if(Array.isArray(data.hits)) raw=data.hits;
+  else if(Array.isArray(data.segments))
+    raw=data.segments.flatMap(s=>s.hits||[]);
+  games=Object.values(Object.fromEntries(raw.map(g=>[g.id,g])));
+
+  games.unshift({
+    id:"ball-burst",
+    title:"Ball Burst",
+    images:["https://img.gamepix.com/games/ball-burst/icon/ball-burst.png?w=105"],
+    gameURL:"https://play.gamepix.com/ball-burst/embed?sid=1"
+  });
+
+  render();
+});
+
 /* Featured logic */
 function getFeatured(){
   const week=Math.floor(Date.now()/604800000);
-  const list=[games.find(g=>g.id==="ball-burst")];
+  const featured=[games.find(g=>g.id==="ball-burst")];
   const others=games.filter(g=>g.id!=="ball-burst");
-  list.push(others[week%others.length]);
-  list.push(others[(week+3)%others.length]);
-  return list.filter(Boolean);
+  featured.push(others[week%others.length]);
+  featured.push(others[(week+2)%others.length]);
+  return featured.filter(Boolean);
 }
 
+/* Render cards */
 function renderCards(list,el){
   el.innerHTML="";
   list.forEach(g=>{
@@ -198,7 +216,7 @@ function renderCards(list,el){
     const c=document.createElement("div");
     c.className="card";
     c.innerHTML=`
-      <div class="fav-btn ${fav?"active":""}">❤</div>
+      <div class="fav-btn ${fav?"active":""}" onclick="event.stopPropagation();toggleFavourite('${g.id}')">❤</div>
       <img class="thumb" src="${g.images?.[0]||""}">
       <div class="card-body"><div class="card-title">${g.title}</div></div>`;
     c.onclick=()=>openGame(g.gameURL);
@@ -207,23 +225,45 @@ function renderCards(list,el){
 }
 
 function render(){
+  const q=search.value.toLowerCase();
   if(tab==="home"){
     const featured=getFeatured();
     renderCards(featured,featuredGrid);
-    renderCards(games.filter(g=>!featured.includes(g)).slice(0,6),recommendedGrid);
+    renderCards(
+      games.filter(g=>!featured.includes(g)&&g.title.toLowerCase().includes(q)).slice(0,6),
+      recommendedGrid
+    );
   }else{
-    const list=tab==="fav"?games.filter(g=>favourites.includes(g.id)):games;
+    const list=tab==="fav"
+      ? games.filter(g=>favourites.includes(g.id))
+      : games.filter(g=>g.title.toLowerCase().includes(q));
     renderCards(list,grid);
   }
 }
 
+/* Favourites */
+function toggleFavourite(id){
+  favourites=favourites.includes(id)
+    ? favourites.filter(x=>x!==id)
+    : [...favourites,id];
+  localStorage.setItem("favourites",JSON.stringify(favourites));
+  render();
+}
+
+/* Game nav */
 function openGame(url){
   gameFrame.src=url;
   gameView.style.display="block";
   document.body.classList.add("playing");
   history.pushState(null,"");
 }
-window.addEventListener("popstate",()=>{if(document.body.classList.contains("playing"))location.reload()});
+window.addEventListener("popstate",()=>{
+  if(document.body.classList.contains("playing")){
+    document.body.classList.remove("playing");
+    gameView.style.display="none";
+    gameFrame.src="";
+  }
+});
 </script>
 
 </body>
