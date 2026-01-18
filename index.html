@@ -135,20 +135,31 @@ aside.active{transform:translateX(0)}
 .card-body{padding:10px}
 .card-title{font-weight:600;font-size:.95rem}
 
-/* Favourite */
+/* Favourite button (FIXED) */
 .fav-btn{
   position:absolute;
   top:8px;
   right:8px;
-  width:32px;
-  height:32px;
+  width:34px;
+  height:34px;
   border-radius:50%;
-  background:rgba(0,0,0,.6);
+  background:rgba(0,0,0,.55);
   display:flex;
   align-items:center;
   justify-content:center;
+  font-size:18px;
+  color:#ccc;
+  transition:transform .15s, background .15s, box-shadow .15s;
 }
-.fav-btn.active{color:var(--fav)}
+.fav-btn.active{
+  background:rgba(255,92,92,.15);
+  color:var(--fav);
+  box-shadow:0 0 10px rgba(255,92,92,.7);
+  transform:scale(1.15);
+}
+@media (hover:hover){
+  .fav-btn:hover{transform:scale(1.1)}
+}
 
 /* Game View */
 #gameView{
@@ -183,10 +194,8 @@ aside.active{transform:translateX(0)}
 .bottom-nav button span{font-size:22px}
 .bottom-nav button.active{color:var(--accent)}
 
-/* Reserve space so pages scroll */
-.page{
-  padding-bottom:80px;
-}
+/* Scroll space */
+.page{padding-bottom:80px}
 
 body.playing header,
 body.playing .search-wrap,
@@ -230,7 +239,7 @@ body.playing .backdrop{
   </div>
 </div>
 
-<!-- GAMES / FAV -->
+<!-- GAMES -->
 <div id="gamesTab" class="page" style="display:none">
   <div class="section">
     <div class="grid" id="grid"></div>
@@ -278,11 +287,11 @@ function setTab(t){
   document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
   document.querySelector(`.bottom-nav button:nth-child(${t==="games"?1:t==="home"?2:3})`).classList.add("active");
   homeTab.style.display=t==="home"?"block":"none";
-  gamesTab.style.display=t!=="home"?"block":"none";
+  gamesTab.style.display=t==="home"?"none":"block";
   render();
 }
 
-/* Load games safely */
+/* Load games */
 fetch("games.json").then(r=>r.json()).then(data=>{
   let raw=[];
   if(Array.isArray(data.hits)) raw=data.hits;
@@ -306,49 +315,30 @@ fetch("games.json").then(r=>r.json()).then(data=>{
 function buildGenres(){
   const c={};
   games.forEach(g=>(g.genres||[]).forEach(x=>c[x]=(c[x]||0)+1));
-  allowedGenres=Object.entries(c)
-    .sort((a,b)=>b[1]-a[1])
-    .slice(0,10)
-    .map(x=>x[0]);
+  allowedGenres=Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,10).map(x=>x[0]);
 
   genreList.innerHTML="";
   allowedGenres.forEach(slug=>{
     const d=document.createElement("div");
     d.className="genre";
     d.textContent=slug.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
-    d.onclick=()=>{
-      activeGenre=slug;
-      document.querySelectorAll(".genre").forEach(x=>x.classList.remove("active"));
-      d.classList.add("active");
-      closeMenu();
-      setTab("games");
-    };
+    d.onclick=()=>{activeGenre=slug;setTab("games");closeMenu()};
     genreList.appendChild(d);
   });
 
-  filterAll.onclick=()=>{
-    activeGenre="all";
-    setTab("games");
-    closeMenu();
-  };
-  filterFav.onclick=()=>{
-    activeGenre="favourites";
-    setTab("fav");
-    closeMenu();
-  };
+  filterAll.onclick=()=>{activeGenre="all";setTab("games");closeMenu()};
+  filterFav.onclick=()=>{activeGenre="favourites";setTab("fav");closeMenu()};
 }
 
-/* Featured */
+/* Featured logic */
 function getFeatured(){
   const week=Math.floor(Date.now()/604800000);
-  const featured=[games.find(g=>g.id==="ball-burst")];
+  const bb=games.find(g=>g.id==="ball-burst");
   const others=games.filter(g=>g.id!=="ball-burst");
-  featured.push(others[week%others.length]);
-  featured.push(others[(week+2)%others.length]);
-  return featured.filter(Boolean);
+  return [bb, others[week%others.length], others[(week+2)%others.length]].filter(Boolean);
 }
 
-/* Render cards */
+/* Render */
 function renderCards(list,el){
   el.innerHTML="";
   list.forEach(g=>{
@@ -356,7 +346,10 @@ function renderCards(list,el){
     const c=document.createElement("div");
     c.className="card";
     c.innerHTML=`
-      <div class="fav-btn ${fav?"active":""}" onclick="event.stopPropagation();toggleFavourite('${g.id}')">❤</div>
+      <div class="fav-btn ${fav?"active":""}"
+           onclick="event.stopPropagation();toggleFavourite('${g.id}')">
+        ${fav?"❤️":"🤍"}
+      </div>
       <img class="thumb" src="${g.images?.[0]||""}">
       <div class="card-body"><div class="card-title">${g.title}</div></div>`;
     c.onclick=()=>openGame(g.gameURL);
@@ -366,14 +359,10 @@ function renderCards(list,el){
 
 function render(){
   const q=search.value.toLowerCase();
-
   if(tab==="home"){
-    const featured=getFeatured();
-    renderCards(featured,featuredGrid);
-    renderCards(
-      games.filter(g=>!featured.includes(g)&&g.title.toLowerCase().includes(q)).slice(0,6),
-      recommendedGrid
-    );
+    const f=getFeatured();
+    renderCards(f,featuredGrid);
+    renderCards(games.filter(g=>!f.includes(g)&&g.title.toLowerCase().includes(q)).slice(0,6),recommendedGrid);
   }else{
     let list=games.filter(g=>g.title.toLowerCase().includes(q));
     if(tab==="fav") list=list.filter(g=>favourites.includes(g.id));
