@@ -225,6 +225,7 @@ let favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
 let genrePlays=JSON.parse(localStorage.getItem("genrePlays")||"{}");
 let tab="home";
 let activeGenre="all";
+let allowedGenres=[];
 
 /* UI */
 function toggleSearch(){searchWrap.classList.toggle("active")}
@@ -261,18 +262,24 @@ fetch("games.json").then(r=>r.json()).then(data=>{
   render();
 });
 
-/* Genres */
+/* Build TOP 10 genres */
 function buildGenres(){
-  const c={};
-  games.forEach(g=>(g.genres||[]).forEach(x=>c[x]=(c[x]||0)+1));
+  const counts={};
+  games.forEach(g=>(g.genres||[]).forEach(x=>counts[x]=(counts[x]||0)+1));
+  allowedGenres=Object.entries(counts)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,10)
+    .map(x=>x[0]);
+
   genreList.innerHTML="";
-  Object.keys(c).slice(0,10).forEach(slug=>{
+  allowedGenres.forEach(slug=>{
     const d=document.createElement("div");
     d.className="genre";
     d.textContent=slug.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
     d.onclick=()=>{activeGenre=slug;setTab("games");closeMenu()};
     genreList.appendChild(d);
   });
+
   filterAll.onclick=()=>{activeGenre="all";setTab("games");closeMenu()};
   filterFav.onclick=()=>{activeGenre="favourites";setTab("fav");closeMenu()};
 }
@@ -285,21 +292,18 @@ function getFeatured(){
   return [bb, others[week%others.length], others[(week+3)%others.length]].filter(Boolean);
 }
 
-/* Recommended (SMART) */
+/* Recommended (based on top genres only) */
 function getRecommended(){
   const favGenres=Object.entries(genrePlays)
+    .filter(([g])=>allowedGenres.includes(g))
     .sort((a,b)=>b[1]-a[1])
     .slice(0,2)
     .map(x=>x[0]);
 
-  let rec=games.filter(g=>
-    g.genres?.some(gen=>favGenres.includes(gen))
-  );
-
+  let rec=games.filter(g=>g.genres?.some(gen=>favGenres.includes(gen)));
   if(rec.length<6){
     rec=rec.concat(games.filter(g=>!rec.includes(g)));
   }
-
   return rec.slice(0,6);
 }
 
@@ -348,7 +352,8 @@ function toggleFavourite(id){
 /* Game open */
 function openGame(game){
   (game.genres||[]).forEach(g=>{
-    genrePlays[g]=(genrePlays[g]||0)+1;
+    if(allowedGenres.includes(g))
+      genrePlays[g]=(genrePlays[g]||0)+1;
   });
   localStorage.setItem("genrePlays",JSON.stringify(genrePlays));
 
