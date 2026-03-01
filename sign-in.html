@@ -1,59 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Playgama Sign In</title>
-    <script src="https://bridge.playgama.com"></script>
+    <title>Sign In</title>
     <style>
-        body { font-family: -apple-system, system-ui, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #0f0f0f; color: white; }
-        #loginBtn { padding: 16px 32px; font-size: 18px; font-weight: bold; cursor: pointer; background: #ff4500; border: none; border-radius: 8px; color: white; transition: transform 0.1s; }
-        #loginBtn:active { transform: scale(0.95); }
-        #loginBtn:disabled { background: #333; cursor: not-allowed; }
-        #msg { position: absolute; bottom: 20%; color: #888; font-size: 14px; }
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #121212; color: white; }
+        .btn { padding: 15px 30px; font-size: 1.2rem; background: #ff4500; border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: bold; }
+        .btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
 
-    <button id="loginBtn" disabled>Initializing...</button>
-    <div id="msg">Waiting for SDK...</div>
+    <button class="btn" onclick="openLogin()">Sign In with Playgama</button>
 
     <script>
-        const btn = document.getElementById('loginBtn');
-        const msg = document.getElementById('msg');
+        function openLogin() {
+            // 1. Open Playgama in a new popup (Google login won't block this)
+            const loginUrl = "https://playgama.com"; 
+            const popup = window.open(loginUrl, "PlaygamaLogin", "width=600,height=700");
 
-        // Initialize Playgama Bridge
-        window.bridge.initialize()
-            .then(() => {
-                btn.disabled = false;
-                btn.innerText = "Sign In with Playgama";
-                msg.innerText = "Connected to Playgama";
-                console.log("Platform ID:", window.bridge.platform.id);
-            })
-            .catch(err => {
-                msg.innerText = "Config Error: Check playgama-bridge-config.json";
-                console.error("Init Error:", err);
-            });
+            // 2. Start a "Poller" to watch the window
+            const checkWindow = setInterval(() => {
+                // If the popup is closed, we assume they finished or gave up
+                if (!popup || popup.closed) {
+                    clearInterval(checkWindow);
+                    
+                    console.log("Popup closed. Waiting 250ms...");
 
-        btn.addEventListener('click', () => {
-            btn.disabled = true;
-            btn.innerText = "Opening Popup...";
-            
-            window.bridge.player.authorize()
-                .then(() => {
-                    msg.innerText = "Success! Redirecting...";
-                    // Wait a quarter second (250ms)
+                    // 3. Wait exactly a quarter of a second
                     setTimeout(() => {
-                        window.location.href = 'https://fast4word.github.io';
+                        // 4. Redirect back to your GitHub page
+                        window.location.href = "https://fast4word.github.io";
                     }, 250);
-                })
-                .catch(err => {
-                    btn.disabled = false;
-                    btn.innerText = "Sign In with Playgama";
-                    msg.innerText = "Sign-in failed. Check console (F12).";
-                    console.error("Auth Error Details:", err);
-                });
-        });
+                }
+            }, 500); // Check every half-second
+        }
     </script>
 </body>
 </html>
