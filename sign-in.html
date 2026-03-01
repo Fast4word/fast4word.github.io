@@ -2,51 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sign In with Playgama</title>
-    <!-- Load the official Playgama Bridge SDK from CDN -->
-    <script src="https://bridge.playgama.com/v1/stable/playgama-bridge.js"></script>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playgama Sign In</title>
+    <script src="https://bridge.playgama.com"></script>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #1a1a1a; color: white; }
-        .login-btn { padding: 15px 30px; font-size: 18px; cursor: pointer; background: #ff4500; border: none; color: white; border-radius: 5px; font-weight: bold; }
-        .login-btn:disabled { background: #555; cursor: not-allowed; }
+        body { font-family: -apple-system, system-ui, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #0f0f0f; color: white; }
+        #loginBtn { padding: 16px 32px; font-size: 18px; font-weight: bold; cursor: pointer; background: #ff4500; border: none; border-radius: 8px; color: white; transition: transform 0.1s; }
+        #loginBtn:active { transform: scale(0.95); }
+        #loginBtn:disabled { background: #333; cursor: not-allowed; }
+        #msg { position: absolute; bottom: 20%; color: #888; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <button id="signInBtn" class="login-btn" disabled>Loading SDK...</button>
+    <button id="loginBtn" disabled>Initializing...</button>
+    <div id="msg">Waiting for SDK...</div>
 
     <script>
-        const btn = document.getElementById('signInBtn');
+        const btn = document.getElementById('loginBtn');
+        const msg = document.getElementById('msg');
 
-        // 1. Initialize the SDK immediately
+        // Initialize Playgama Bridge
         window.bridge.initialize()
             .then(() => {
-                btn.innerText = "Sign In with Playgama";
                 btn.disabled = false;
-                console.log("Playgama Bridge Initialized");
+                btn.innerText = "Sign In with Playgama";
+                msg.innerText = "Connected to Playgama";
+                console.log("Platform ID:", window.bridge.platform.id);
             })
             .catch(err => {
-                btn.innerText = "Failed to load SDK";
-                console.error("Initialization error:", err);
+                msg.innerText = "Config Error: Check playgama-bridge-config.json";
+                console.error("Init Error:", err);
             });
 
-        // 2. Handle the click event
         btn.addEventListener('click', () => {
-            // Trigger the official authorization popup
+            btn.disabled = true;
+            btn.innerText = "Opening Popup...";
+            
             window.bridge.player.authorize()
                 .then(() => {
-                    btn.innerText = "Signed In! Redirecting...";
-                    btn.disabled = true;
-
-                    // 3. Wait exactly a quarter of a second (250ms)
+                    msg.innerText = "Success! Redirecting...";
+                    // Wait a quarter second (250ms)
                     setTimeout(() => {
                         window.location.href = 'https://fast4word.github.io';
                     }, 250);
                 })
                 .catch(err => {
-                    console.warn("Login cancelled or failed:", err);
-                    alert("Sign-in failed. Please try again.");
+                    btn.disabled = false;
+                    btn.innerText = "Sign In with Playgama";
+                    msg.innerText = "Sign-in failed. Check console (F12).";
+                    console.error("Auth Error Details:", err);
                 });
         });
     </script>
