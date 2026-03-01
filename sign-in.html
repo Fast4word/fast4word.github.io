@@ -1,0 +1,15 @@
+<iframe src="https://accounts.google.com/v3/signin/accountchooser?as=uUKgh41XJAC2zIQPoCov25Dx6G5rF_3t34rj3ayaih0&client_id=871474283002-95j82n078qgji9jgqi57gvoaj6lguhbb.apps.googleusercontent.com&display=popup&gis_params=ChRodHRwczovL3BsYXlnYW1hLmNvbRINZ2lzX3RyYW5zZm9ybRgHKit1VUtnaDQxWEpBQzJ6SVFQb0NvdjI1RHg2RzVyRl8zdDM0cmozYXlhaWgwMkg4NzE0NzQyODMwMDItOTVqODJuMDc4cWdqaTlqZ3FpNTdndm9hajZsZ3VoYmIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb204AUJAODgxM2MxZDM1NjQyNzg2ZDIzNTQ0ZDU4ZjE5Yzc4YWE1ZTg5ZGRhNDY4MzljYjJjZDc5MTJiYzBkZjA2NmE1N1IleyJyZXR1cm5VUkwiOiJodHRwczovL3BsYXlnYW1hLmNvbS8ifQ&gsiwebsdk=gis_attributes&nonce=9dab8bea938ce7ba0f191c2076155dfb7bd757c6feb5a5fcb911221d0ef0654c&origin=https%3A%2F%2Fplaygama.com&prompt=select_account&redirect_uri=gis_transform&response_mode=form_post&response_type=id_token&scope=openid+email+profile&state=%7B%22returnURL%22%3A%22https%3A%2F%2Fplaygama.com%2F%22%7D&dsh=uUKgh41XJAC2zIQPoCov25Dx6G5rF_3t34rj3ayaih0&o2v=1&service=lso&flowName=GeneralOAuthFlow&opparams=%253Fresponse_mode%253Dform_post%2526gis_params%253DChRodHRwczovL3BsYXlnYW1hLmNvbRINZ2lzX3RyYW5zZm9ybRgHKit1VUtnaDQxWEpBQzJ6SVFQb0NvdjI1RHg2RzVyRl8zdDM0cmozYXlhaWgwMkg4NzE0NzQyODMwMDItOTVqODJuMDc4cWdqaTlqZ3FpNTdndm9hajZsZ3VoYmIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb204AUJAODgxM2MxZDM1NjQyNzg2ZDIzNTQ0ZDU4ZjE5Yzc4YWE1ZTg5ZGRhNDY4MzljYjJjZDc5MTJiYzBkZjA2NmE1N1IleyJyZXR1cm5VUkwiOiJodHRwczovL3BsYXlnYW1hLmNvbS8ifQ&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAMmIq2SGEMmgLxyIvlwHl32e83ZVY8oulhoD5Dn-1d9LNM5TynwWUgv0FvIaF9dqdAN8BNst9K5iDDdbPYLJzKt7YkaUcbgfBPusY49qHt3zG8YfLOQ6X9wDlOroc5zLY160UMBKMwPSmdGkwrLL_E_3sKzPmdbBpj0iVE97mKMvdEZ9Si1jpjF3y2IpQqNH0RX9lyaV8BqDnyFTzNYYj3m8TFZo4aOu_Dqx9pGyseTWqu5XZ7aSrA7Rr2HE6m8n02mnTx6-BuHAxNTzy_m2eAIPuDb4fTMYYuENt15fIyi7WVxyNwhj0fJATLQMWbYWEkb-Vy3lBje9CptKygzDfxNzqDiMsp3rGUQkF3hFZ1IEZ3_NkFf7zLGBI6vpFjlX5VXI2dlmMUXJdmloL5TmmbZwyuOn9TCVJML689x7nMQvcbc4u2Mroc6D6wbCwaiE0Eb-gYqpiM2LFrqf0FV7R-KEDFAb4_l_W0WGQAuCix8wY8oFG0%26flowName%3DGeneralOAuthFlow%26as%3DuUKgh41XJAC2zIQPoCov25Dx6G5rF_3t34rj3ayaih0%26client_id%3D871474283002-95j82n078qgji9jgqi57gvoaj6lguhbb.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fconsent%23&app_domain=https%3A%2F%2Fplaygama.com" id="signin">
+<script>
+const iframe = document.getElementById('myIframe');
+
+iframe.addEventListener('load', () => {
+    // We can't see the URL, but we know it just finished loading something new
+    console.log("Iframe finished loading a new page.");
+    
+    // Wait a quarter second (250ms)
+    setTimeout(() => {
+        // Force the parent window to redirect
+        window.location.href = 'https://fast4word.github.io';
+    }, 250);
+});
+</script>
