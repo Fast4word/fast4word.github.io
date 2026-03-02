@@ -1,4 +1,6 @@
 User-agent: *
-Disallow:
+Disallow: /robots.txt
+Disallow: /sitemap.xml
+Disallow: /sign-in.html
 
 Sitemap: https://yourdomain.com/sitemap.xml
