@@ -3,4 +3,4 @@ Disallow: /robots.txt
 Disallow: /sitemap.xml
 Disallow: /sign-in.html
 
-Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: https://fast4word.github.io/sitemap.xml
