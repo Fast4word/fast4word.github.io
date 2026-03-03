@@ -418,7 +418,7 @@ function buildGenres() {
   const c = {};
   games.forEach(g => (g.genres || []).forEach(x => {
     // Exclude curated genres here
-    if (!x.includes("curated")) {
+    if (!x.includes("curated") && !x.includes("_")) {
       c[x] = (c[x] || 0) + 1;
     }
   }));
