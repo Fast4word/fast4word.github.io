@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <title>Dunah PlayZone</title>
     <meta name="msvalidate.01" content="857F68342483599FAEE9C91B916F668A" />
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- SEO Meta Tags -->
@@ -14,13 +13,11 @@
     <meta name="keywords" content="games, fast4word, dunah, playzone, free, browser, gaming, unblocked, web, mobile">
     <meta name="robots" content="index, follow">
 
-
     <!-- Open Graph Tags (for social media) -->
     <meta property="og:title" content="Dunah Playzone - Play free online games unblocked!">
     <meta property="og:description" content="Best unblocked online games for free at Dunah Playzone! Play now top web and mobile games like Deadly Descent, Ball Burst, Stickman Clicker, and Hazmob FPS!">
     <meta property="og:image" content="https://fast4word.github.io/og-image.png">
     <meta property="og:url" content="https://fast4word.github.io">
-
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://fast4word.github.io">
@@ -34,161 +31,238 @@
 </svg>">
 
 <style>
-:root{
-  --bg:#0b0f1a;
-  --panel:#151a2d;
-  --accent:#6cf2c2;
-  --text:#fff;
-  --muted:#9aa3c7;
-  --fav:#ff5c5c;
+:root {
+  --bg: #0b0f1a;
+  --panel: #151a2d;
+  --accent: #6cf2c2;
+  --text: #fff;
+  --muted: #9aa3c7;
+  --fav: #ff5c5c;
 }
 
-*{box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, sans-serif;
+}
 
-body{
-  margin:0;
-  background:linear-gradient(180deg,#0b0f1a,#0e1330);
-  color:var(--text);
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #0b0f1a, #0e1330);
+  color: var(--text);
 }
 
 /* Header */
-header{
-  position:sticky;
-  top:0;
-  z-index:20;
-  background:#0d1225;
-  padding:14px;
-  display:flex;
-  align-items:center;
-  gap:12px;
+header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #0d1225;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-.menu-btn,.search-btn{font-size:22px;cursor:pointer}
-header h1{margin:0;font-size:1.2rem;flex:1}
+.menu-btn, .search-btn {
+  font-size: 22px;
+  cursor: pointer;
+}
+header h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  flex: 1;
+}
 
 /* Search */
-.search-wrap{display:none;padding:12px}
-.search-wrap.active{display:block}
-.search-wrap input{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:none;
+.search-wrap {
+  display: none;
+  padding: 12px;
+}
+.search-wrap.active {
+  display: block;
+}
+.search-wrap input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
 }
 
 /* Sidebar */
-aside{
-  position:fixed;
-  top:0;bottom:0;left:0;
-  width:260px;
-  background:#0d1225;
-  padding:18px;
-  overflow-y:auto;
-  transform:translateX(-100%);
-  transition:.25s;
-  z-index:50;
+aside {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 260px;
+  background: #0d1225;
+  padding: 18px;
+  overflow-y: auto;
+  transform: translateX(-100%);
+  transition: .25s;
+  z-index: 50;
 }
-aside.active{transform:translateX(0)}
-.backdrop{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.6);
-  display:none;
-  z-index:45;
+aside.active {
+  transform: translateX(0);
 }
-.backdrop.active{display:block}
-.genre{
-  padding:12px;border-radius:10px;
-  margin-bottom:6px;cursor:pointer;
-  color:var(--muted);
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .6);
+  display: none;
+  z-index: 45;
 }
-.genre.active,.genre:hover{
-  background:var(--panel);
-  color:var(--accent);
+.backdrop.active {
+  display: block;
+}
+.genre {
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  color: var(--muted);
+}
+.genre.active, .genre:hover {
+  background: var(--panel);
+  color: var(--accent);
 }
 
 /* Sections */
-.section{padding:14px}
-.section h2{margin:0 0 10px}
+.section {
+  padding: 14px;
+}
+.section h2 {
+  margin: 0 0 10px;
+}
 
 /* Grid */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
 }
-@media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:900px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media (min-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
 
 /* Cards */
-.card{
-  background:var(--panel);
-  border-radius:14px;
-  overflow:hidden;
-  cursor:pointer;
-  position:relative;
+.card {
+  background: var(--panel);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
 }
-.thumb{width:100%;height:140px;object-fit:cover}
-.card-body{padding:10px}
-.card-title{font-weight:600;font-size:.95rem}
+.thumb {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+.card-body {
+  padding: 10px;
+}
+.card-title {
+  font-weight: 600;
+  font-size: .95rem;
+}
 
 /* Favourite */
-.fav-btn{
-  position:absolute;
-  top:8px;right:8px;
-  width:34px;height:34px;
-  border-radius:50%;
-  background:rgba(0,0,0,.55);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;color:#ccc;
-  transition:.15s;
+.fav-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #ccc;
+  transition: .15s;
 }
-.fav-btn.active{
-  background:rgba(255,92,92,.15);
-  color:var(--fav);
-  box-shadow:0 0 10px rgba(255,92,92,.7);
-  transform:scale(1.15);
+.fav-btn.active {
+  background: rgba(255, 92, 92, .15);
+  color: var(--fav);
+  box-shadow: 0 0 10px rgba(255, 92, 92, .7);
+  transform: scale(1.15);
 }
 
 /* Game View */
-#gameView{position:fixed;inset:0;background:#000;display:none;z-index:100}
-#gameView iframe{width:100%;height:100%;border:none}
+#gameView {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: none;
+  z-index: 100;
+}
+#gameView iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
 
 /* Bottom Nav */
-.bottom-nav{
-  position:fixed;bottom:0;left:0;right:0;
-  height:64px;background:#0d1225;
-  display:flex;justify-content:space-around;align-items:center;
-  z-index:40;
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: #0d1225;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 40;
 }
-.bottom-nav button{
-  background:none;border:none;
-  color:var(--muted);
-  display:flex;flex-direction:column;align-items:center;
-  font-size:.7rem;
+.bottom-nav button {
+  background: none;
+  border: none;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: .7rem;
 }
-.bottom-nav button span{font-size:22px}
-.bottom-nav button.active{color:var(--accent)}
+.bottom-nav button span {
+  font-size: 22px;
+}
+.bottom-nav button.active {
+  color: var(--accent);
+}
 
-.page{padding-bottom:80px}
+.page {
+  padding-bottom: 80px;
+}
 
 body.playing header,
 body.playing .search-wrap,
 body.playing .section,
 body.playing .bottom-nav,
 body.playing aside,
-body.playing .backdrop{display:none}
+body.playing .backdrop {
+  display: none;
+}
 
 /* Adblock overlay */
-#adblockOverlay{
-  position:fixed;
-  inset:0;
-  background:#0b0f1a;
-  color:#fff;
-  display:none;
-  z-index:1000;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:24px;
+#adblockOverlay {
+  position: fixed;
+  inset: 0;
+  background: #0b0f1a;
+  color: #fff;
+  display: none;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
 }
 </style>
 </head>
@@ -197,14 +271,14 @@ body.playing .backdrop{display:none}
 <header>
   <div class="menu-btn" onclick="openMenu()">☰</div>
   <h1>Dunah PlayZone</h1>
-  <a id='wot-badge0' class='wot-badge_dark' href='https://www.mywot.com/scorecard/fast4word.github.io?wot_badge=0_black' target='_blank' >
+  <a id='wot-badge0' class='wot-badge_dark' href='https://www.mywot.com/scorecard/fast4word.github.io?wot_badge=0_black' target='_blank'>
     <div class='wot-logo'></div>
     <div class='wot-shield'></div>
     <p class='wot-secured'>Verified Website</p>
     <div class='wot-vertical'></div>
     <p class='wot-report'>See Report</p>
-    </a>
-    <div class="search-btn" onclick="toggleSearch()">🔍</div>
+  </a>
+  <div class="search-btn" onclick="toggleSearch()">🔍</div>
 </header>
 
 <div class="search-wrap" id="searchWrap">
@@ -273,66 +347,66 @@ body.playing .backdrop{display:none}
 <div class="adsbox" style="height:1px;width:1px;position:absolute;left:-9999px"></div>
 
 <script>
-history.replaceState(null,"");
+history.replaceState(null, "");
 
-const featuredGrid=document.getElementById("featuredGrid");
-const recommendedGrid=document.getElementById("recommendedGrid");
-const grid=document.getElementById("grid");
-const sidebar=document.getElementById("sidebar");
-const backdrop=document.getElementById("backdrop");
-const genreList=document.getElementById("genreList");
-const search=document.getElementById("search");
-const searchWrap=document.getElementById("searchWrap");
-const gameView=document.getElementById("gameView");
-const gameFrame=document.getElementById("gameFrame");
-const adblockOverlay=document.getElementById("adblockOverlay");
+const featuredGrid = document.getElementById("featuredGrid");
+const recommendedGrid = document.getElementById("recommendedGrid");
+const grid = document.getElementById("grid");
+const sidebar = document.getElementById("sidebar");
+const backdrop = document.getElementById("backdrop");
+const genreList = document.getElementById("genreList");
+const search = document.getElementById("search");
+const searchWrap = document.getElementById("searchWrap");
+const gameView = document.getElementById("gameView");
+const gameFrame = document.getElementById("gameFrame");
+const adblockOverlay = document.getElementById("adblockOverlay");
 
-let games=[];
-let favourites=JSON.parse(localStorage.getItem("favourites")||"[]");
-let genrePlays=JSON.parse(localStorage.getItem("genrePlays")||"{}");
-let allowedGenres=[];
-let tab="home";
-let activeGenre="all";
-let adBlocked=false;
+let games = [];
+let favourites = JSON.parse(localStorage.getItem("favourites") || "[]");
+let genrePlays = JSON.parse(localStorage.getItem("genrePlays") || "{}");
+let allowedGenres = [];
+let tab = "home";
+let activeGenre = "all";
+let adBlocked = false;
 
 /* Adblock detect */
-function detectAdBlock(){
-  const bait=document.querySelector(".adsbox");
-  if(!bait||bait.offsetHeight===0){
-    adBlocked=true;
+function detectAdBlock() {
+  const bait = document.querySelector(".adsbox");
+  if (!bait || bait.offsetHeight === 0) {
+    adBlocked = true;
   }
 }
-window.addEventListener("load",()=>setTimeout(detectAdBlock,300));
+window.addEventListener("load", () => setTimeout(detectAdBlock, 300));
 
 /* UI */
-function toggleSearch(){searchWrap.classList.toggle("active")}
-function openMenu(){sidebar.classList.add("active");backdrop.classList.add("active")}
-function closeMenu(){sidebar.classList.remove("active");backdrop.classList.remove("active")}
+function toggleSearch() { searchWrap.classList.toggle("active"); }
+function openMenu() { sidebar.classList.add("active"); backdrop.classList.add("active"); }
+function closeMenu() { sidebar.classList.remove("active"); backdrop.classList.remove("active"); }
 
 /* Tabs */
-function setTab(t){
-  tab=t;
-  document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
-  document.querySelector(`.bottom-nav button:nth-child(${t==="games"?1:t==="home"?2:3})`).classList.add("active");
-  homeTab.style.display=t==="home"?"block":"none";
-  gamesTab.style.display=t==="home"?"none":"block";
+function setTab(t) {
+  tab = t;
+  document.querySelectorAll(".bottom-nav button").forEach(b => b.classList.remove("active"));
+  document.querySelector(`.bottom-nav button:nth-child(${t === "games" ? 1 : t === "home" ? 2 : 3})`).classList.add("active");
+  homeTab.style.display = t === "home" ? "block" : "none";
+  gamesTab.style.display = t === "home" ? "none" : "block";
   render();
 }
 
 /* Load games */
-fetch("games.json").then(r=>r.json()).then(data=>{
-  let raw=[];
-  if(Array.isArray(data.hits)) raw=data.hits;
-  else if(Array.isArray(data.segments))
-    raw=data.segments.flatMap(s=>s.hits||[]);
-  games=Object.values(Object.fromEntries(raw.map(g=>[g.id,g])));
+fetch("games.json").then(r => r.json()).then(data => {
+  let raw = [];
+  if (Array.isArray(data.hits)) raw = data.hits;
+  else if (Array.isArray(data.segments))
+    raw = data.segments.flatMap(s => s.hits || []);
+  games = Object.values(Object.fromEntries(raw.map(g => [g.id, g])));
 
   games.unshift({
-    id:"ball-burst",
-    title:"Ball Burst",
-    images:["https://img.gamepix.com/games/ball-burst/icon/ball-burst.png?w=105"],
-    genres:["arcade","mobile","puzzle", "skill"],
-    gameURL:"https://play.gamepix.com/ball-burst/embed?sid=1"
+    id: "ball-burst",
+    title: "Ball Burst",
+    images: ["https://img.gamepix.com/games/ball-burst/icon/ball-burst.png?w=105"],
+    genres: ["arcade", "mobile", "puzzle", "skill"],
+    gameURL: "https://play.gamepix.com/ball-burst/embed?sid=1"
   });
 
   buildGenres();
@@ -340,115 +414,120 @@ fetch("games.json").then(r=>r.json()).then(data=>{
 });
 
 /* Genres (top 10) */
-function buildGenres(){
-  const c={};
-  games.forEach(g=>(g.genres||[]).forEach(x=>c[x]=(c[x]||0)+1));
-  allowedGenres=Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,10).map(x=>x[0]);
+function buildGenres() {
+  const c = {};
+  games.forEach(g => (g.genres || []).forEach(x => {
+    // Exclude curated genres here
+    if (!x.includes("curated")) {
+      c[x] = (c[x] || 0) + 1;
+    }
+  }));
+  allowedGenres = Object.entries(c).sort((a, b) => b[1] - a[1]).slice(0, 10).map(x => x[0]);
 
-  genreList.innerHTML="";
-  allowedGenres.forEach(slug=>{
-    const d=document.createElement("div");
-    d.className="genre";
-    d.textContent=slug.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
-    d.onclick=()=>{activeGenre=slug;setTab("games");closeMenu()};
+  genreList.innerHTML = "";
+  allowedGenres.forEach(slug => {
+    const d = document.createElement("div");
+    d.className = "genre";
+    d.textContent = slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    d.onclick = () => { activeGenre = slug; setTab("games"); closeMenu(); };
     genreList.appendChild(d);
   });
 
-  filterAll.onclick=()=>{activeGenre="all";setTab("games");closeMenu()};
-  filterFav.onclick=()=>{activeGenre="favourites";setTab("fav");closeMenu()};
+  filterAll.onclick = () => { activeGenre = "all"; setTab("games"); closeMenu(); };
+  filterFav.onclick = () => { activeGenre = "favourites"; setTab("fav"); closeMenu(); };
 }
 
 /* Featured */
-function getFeatured(){
-  const week=Math.floor(Date.now()/604800000);
-  const bb=games.find(g=>g.id==="ball-burst");
-  const others=games.filter(g=>g.id!=="ball-burst");
-  return [bb, others[week%others.length], others[(week+3)%others.length]].filter(Boolean);
+function getFeatured() {
+  const week = Math.floor(Date.now() / 604800000);
+  const bb = games.find(g => g.id === "ball-burst");
+  const others = games.filter(g => g.id !== "ball-burst");
+  return [bb, others[week % others.length], others[(week + 3) % others.length]].filter(Boolean);
 }
 
 /* Recommended */
-function getRecommended(){
-  const favGenres=Object.entries(genrePlays)
-    .filter(([g])=>allowedGenres.includes(g))
-    .sort((a,b)=>b[1]-a[1])
-    .slice(0,2)
-    .map(x=>x[0]);
+function getRecommended() {
+  const favGenres = Object.entries(genrePlays)
+    .filter(([g]) => allowedGenres.includes(g))
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 2)
+    .map(x => x[0]);
 
-  let rec=games.filter(g=>g.genres?.some(gen=>favGenres.includes(gen)));
-  if(rec.length<6) rec=rec.concat(games.filter(g=>!rec.includes(g)));
-  return rec.slice(0,6);
+  let rec = games.filter(g => g.genres?.some(gen => favGenres.includes(gen)));
+  if (rec.length < 6) rec = rec.concat(games.filter(g => !rec.includes(g)));
+  return rec.slice(0, 6);
 }
 
 /* Render */
-function renderCards(list,el){
-  el.innerHTML="";
-  list.forEach(g=>{
-    const fav=favourites.includes(g.id);
-    const c=document.createElement("div");
-    c.className="card";
-    c.innerHTML=`
-      <div class="fav-btn ${fav?"active":""}"
-        onclick="event.stopPropagation();toggleFavourite('${g.id}')">
-        ${fav?"❤️":"🤍"}
+function renderCards(list, el) {
+  el.innerHTML = "";
+  list.forEach(g => {
+    const fav = favourites.includes(g.id);
+    const c = document.createElement("div");
+    c.className = "card";
+    c.innerHTML = `
+      <div class="fav-btn ${fav ? "active" : ""}"
+        onclick="event.stopPropagation(); toggleFavourite('${g.id}')">
+        ${fav ? "❤️" : "🤍"}
       </div>
-      <img class="thumb" src="${g.images?.[0]||""}">
+      <img class="thumb" src="${g.images?.[0] || ""}">
       <div class="card-body"><div class="card-title">${g.title}</div></div>`;
-    c.onclick=()=>openGame(g);
+    c.onclick = () => openGame(g);
     el.appendChild(c);
   });
 }
 
-function render(){
-  const q=search.value.toLowerCase();
-  if(tab==="home"){
-    renderCards(getFeatured(),featuredGrid);
-    renderCards(getRecommended().filter(g=>g.title.toLowerCase().includes(q)),recommendedGrid);
-  }else{
-    let list=games.filter(g=>g.title.toLowerCase().includes(q));
-    if(tab==="fav") list=list.filter(g=>favourites.includes(g.id));
-    if(activeGenre!=="all"&&activeGenre!=="favourites")
-      list=list.filter(g=>g.genres?.includes(activeGenre));
-    renderCards(list,grid);
+function render() {
+  const q = search.value.toLowerCase();
+  if (tab === "home") {
+    renderCards(getFeatured(), featuredGrid);
+    renderCards(getRecommended().filter(g => g.title.toLowerCase().includes(q)), recommendedGrid);
+  } else {
+    let list = games.filter(g => g.title.toLowerCase().includes(q));
+    if (tab === "fav") list = list.filter(g => favourites.includes(g.id));
+    if (activeGenre !== "all" && activeGenre !== "favourites")
+      list = list.filter(g => g.genres?.includes(activeGenre));
+    renderCards(list, grid);
   }
 }
 
 /* Favourites */
-function toggleFavourite(id){
-  favourites=favourites.includes(id)
-    ? favourites.filter(x=>x!==id)
-    : [...favourites,id];
-  localStorage.setItem("favourites",JSON.stringify(favourites));
+function toggleFavourite(id) {
+  favourites = favourites.includes(id)
+    ? favourites.filter(x => x !== id)
+    : [...favourites, id];
+  localStorage.setItem("favourites", JSON.stringify(favourites));
   render();
 }
 
 /* Game open (GATED) */
-function openGame(game){
-  if(adBlocked){
-    adblockOverlay.style.display="flex";
+function openGame(game) {
+  if (adBlocked) {
+    adblockOverlay.style.display = "flex";
     return;
   }
 
-  (game.genres||[]).forEach(g=>{
-    if(allowedGenres.includes(g))
-      genrePlays[g]=(genrePlays[g]||0)+1;
+  (game.genres || []).forEach(g => {
+    if (allowedGenres.includes(g))
+      genrePlays[g] = (genrePlays[g] || 0) + 1;
   });
-  localStorage.setItem("genrePlays",JSON.stringify(genrePlays));
+  localStorage.setItem("genrePlays", JSON.stringify(genrePlays));
 
-  gameFrame.src=game.gameURL;
-  gameView.style.display="block";
+  gameFrame.src = game.gameURL;
+  gameView.style.display = "block";
   document.body.classList.add("playing");
-  history.pushState(null,"");
+  history.pushState(null, "");
 }
 
-window.addEventListener("popstate",()=>{
-  if(document.body.classList.contains("playing")){
+window.addEventListener("popstate", () => {
+  if (document.body.classList.contains("playing")) {
     document.body.classList.remove("playing");
-    gameView.style.display="none";
-    gameFrame.src="";
+    gameView.style.display = "none";
+    gameFrame.src = "";
   }
 });
 
-search.oninput=render;
+search.oninput = render;
 </script>
 
 </body>
