@@ -1,37 +1,41 @@
 {
-  "background_color": "#ffffff",
-  "description": "Best unblocked online games for free at Dunah Playzone! Play now top web and mobile games like Deadly Descent, Ball Burst, Stickman Clicker, and Hazmob FPS!",
-  "dir": "ltr",
+ 
+  "id": "dunah.playzone-pwa",
+
+
+  "name": "Dunah Playzone",
+
+  "short_name": "Playzone",
+
+ 
+  "start_url": "https://fast4word.github.io",
+
+
   "display": "standalone",
-  "name": "fast4word.github",
+
+
   "orientation": "any",
-  "scope": "/",
-  "short_name": "fast4word.github",
-  "start_url": "/",
-  "theme_color": "#ffffff",
+
+
+  "background_color": "#ffffff",
+
+ 
+  "theme_color": "#000000",
+
+
   "icons": [
     {
-      "src": "data:image/svg+xml,\n&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;\n  &lt;rect width='100' height='100' rx='22' fill='%230b0f1a'/&gt;\n  &lt;circle cx='50' cy='50' r='36' stroke='%236cf2c2' stroke-width='6' fill='none'/&gt;\n  &lt;polygon points='42,32 72,50 42,68' fill='%236cf2c2'/&gt;\n&lt;/svg&gt;",
-      "type": "image/svg+xml",
-      "isSquare": false,
-      "isPng": false,
-      "isWebp": false,
-      "isJpg": false,
-      "width": 0,
-      "is512x512": false,
-      "is256x256": false,
-      "is192x192": false
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "https://fast4word.github.io/og-image.png",
-      "isSquare": false,
-      "isPng": true,
-      "isWebp": false,
-      "isJpg": false,
-      "width": 0,
-      "is512x512": false,
-      "is256x256": false,
-      "is192x192": false
+      "src": "/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+     
+      "purpose": "maskable"
     }
   ]
 }
