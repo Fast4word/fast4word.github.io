@@ -621,20 +621,32 @@ function closeMenu() {
 
 /* Tabs */
 function setTab(t) {
-  tab = t;
+  // Store the actual tab for highlighting
+  const displayTab = t;
   
   // Handle downloaded tab
   if (t === 'downloaded') {
     activeGenre = 'downloaded';
-    t = 'games';
+    tab = 'games';
+  } else if (t === 'fav') {
+    activeGenre = 'favourites';
+    tab = 'games';
+  } else if (t === 'games') {
+    activeGenre = 'all';
+    tab = 'games';
+  } else {
+    tab = t;
+    activeGenre = 'all';
   }
   
+  // Update button highlights
   document.querySelectorAll(".bottom-nav button").forEach(b => b.classList.remove("active"));
-  const btnIndex = activeGenre === 'downloaded' ? 4 : (t === "games" ? 1 : t === "home" ? 2 : 3);
-  document.querySelector(`.bottom-nav button:nth-child(${btnIndex})`).classList.add("active");
+  const btnIndex = displayTab === 'games' ? 1 : displayTab === 'home' ? 2 : displayTab === 'fav' ? 3 : 4;
+  const targetBtn = document.querySelector(`.bottom-nav button:nth-child(${btnIndex})`);
+  if (targetBtn) targetBtn.classList.add("active");
   
-  homeTab.style.display = t === "home" ? "block" : "none";
-  gamesTab.style.display = t === "home" ? "none" : "block";
+  homeTab.style.display = tab === "home" ? "block" : "none";
+  gamesTab.style.display = tab === "home" ? "none" : "block";
   render();
 }
 
@@ -656,12 +668,44 @@ fetch("games.json").then(r => r.json()).then(data => {
 
   buildGenres();
   render();
-}).catch(err => {
+}).catch(async err => {
   console.error("Failed to load games:", err);
+  
+  // When offline, try to load downloaded games from cache
   if (!isOnline) {
-    // Show only downloaded games when offline
-    activeGenre = 'downloaded';
-    setTab('downloaded');
+    try {
+      const cache = await caches.open('games-cache-v1');
+      const cachedGames = [];
+      
+      // Load game metadata from cache
+      for (const gameId of downloaded) {
+        try {
+          const metaResponse = await cache.match(`game-meta-${gameId}`);
+          if (metaResponse) {
+            const gameData = await metaResponse.json();
+            cachedGames.push(gameData);
+          }
+        } catch (e) {
+          console.error(`Failed to load cached game ${gameId}:`, e);
+        }
+      }
+      
+      if (cachedGames.length > 0) {
+        games = cachedGames;
+        buildGenres();
+        // Show only downloaded games when offline
+        activeGenre = 'downloaded';
+        setTab('downloaded');
+      } else {
+        // No cached games, show empty state
+        activeGenre = 'downloaded';
+        setTab('downloaded');
+      }
+    } catch (e) {
+      console.error("Failed to load from cache:", e);
+      activeGenre = 'downloaded';
+      setTab('downloaded');
+    }
   }
 });
 
@@ -733,6 +777,10 @@ async function toggleDownload(gameId, event) {
     try {
       const cache = await caches.open('games-cache-v1');
       await cache.delete(game.gameURL);
+      // Also remove thumbnail
+      if (game.images?.[0]) {
+        await cache.delete(game.images[0]);
+      }
       showToast("🗑️ Game removed from downloads");
     } catch (err) {
       console.error("Cache removal error:", err);
@@ -744,14 +792,51 @@ async function toggleDownload(gameId, event) {
     
     try {
       const cache = await caches.open('games-cache-v1');
-      await cache.add(game.gameURL);
+      
+      // Store game metadata
+      const gameData = {
+        id: game.id,
+        title: game.title,
+        gameURL: game.gameURL,
+        images: game.images,
+        genres: game.genres,
+        timestamp: Date.now()
+      };
+      
+      // Cache the game metadata as JSON
+      await cache.put(
+        `game-meta-${gameId}`,
+        new Response(JSON.stringify(gameData), {
+          headers: { 'Content-Type': 'application/json' }
+        })
+      );
+      
+      // Cache the game iframe URL
+      try {
+        await cache.add(game.gameURL);
+      } catch (e) {
+        // If direct add fails due to CORS, fetch with no-cors mode
+        const response = await fetch(game.gameURL, { mode: 'no-cors' });
+        await cache.put(game.gameURL, response);
+      }
+      
+      // Cache the thumbnail image
+      if (game.images?.[0]) {
+        try {
+          await cache.add(game.images[0]);
+        } catch (e) {
+          // Try with no-cors if direct add fails
+          const imgResponse = await fetch(game.images[0], { mode: 'no-cors' });
+          await cache.put(game.images[0], imgResponse);
+        }
+      }
       
       downloaded.push(gameId);
       localStorage.setItem("downloaded", JSON.stringify(downloaded));
-      showToast("✅ Game downloaded for offline play");
+      showToast("✅ Game downloaded! Note: Some games may need internet for full features.", 4000);
     } catch (err) {
       console.error("Cache error:", err);
-      showToast("❌ Download failed");
+      showToast("❌ Download failed - " + err.message);
     } finally {
       btn.classList.remove('downloading');
     }
@@ -818,6 +903,31 @@ function render() {
       list = list.filter(g => downloaded.includes(g.id));
     } else if (activeGenre !== "all") {
       list = list.filter(g => g.genres?.includes(activeGenre));
+    }
+    
+    // Update empty state message based on context
+    if (list.length === 0) {
+      const emptyIcon = emptyState.querySelector('.empty-state-icon');
+      const emptyTitle = emptyState.querySelector('h3');
+      const emptyText = emptyState.querySelector('p');
+      
+      if (activeGenre === "downloaded") {
+        emptyIcon.textContent = "📥";
+        emptyTitle.textContent = isOnline ? "No downloaded games yet" : "No offline games available";
+        emptyText.textContent = isOnline ? "Download games while online to play them offline" : "Connect to the internet to download games";
+      } else if (activeGenre === "favourites") {
+        emptyIcon.textContent = "❤️";
+        emptyTitle.textContent = "No favourites yet";
+        emptyText.textContent = "Tap the heart icon on games to add them here";
+      } else if (q) {
+        emptyIcon.textContent = "🔍";
+        emptyTitle.textContent = "No games found";
+        emptyText.textContent = "Try a different search term";
+      } else {
+        emptyIcon.textContent = "📭";
+        emptyTitle.textContent = "No games found";
+        emptyText.textContent = "Try adjusting your filters";
+      }
     }
     
     renderCards(list, grid);
