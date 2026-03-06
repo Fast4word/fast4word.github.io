@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Offline | Game Over</title>
+    <style>
+        @import url('https://fonts.googleapis.com');
+
+        body {
+            background-color: #1a1a1a;
+            color: #00e436;
+            font-family: 'Press Start 2P', cursive;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            touch-action: none; /* Prevents scrolling while playing */
+        }
+
+        #game-container {
+            position: relative;
+            border: 4px solid #fff;
+            box-shadow: 0 0 20px #00e436;
+            max-width: 90vw;
+            max-height: 90vw;
+        }
+
+        canvas {
+            display: block;
+            background-color: #000;
+            width: 100%; /* Makes canvas responsive */
+            height: auto;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+            width: 85%;
+            z-index: 10;
+        }
+
+        h1 { font-size: 1rem; color: #ff004d; margin-bottom: 10px; }
+        p { font-size: 0.5rem; color: #fff; line-height: 1.4; margin-bottom: 15px;}
+
+        .btn {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 12px 20px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-areas: 
+                ". up ."
+                "left down right";
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .d-btn {
+            background: #333;
+            color: #fff;
+            border: 2px solid #fff;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            touch-action: manipulation;
+        }
+
+        .up { grid-area: up; }
+        .left { grid-area: left; }
+        .down { grid-area: down; }
+        .right { grid-area: right; }
+
+        .score-board { margin: 15px 0; font-size: 0.7rem; }
+    </style>
+</head>
+<body>
+
+    <div class="score-board">SCORE: <span id="scoreVal">0</span></div>
+
+    <div id="game-container">
+        <canvas id="snakeGame" width="400" height="400"></canvas>
+        
+        <div id="status-overlay" class="overlay">
+            <h1 id="title">OFFLINE</h1>
+            <p id="msg">CONNECTION LOST.<br>START GAME?</p>
+            <button class="btn" onclick="startGame()">START</button>
+        </div>
+    </div>
+
+    <!-- Mobile Controls -->
+    <div class="controls">
+        <div class="d-btn up" onclick="changeDir('up')">▲</div>
+        <div class="d-btn left" onclick="changeDir('left')">◀</div>
+        <div class="d-btn down" onclick="changeDir('down')">▼</div>
+        <div class="d-btn right" onclick="changeDir('right')">▶</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('snakeGame');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('scoreVal');
+        const overlay = document.getElementById('status-overlay');
+        
+        let score = 0, grid = 20, count = 0, gameActive = false;
+        let snake = { x: 160, y: 160, dx: grid, dy: 0, cells: [], maxCells: 4 };
+        let apple = { x: 320, y: 320 };
+
+        function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
+
+        function startGame() {
+            score = 0; scoreElement.innerHTML = score;
+            snake = { x: 160, y: 160, dx: grid, dy: 0, cells: [], maxCells: 4 };
+            apple = { x: getRandomInt(0, 20) * grid, y: getRandomInt(0, 20) * grid };
+            overlay.style.display = 'none';
+            gameActive = true;
+            requestAnimationFrame(loop);
+        }
+
+        function changeDir(dir) {
+            if (dir === 'left' && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
+            else if (dir === 'up' && snake.dy === 0) { snake.dy = -grid; snake.dx = 0; }
+            else if (dir === 'right' && snake.dx === 0) { snake.dx = grid; snake.dy = 0; }
+            else if (dir === 'down' && snake.dy === 0) { snake.dy = grid; snake.dx = 0; }
+        }
+
+        function loop() {
+            if (!gameActive) return;
+            requestAnimationFrame(loop);
+            if (++count < 8) return; // Game speed (higher = slower)
+            count = 0;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            snake.x += snake.dx; snake.y += snake.dy;
+
+            if (snake.x < 0) snake.x = canvas.width - grid;
+            else if (snake.x >= canvas.width) snake.x = 0;
+            if (snake.y < 0) snake.y = canvas.height - grid;
+            else if (snake.y >= canvas.height) snake.y = 0;
+
+            snake.cells.unshift({x: snake.x, y: snake.y});
+            if (snake.cells.length > snake.maxCells) snake.cells.pop();
+
+            ctx.fillStyle = '#ff004d';
+            ctx.fillRect(apple.x, apple.y, grid-1, grid-1);
+
+            ctx.fillStyle = '#00e436';
+            snake.cells.forEach((cell, index) => {
+                ctx.fillRect(cell.x, cell.y, grid-1, grid-1);
+                if (cell.x === apple.x && cell.y === apple.y) {
+                    snake.maxCells++; score += 10; scoreElement.innerHTML = score;
+                    apple.x = getRandomInt(0, 20) * grid; apple.y = getRandomInt(0, 20) * grid;
+                }
+                for (let i = index + 1; i < snake.cells.length; i++) {
+                    if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+                        gameActive = false;
+                        document.getElementById('title').innerHTML = "GAME OVER";
+                        overlay.style.display = 'block';
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeDir('left');
+            else if (e.key === 'ArrowUp') changeDir('up');
+            else if (e.key === 'ArrowRight') changeDir('right');
+            else if (e.key === 'ArrowDown') changeDir('down');
+        });
+
+        window.addEventListener('online', () => window.location.reload());
+    </script>
+</body>
+</html>
