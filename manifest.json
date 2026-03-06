@@ -1,12 +1,15 @@
 {
   "id": "dunah.playzone-pwa",
-  "name": "Playzone",
-  "short_name": "Playzone",
-  "start_url": "https://fast4word.github.io",
+  "name": "Dunah PlayZone",
+  "short_name": "PlayZone",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#0b0f1a",
+  "theme_color": "#0b0f1a",
+  "description": "Best unblocked online games for free at Dunah Playzone! Play now top web and mobile games like Deadly Descent, Ball Burst, Stickman Clicker, and Hazmob FPS! Download games for offline play.",
+  "categories": ["games", "entertainment"],
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -19,9 +22,55 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "monochrome"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Favourites",
+      "short_name": "Favourites",
+      "description": "View your favourite games",
+      "url": "/?tab=favourites",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Downloaded",
+      "short_name": "Downloads",
+      "description": "View downloaded games for offline play",
+      "url": "/?tab=downloaded",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ],
   "dir": "auto",
   "lang": "en",
-  "description": "Best unblocked online games for free at Dunah Playzone! Play now top web and mobile games like Deadly Descent, Ball Burst, Stickman Clicker, and Hazmob FPS!"
+  "prefer_related_applications": false,
+  "display_override": ["standalone", "fullscreen", "minimal-ui"],
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }
