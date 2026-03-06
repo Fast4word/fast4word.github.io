@@ -586,12 +586,22 @@ window.addEventListener('offline', updateConnectionStatus);
 updateConnectionStatus();
 
 /* Toast Notifications */
+let toastTimeout;
 function showToast(message, duration = 3000) {
+  clearTimeout(toastTimeout);
   toast.textContent = message;
   toast.classList.add('show');
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, duration);
+  
+  if (duration > 0) {
+    toastTimeout = setTimeout(() => {
+      toast.classList.remove('show');
+    }, duration);
+  }
+}
+
+function hideToast() {
+  clearTimeout(toastTimeout);
+  toast.classList.remove('show');
 }
 
 /* Adblock detect */
@@ -754,7 +764,7 @@ function getRecommended() {
   return rec.slice(0, 6);
 }
 
-/* Download Game */
+/* Download Game - Download actual HTML and assets */
 async function toggleDownload(gameId, event) {
   event.stopPropagation();
   
@@ -776,11 +786,15 @@ async function toggleDownload(gameId, event) {
     // Remove from cache
     try {
       const cache = await caches.open('games-cache-v1');
-      await cache.delete(game.gameURL);
-      // Also remove thumbnail
-      if (game.images?.[0]) {
-        await cache.delete(game.images[0]);
+      const keys = await cache.keys();
+      
+      // Delete all cached resources for this game
+      for (const request of keys) {
+        if (request.url.includes(gameId) || request.url.includes(game.gameURL)) {
+          await cache.delete(request);
+        }
       }
+      
       showToast("🗑️ Game removed from downloads");
     } catch (err) {
       console.error("Cache removal error:", err);
@@ -793,17 +807,111 @@ async function toggleDownload(gameId, event) {
     try {
       const cache = await caches.open('games-cache-v1');
       
-      // Store game metadata
+      // Fetch the actual game HTML
+      const gameResponse = await fetch(game.gameURL);
+      const gameHTML = await gameResponse.text();
+      
+      // Parse and extract resources from HTML
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(gameHTML, 'text/html');
+      
+      // Find all resources to cache
+      const resourcesToCache = new Set();
+      const baseURL = new URL(game.gameURL);
+      
+      // Get scripts
+      doc.querySelectorAll('script[src]').forEach(script => {
+        const src = script.getAttribute('src');
+        if (src) {
+          const fullURL = new URL(src, baseURL).href;
+          resourcesToCache.add(fullURL);
+        }
+      });
+      
+      // Get stylesheets
+      doc.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href) {
+          const fullURL = new URL(href, baseURL).href;
+          resourcesToCache.add(fullURL);
+        }
+      });
+      
+      // Get images
+      doc.querySelectorAll('img[src]').forEach(img => {
+        const src = img.getAttribute('src');
+        if (src && !src.startsWith('data:')) {
+          const fullURL = new URL(src, baseURL).href;
+          resourcesToCache.add(fullURL);
+        }
+      });
+      
+      // Cache the main game HTML
+      await cache.put(game.gameURL, new Response(gameHTML, {
+        headers: { 'Content-Type': 'text/html' }
+      }));
+      
+      // Cache all resources
+      let cached = 0;
+      const total = resourcesToCache.size;
+      
+      // Show initial progress
+      showToast(`📥 Downloading... 0/${total} resources`, 60000);
+      
+      for (const url of resourcesToCache) {
+        try {
+          const response = await fetch(url, { mode: 'cors' });
+          await cache.put(url, response);
+          cached++;
+          
+          // Update progress
+          if (cached % 5 === 0 || cached === total) {
+            showToast(`📥 Downloading... ${cached}/${total} resources`, 60000);
+          }
+        } catch (e) {
+          // Try with no-cors as fallback
+          try {
+            const response = await fetch(url, { mode: 'no-cors' });
+            await cache.put(url, response);
+            cached++;
+            
+            if (cached % 5 === 0 || cached === total) {
+              showToast(`📥 Downloading... ${cached}/${total} resources`, 60000);
+            }
+          } catch (err) {
+            console.warn(`Failed to cache: ${url}`, err);
+          }
+        }
+      }
+      
+      // Cache thumbnail
+      if (game.images?.[0]) {
+        try {
+          const imgResponse = await fetch(game.images[0], { mode: 'cors' });
+          await cache.put(game.images[0], imgResponse);
+        } catch (e) {
+          try {
+            const imgResponse = await fetch(game.images[0], { mode: 'no-cors' });
+            await cache.put(game.images[0], imgResponse);
+          } catch (err) {
+            console.warn('Failed to cache thumbnail');
+          }
+        }
+      }
+      
+      // Store game metadata with cached resources list
       const gameData = {
         id: game.id,
         title: game.title,
         gameURL: game.gameURL,
         images: game.images,
         genres: game.genres,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        cachedResources: Array.from(resourcesToCache),
+        cachedCount: cached,
+        totalResources: total
       };
       
-      // Cache the game metadata as JSON
       await cache.put(
         `game-meta-${gameId}`,
         new Response(JSON.stringify(gameData), {
@@ -811,31 +919,14 @@ async function toggleDownload(gameId, event) {
         })
       );
       
-      // Cache the game iframe URL
-      try {
-        await cache.add(game.gameURL);
-      } catch (e) {
-        // If direct add fails due to CORS, fetch with no-cors mode
-        const response = await fetch(game.gameURL, { mode: 'no-cors' });
-        await cache.put(game.gameURL, response);
-      }
-      
-      // Cache the thumbnail image
-      if (game.images?.[0]) {
-        try {
-          await cache.add(game.images[0]);
-        } catch (e) {
-          // Try with no-cors if direct add fails
-          const imgResponse = await fetch(game.images[0], { mode: 'no-cors' });
-          await cache.put(game.images[0], imgResponse);
-        }
-      }
-      
       downloaded.push(gameId);
       localStorage.setItem("downloaded", JSON.stringify(downloaded));
-      showToast("✅ Game downloaded! Note: Some games may need internet for full features.", 4000);
+      
+      hideToast();
+      showToast(`✅ Downloaded! Cached ${cached}/${total} resources. May need internet for some features.`, 4000);
     } catch (err) {
       console.error("Cache error:", err);
+      hideToast();
       showToast("❌ Download failed - " + err.message);
     } finally {
       btn.classList.remove('downloading');
