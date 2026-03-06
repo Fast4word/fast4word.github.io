@@ -94,38 +94,97 @@ self.addEventListener('fetch', (event) => {
       caches.match(request)
         .then(cachedResponse => {
           if (cachedResponse) {
+            // Return cached version
             return cachedResponse;
           }
-          // Try to fetch, but use cached version on failure
+          
+          // Try to fetch from network
           return fetch(request).then(response => {
-            // Cache successful responses
-            if (response.ok) {
-              const responseClone = response.clone();
-              caches.open(GAMES_CACHE).then(cache => {
-                cache.put(request, responseClone);
-              });
-            }
+            // Don't cache on-the-fly unless it's a deliberate download
             return response;
           }).catch(async () => {
-            // If fetch fails and we have no cache, try to return cached version anyway
-            const cached = await caches.match(request);
-            if (cached) return cached;
-            
-            // Return a minimal error page for the iframe
+            // If offline and not cached, return error page
             return new Response(
               `<!DOCTYPE html>
               <html>
-              <head><style>body{background:#0b0f1a;color:#fff;font-family:system-ui;display:flex;align-items:center;justify-content:center;height:100vh;text-align:center;margin:0;}</style></head>
+              <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style>
+                  body {
+                    background: linear-gradient(180deg, #0b0f1a, #0e1330);
+                    color: #fff;
+                    font-family: system-ui, -apple-system, sans-serif;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100vh;
+                    margin: 0;
+                    text-align: center;
+                    padding: 20px;
+                  }
+                  .container {
+                    max-width: 400px;
+                  }
+                  h1 {
+                    color: #ff5c5c;
+                    font-size: 1.5rem;
+                    margin-bottom: 1rem;
+                  }
+                  p {
+                    color: #9aa3c7;
+                    line-height: 1.6;
+                  }
+                  .icon {
+                    font-size: 4rem;
+                    margin-bottom: 1rem;
+                  }
+                </style>
+              </head>
               <body>
-                <div>
-                  <h2>⚠️ Game Unavailable Offline</h2>
-                  <p>This game needs an internet connection to load.</p>
-                  <p>Please connect to the internet and try again.</p>
+                <div class="container">
+                  <div class="icon">⚠️</div>
+                  <h1>Game Not Available Offline</h1>
+                  <p>This game hasn't been downloaded yet.</p>
+                  <p>Connect to the internet and use the download button to play offline.</p>
                 </div>
               </body>
               </html>`,
-              { headers: { 'Content-Type': 'text/html' } }
+              { 
+                status: 503,
+                headers: { 'Content-Type': 'text/html' }
+              }
             );
+          });
+        })
+    );
+    return;
+  }
+
+  // Handle game assets (JS, CSS, images from game servers)
+  if (request.url.match(/\.(js|css|woff2?|ttf|eot)$/i) && 
+      (request.url.includes('gamepix.com') || request.url.includes('playgama.com') || 
+       request.url.includes('googleapis.com') || request.url.includes('gstatic.com'))) {
+    event.respondWith(
+      caches.match(request)
+        .then(cachedResponse => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          return fetch(request).catch(() => {
+            // Return empty response for missing assets
+            const ext = request.url.split('.').pop().toLowerCase();
+            const contentTypes = {
+              'js': 'application/javascript',
+              'css': 'text/css',
+              'woff': 'font/woff',
+              'woff2': 'font/woff2',
+              'ttf': 'font/ttf',
+              'eot': 'application/vnd.ms-fontobject'
+            };
+            return new Response('', {
+              headers: { 'Content-Type': contentTypes[ext] || 'text/plain' }
+            });
           });
         })
     );
