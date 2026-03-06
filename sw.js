@@ -64,18 +64,26 @@ self.addEventListener('fetch', (event) => {
           if (cachedResponse) {
             return cachedResponse;
           }
-          // If in standalone mode (PWA), show main app instead of offline page
-          const isStandalone = await clients.matchAll({ type: 'window' }).then(clients => {
-            return clients.some(client => client.url.includes('display-mode=standalone'));
-          });
           
-          if (isStandalone) {
-            return caches.match('/index.html');
-          }
+          // Check if we're in standalone/PWA mode by checking if there are any clients
+          const allClients = await clients.matchAll({ type: 'window' });
+          const isStandalone = allClients.length > 0 && (
+            allClients[0].url.includes('?standalone') ||
+            self.registration.scope.includes('standalone')
+          );
           
-          // Otherwise show offline page
-          return caches.match(OFFLINE_URL);
+          // In PWA mode, show main app; in browser mode, show offline page
+          const fallbackPage = isStandalone ? '/index.html' : OFFLINE_URL;
+          return caches.match(fallbackPage);
         })
+    );
+    return;
+  }
+
+  // Handle game metadata requests
+  if (request.url.includes('game-meta-')) {
+    event.respondWith(
+      caches.match(request).then(response => response || fetch(request))
     );
     return;
   }
@@ -88,15 +96,36 @@ self.addEventListener('fetch', (event) => {
           if (cachedResponse) {
             return cachedResponse;
           }
+          // Try to fetch, but use cached version on failure
           return fetch(request).then(response => {
-            // Only cache successful responses
-            if (response.ok && request.url.includes('/embed')) {
+            // Cache successful responses
+            if (response.ok) {
               const responseClone = response.clone();
               caches.open(GAMES_CACHE).then(cache => {
                 cache.put(request, responseClone);
               });
             }
             return response;
+          }).catch(async () => {
+            // If fetch fails and we have no cache, try to return cached version anyway
+            const cached = await caches.match(request);
+            if (cached) return cached;
+            
+            // Return a minimal error page for the iframe
+            return new Response(
+              `<!DOCTYPE html>
+              <html>
+              <head><style>body{background:#0b0f1a;color:#fff;font-family:system-ui;display:flex;align-items:center;justify-content:center;height:100vh;text-align:center;margin:0;}</style></head>
+              <body>
+                <div>
+                  <h2>⚠️ Game Unavailable Offline</h2>
+                  <p>This game needs an internet connection to load.</p>
+                  <p>Please connect to the internet and try again.</p>
+                </div>
+              </body>
+              </html>`,
+              { headers: { 'Content-Type': 'text/html' } }
+            );
           });
         })
     );
@@ -134,7 +163,7 @@ self.addEventListener('fetch', (event) => {
           if (cachedResponse) {
             return cachedResponse;
           }
-          return fetch(request).then(response => {
+          return fetch(request, { mode: 'cors' }).then(response => {
             if (response.ok) {
               const responseClone = response.clone();
               caches.open(CACHE_NAME).then(cache => {
@@ -142,12 +171,21 @@ self.addEventListener('fetch', (event) => {
               });
             }
             return response;
-          });
-        })
-        .catch(() => {
-          // Return a placeholder image if offline and not cached
-          return new Response('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="#1a1f3a" width="100" height="100"/></svg>', {
-            headers: { 'Content-Type': 'image/svg+xml' }
+          }).catch(async () => {
+            // Try with no-cors as fallback
+            try {
+              const noCorsResponse = await fetch(request, { mode: 'no-cors' });
+              caches.open(CACHE_NAME).then(cache => {
+                cache.put(request, noCorsResponse.clone());
+              });
+              return noCorsResponse;
+            } catch (e) {
+              // Return a placeholder image if offline and not cached
+              return new Response(
+                `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="#1a1f3a" width="100" height="100"/><text x="50" y="50" text-anchor="middle" dy=".3em" fill="#9aa3c7" font-size="14">?</text></svg>`,
+                { headers: { 'Content-Type': 'image/svg+xml' } }
+              );
+            }
           });
         })
     );
