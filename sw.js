@@ -1,17 +1,37 @@
-// The 'install' event is required for the browser to allow installation
+const CACHE_NAME = 'offline-v1';
+const OFFLINE_URL = '/offline.html';
+
 self.addEventListener('install', (event) => {
-  // Forces the waiting service worker to become the active service worker
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.add(OFFLINE_URL);
+    })
+  );
   self.skipWaiting();
 });
 
-// The 'activate' event fires once the SW is installed
 self.addEventListener('activate', (event) => {
-  // Allows the SW to take control of the page immediately
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) return caches.delete(key);
+        })
+      );
+    })
+  );
+  self.clients.claim();
 });
 
-// The 'fetch' event is required for PWA status. 
-// This version just fetches from the network normally.
 self.addEventListener('fetch', (event) => {
-  event.respondWith(fetch(event.request));
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).catch(() => {
+        return caches.match(OFFLINE_URL);
+      })
+    );
+  } else {
+    // For images, CSS, and JS, continue to use the network normally
+    event.respondWith(fetch(event.request));
+  }
 });
