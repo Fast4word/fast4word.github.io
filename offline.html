@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Offline Mode | Connection Lost</title>
+    <title>RIP Internet | Game Over</title>
     <style>
         @import url('https://fonts.googleapis.com');
         
         :root {
             --neon-green: #00e436;
             --neon-red: #ff004d;
-            --bg-dark: #0a0a0a;
+            --bg-dark: #050505;
         }
 
         body {
@@ -22,98 +22,193 @@
             flex-direction: column;
             align-items: center;
             height: 100vh;
-            touch-action: none; /* Prevents scroll while playing */
+            touch-action: none;
+            text-align: center;
         }
 
-        /* Responsive Connection Header */
-        .status-bar {
+        /* Obnoxious Emergency Alert */
+        .emergency-banner {
             width: 100%;
             background: var(--neon-red);
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            font-size: 0.6rem;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 10px rgba(255, 0, 77, 0.4);
+            padding: 12px 0;
+            font-size: 0.5rem;
+            animation: pulse 0.5s infinite alternate;
+            box-shadow: 0 5px 15px rgba(255, 0, 77, 0.5);
         }
 
-        /* Game Area Scales with screen */
+        @keyframes pulse {
+            from { opacity: 1; } to { opacity: 0.7; }
+        }
+
+        .humor-text {
+            font-size: 0.45rem;
+            margin: 15px 10px;
+            color: #aaa;
+            line-height: 1.5;
+        }
+
         #game-container {
             position: relative;
-            margin-top: 20px;
-            width: 90vw;
-            max-width: 400px;
+            width: 85vw;
+            max-width: 350px;
             aspect-ratio: 1/1;
-            border: 4px solid #333;
+            border: 6px double #444;
             background: #000;
         }
 
         canvas { width: 100%; height: 100%; image-rendering: pixelated; }
 
-        /* Large, Thumb-Friendly Controls */
+        .score { margin: 15px; font-size: 0.7rem; color: var(--neon-green); }
+
+        /* The D-PAD */
         .controller {
             margin-top: auto;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             display: grid;
             grid-template-areas: ". up ." "left . right" ". down .";
-            gap: 15px;
+            gap: 12px;
         }
 
         .d-pad {
-            width: 65px;
-            height: 65px;
+            width: 60px;
+            height: 60px;
             background: #222;
-            border: 2px solid #555;
+            border: 3px solid #666;
             color: var(--neon-green);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 0 #111;
+            font-size: 1.2rem;
+            border-radius: 8px;
             user-select: none;
         }
 
-        .d-pad:active { transform: translateY(4px); box-shadow: none; }
+        .d-pad:active { background: var(--neon-green); color: black; }
         .up { grid-area: up; } .left { grid-area: left; } .right { grid-area: right; } .down { grid-area: down; }
-
-        .score { margin: 15px; font-size: 0.8rem; color: var(--neon-green); }
 
         .overlay {
             position: absolute; inset: 0;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.9);
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            text-align: center; padding: 20px;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .btn {
+            background: white; color: black;
+            border: none; padding: 15px;
+            font-family: inherit; font-size: 0.8rem;
+            margin-top: 15px; cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-<div class="status-bar">⚠️ CONNECTION LOST - OFFLINE MODE ACTIVE ⚠️</div>
+<div class="emergency-banner">🚨 CRITICAL ERROR: INTERNET.EXE HAS CRASHED 🚨</div>
 
-<div class="score">SCORE: <span id="scoreVal">000</span></div>
+<div class="humor-text" id="joke-box">
+    SITUATION: DESPERATE<br>
+    WIFI: GONE TO BUY MILK<br>
+    GO OUTSIDE? NO. PLAY SNAKE.
+</div>
+
+<div class="score">XP: <span id="scoreVal">000</span></div>
 
 <div id="game-container">
     <canvas id="snakeGame" width="400" height="400"></canvas>
     <div id="overlay" class="overlay">
-        <h2 style="color:var(--neon-red)">GAME OVER</h2>
-        <p style="font-size:0.5rem">RE-CONNECTING...</p>
-        <button onclick="startGame()" style="padding:10px 20px; font-family:inherit; cursor:pointer;">START</button>
+        <h2 id="title" style="color:var(--neon-red); font-size: 1rem;">WIFI IS DEAD</h2>
+        <p style="font-size:0.4rem">DON'T PANIC. FEED THE PIXELS.</p>
+        <button class="btn" onclick="startGame()">START MISSION</button>
     </div>
 </div>
 
 <div class="controller">
-    <div class="d-pad up" onmousedown="changeDir('up')" ontouchstart="changeDir('up')">▲</div>
-    <div class="d-pad left" onmousedown="changeDir('left')" ontouchstart="changeDir('left')">◀</div>
-    <div class="d-pad right" onmousedown="changeDir('right')" ontouchstart="changeDir('right')">▶</div>
-    <div class="d-pad down" onmousedown="changeDir('down')" ontouchstart="changeDir('down')">▼</div>
+    <div class="d-pad up" ontouchstart="changeDir('up')" onmousedown="changeDir('up')">▲</div>
+    <div class="d-pad left" ontouchstart="changeDir('left')" onmousedown="changeDir('left')">◀</div>
+    <div class="d-pad right" ontouchstart="changeDir('right')" onmousedown="changeDir('right')">▶</div>
+    <div class="d-pad down" ontouchstart="changeDir('down')" onmousedown="changeDir('down')">▼</div>
 </div>
 
 <script>
-    // Logic from previous version fits here with improved D-Pad triggers
-    // Uses window.addEventListener('online', () => window.location.reload()) to return once sync is possible.
-</script>
+    const jokes = [
+        "WIFI: GONE TO BUY MILK",
+        "LOADING OUTSIDE... 0%",
+        "HAVE YOU TRIED YELLING AT THE ROUTER?",
+        "PLP 1 DISCONNECTED. MOM IS CALLING.",
+        "THE DINOSAUR IS ON VACATION.",
+        "SITUATION: DESPERATE"
+    ];
 
+    const canvas = document.getElementById('snakeGame');
+    const ctx = canvas.getContext('2d');
+    const scoreElement = document.getElementById('scoreVal');
+    const overlay = document.getElementById('overlay');
+    const jokeBox = document.getElementById('joke-box');
+    
+    let score = 0, grid = 20, count = 0, gameActive = false;
+    let snake = { x: 160, y: 160, dx: grid, dy: 0, cells: [], maxCells: 4 };
+    let apple = { x: 320, y: 320 };
+
+    function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
+
+    function startGame() {
+        score = 0; scoreElement.innerHTML = "000";
+        jokeBox.innerHTML = jokes[Math.floor(Math.random() * jokes.length)];
+        snake = { x: 160, y: 160, dx: grid, dy: 0, cells: [], maxCells: 4 };
+        apple = { x: getRandomInt(0, 20) * grid, y: getRandomInt(0, 20) * grid };
+        overlay.style.display = 'none';
+        gameActive = true;
+        requestAnimationFrame(loop);
+    }
+
+    function changeDir(dir) {
+        if (dir === 'left' && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
+        else if (dir === 'up' && snake.dy === 0) { snake.dy = -grid; snake.dx = 0; }
+        else if (dir === 'right' && snake.dx === 0) { snake.dx = grid; snake.dy = 0; }
+        else if (dir === 'down' && snake.dy === 0) { snake.dy = grid; snake.dx = 0; }
+    }
+
+    function loop() {
+        if (!gameActive) return;
+        requestAnimationFrame(loop);
+        if (++count < 8) return; 
+        count = 0;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        snake.x += snake.dx; snake.y += snake.dy;
+
+        if (snake.x < 0) snake.x = canvas.width - grid;
+        else if (snake.x >= canvas.width) snake.x = 0;
+        if (snake.y < 0) snake.y = canvas.height - grid;
+        else if (snake.y >= canvas.height) snake.y = 0;
+
+        snake.cells.unshift({x: snake.x, y: snake.y});
+        if (snake.cells.length > snake.maxCells) snake.cells.pop();
+
+        ctx.fillStyle = '#ff004d';
+        ctx.fillRect(apple.x, apple.y, grid-1, grid-1);
+
+        ctx.fillStyle = '#00e436';
+        snake.cells.forEach((cell, index) => {
+            ctx.fillRect(cell.x, cell.y, grid-1, grid-1);
+            if (cell.x === apple.x && cell.y === apple.y) {
+                snake.maxCells++; score += 10; 
+                scoreElement.innerHTML = score.toString().padStart(3, '0');
+                apple.x = getRandomInt(0, 20) * grid; apple.y = getRandomInt(0, 20) * grid;
+            }
+            for (let i = index + 1; i < snake.cells.length; i++) {
+                if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+                    gameActive = false;
+                    document.getElementById('title').innerHTML = "FATAL ERROR";
+                    overlay.style.display = 'flex';
+                }
+            }
+        });
+    }
+
+    window.addEventListener('online', () => window.location.reload());
+</script>
 </body>
 </html>
