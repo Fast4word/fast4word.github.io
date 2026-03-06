@@ -1,28 +1,12 @@
 {
- 
   "id": "dunah.playzone-pwa",
-
-
-  "name": "Dunah Playzone",
-
+  "name": "Playzone",
   "short_name": "Playzone",
-
- 
   "start_url": "https://fast4word.github.io",
-
-
   "display": "standalone",
-
-
   "orientation": "any",
-
-
   "background_color": "#ffffff",
-
- 
   "theme_color": "#000000",
-
-
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -34,8 +18,10 @@
       "src": "/icons/maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
-     
       "purpose": "maskable"
     }
-  ]
+  ],
+  "dir": "auto",
+  "lang": "en",
+  "description": "Best unblocked online games for free at Dunah Playzone! Play now top web and mobile games like Deadly Descent, Ball Burst, Stickman Clicker, and Hazmob FPS!"
 }
