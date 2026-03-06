@@ -529,6 +529,15 @@ window.addEventListener("popstate", () => {
 
 search.oninput = render;
 </script>
-
+<script>
+  // Check if the browser supports Service Workers
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('Service Worker Registered!'))
+        .catch(err => console.log('Registration Failed: ', err));
+    });
+  }
+</script>
 </body>
 </html>
