@@ -9,59 +9,90 @@
         
         * { box-sizing: border-box; }
         html, body {
-            margin: 0; padding: 0; width: 100vw; height: 100vh;
+            margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: #000; color: #00e436;
             font-family: 'Press Start 2P', cursive;
             overflow: hidden; position: fixed;
+            display: flex; flex-direction: column;
         }
 
-        /* Large, Clear Emergency Banner */
         .respawn-banner {
-            position: absolute; top: 0; left: 0; width: 100%;
-            background: #ff004d; color: #fff;
+            width: 100%; background: #ff004d; color: #fff;
             padding: 20px 0; text-align: center;
-            font-size: clamp(0.8rem, 5vw, 1.5rem); /* Significantly larger text */
+            font-size: clamp(0.8rem, 5vw, 1.2rem);
             box-shadow: 0 10px 30px rgba(255, 0, 77, 0.9);
-            z-index: 100; animation: pulse 1s infinite alternate;
+            z-index: 100;
         }
 
-        @keyframes pulse {
-            from { background: #ff004d; } to { background: #b30036; }
+        /* Game Area: Fills space between top and bottom */
+        #game-wrapper {
+            position: relative; flex-grow: 1;
+            width: 100%; background: #050505;
+            display: flex; justify-content: center; align-items: center;
         }
 
-        canvas { display: block; width: 100vw; height: 100vh; image-rendering: pixelated; }
+        canvas { display: block; image-rendering: pixelated; }
 
         .score-box {
-            position: absolute; top: 100px; left: 30px;
-            font-size: 1.2rem; color: #fff; z-index: 50;
+            position: absolute; top: 20px; left: 20px;
+            font-size: 1rem; color: #fff; z-index: 50;
         }
+
+        /* MASSIVE MOBILE CONTROLS */
+        .controller {
+            width: 100%; background: #111;
+            padding: 20px 0; display: grid;
+            grid-template-areas: ". up ." "left . right" ". down .";
+            gap: 10px; justify-content: center;
+            border-top: 4px solid #333;
+        }
+
+        .d-pad {
+            width: 75px; height: 75px; background: #222;
+            border: 4px solid #444; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; border-radius: 10px;
+            touch-action: manipulation; user-select: none;
+        }
+
+        .d-pad:active { background: #00e436; color: #000; border-color: #fff; }
+        .up { grid-area: up; } .left { grid-area: left; } .right { grid-area: right; } .down { grid-area: down; }
 
         .overlay {
             position: absolute; inset: 0; background: rgba(0,0,0,0.95);
             display: flex; flex-direction: column; justify-content: center;
-            align-items: center; z-index: 200; padding: 40px;
+            align-items: center; z-index: 200; padding: 20px;
         }
 
         .start-btn {
             background: #00e436; color: #000; border: none;
-            padding: 25px 50px; font-family: inherit;
-            font-size: 1.5rem; cursor: pointer;
+            padding: 25px 40px; font-family: inherit;
+            font-size: 1.2rem; cursor: pointer;
         }
     </style>
 </head>
 <body>
 
 <div class="respawn-banner">⚡ WIFI RESPAWNING... ⚡</div>
-<div class="score-box">XP: <span id="scoreVal">000</span></div>
 
-<canvas id="snakeGame"></canvas>
+<div id="game-wrapper">
+    <div class="score-box">XP:<span id="scoreVal">000</span></div>
+    <canvas id="snakeGame"></canvas>
+    
+    <div id="overlay" class="overlay">
+        <h1 style="color:#ff004d; font-size: 1.5rem; text-align:center;">SIGNAL LOST</h1>
+        <p style="font-size: 0.6rem; margin: 20px 0 30px; line-height: 1.6; text-align: center;">
+            WIFI MODEM IS ASLEEP.<br>WAKE IT UP WITH PIXELS.
+        </p>
+        <button class="start-btn" onclick="startGame()">START RECOVERY</button>
+    </div>
+</div>
 
-<div id="overlay" class="overlay">
-    <h1 style="color:#ff004d; font-size: clamp(1.5rem, 10vw, 3.5rem); margin-bottom: 20px;">NO SIGNAL</h1>
-    <p style="font-size: 0.8rem; margin-bottom: 40px; line-height: 1.8; text-align: center;">
-        INTERNET IS DOWN.<br>EAT PIXELS TO RECHARGE.
-    </p>
-    <button class="start-btn" onclick="startGame()">START RECOVERY</button>
+<div class="controller">
+    <div class="d-pad up" ontouchstart="changeDir('ArrowUp')">▲</div>
+    <div class="d-pad left" ontouchstart="changeDir('ArrowLeft')">◀</div>
+    <div class="d-pad right" ontouchstart="changeDir('ArrowRight')">▶</div>
+    <div class="d-pad down" ontouchstart="changeDir('ArrowDown')">▼</div>
 </div>
 
 <script>
@@ -69,81 +100,76 @@
     const ctx = canvas.getContext('2d');
     const scoreElement = document.getElementById('scoreVal');
     const overlay = document.getElementById('overlay');
+    const wrapper = document.getElementById('game-wrapper');
     
-    // Fixed Grid Size for easier alignment
-    const grid = 30; 
+    const grid = 25; 
     let score = 0, count = 0, gameActive = false;
     let snake = { x: 0, y: 0, dx: grid, dy: 0, cells: [], maxCells: 5 };
     let apple = { x: 0, y: 0 };
 
     function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        // Fit canvas to the wrapper div exactly
+        canvas.width = Math.floor(wrapper.clientWidth / grid) * grid;
+        canvas.height = Math.floor(wrapper.clientHeight / grid) * grid;
     }
     window.addEventListener('resize', resize);
     resize();
 
-    // Critical Fix: Snaps apple to the grid
     function placeApple() {
-        const cols = Math.floor(canvas.width / grid);
-        const rows = Math.floor(canvas.height / grid);
-        apple.x = Math.floor(Math.random() * cols) * grid;
-        apple.y = Math.floor(Math.random() * rows) * grid;
+        apple.x = Math.floor(Math.random() * (canvas.width / grid)) * grid;
+        apple.y = Math.floor(Math.random() * (canvas.height / grid)) * grid;
     }
 
     function startGame() {
         score = 0; scoreElement.innerHTML = "000";
-        snake = { x: grid * 5, y: grid * 5, dx: grid, dy: 0, cells: [], maxCells: 5 };
+        snake = { x: grid * 2, y: grid * 2, dx: grid, dy: 0, cells: [], maxCells: 5 };
         placeApple();
         overlay.style.display = 'none';
         gameActive = true;
         requestAnimationFrame(loop);
     }
 
+    function changeDir(key) {
+        if (key === 'ArrowLeft' && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
+        else if (key === 'ArrowUp' && snake.dy === 0) { snake.dy = -grid; snake.dx = 0; }
+        else if (key === 'ArrowRight' && snake.dx === 0) { snake.dx = grid; snake.dy = 0; }
+        else if (key === 'ArrowDown' && snake.dy === 0) { snake.dy = grid; snake.dx = 0; }
+    }
+
+    // Keyboard support
     window.addEventListener("keydown", (e) => {
         if(["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) e.preventDefault();
-        if (e.key === 'ArrowLeft' && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
-        else if (e.key === 'ArrowUp' && snake.dy === 0) { snake.dy = -grid; snake.dx = 0; }
-        else if (e.key === 'ArrowRight' && snake.dx === 0) { snake.dx = grid; snake.dy = 0; }
-        else if (e.key === 'ArrowDown' && snake.dy === 0) { snake.dy = grid; snake.dx = 0; }
+        changeDir(e.key);
     });
 
     function loop() {
         if (!gameActive) return;
         requestAnimationFrame(loop);
-
-        if (++count < 7) return; 
+        if (++count < 8) return; 
         count = 0;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         snake.x += snake.dx; snake.y += snake.dy;
 
-        // Screen Wrap
-        if (snake.x < 0) snake.x = Math.floor(canvas.width / grid) * grid - grid;
+        if (snake.x < 0) snake.x = canvas.width - grid;
         else if (snake.x >= canvas.width) snake.x = 0;
-        if (snake.y < 0) snake.y = Math.floor(canvas.height / grid) * grid - grid;
+        if (snake.y < 0) snake.y = canvas.height - grid;
         else if (snake.y >= canvas.height) snake.y = 0;
 
         snake.cells.unshift({x: snake.x, y: snake.y});
         if (snake.cells.length > snake.maxCells) snake.cells.pop();
 
-        // Draw Apple
         ctx.fillStyle = '#ff004d';
-        ctx.fillRect(apple.x, apple.y, grid - 2, grid - 2);
+        ctx.fillRect(apple.x, apple.y, grid-2, grid-2);
 
-        // Draw Snake and Collision
         ctx.fillStyle = '#00e436';
         snake.cells.forEach((cell, index) => {
-            ctx.fillRect(cell.x, cell.y, grid - 2, grid - 2);
-            
-            // Fixed eating detection: Check for perfect overlap
+            ctx.fillRect(cell.x, cell.y, grid-2, grid-2);
             if (cell.x === apple.x && cell.y === apple.y) {
-                snake.maxCells++; 
-                score += 10;
+                snake.maxCells++; score += 10;
                 scoreElement.innerHTML = score.toString().padStart(3, '0');
                 placeApple();
             }
-            
             for (let i = index + 1; i < snake.cells.length; i++) {
                 if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
                     gameActive = false;
