@@ -44,65 +44,36 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(request)
         .then(response => {
-          // Cache successful responses
           if (response.ok) {
             const responseClone = response.clone();
             caches.open(CACHE_NAME).then(cache => {
+              // Updates the cache for the page currently being visited
               cache.put(request, responseClone);
+              
+              // BACKGROUND UPDATE: Keep the offline page fresh
+              // cache.put OVERWRITES the old file, so storage doesn't grow
+              fetch(OFFLINE_URL).then(offRes => {
+                if (offRes.ok) cache.put(OFFLINE_URL, offRes);
+              }).catch(() => {/* fail silently if background fetch fails */});
             });
           }
           return response;
         })
         .catch(async () => {
-          // No internet - show offline page
+          // No internet - show the updated offline page from cache
           const offlinePage = await caches.match(OFFLINE_URL);
-          if (offlinePage) {
-            return offlinePage;
-          }
+          if (offlinePage) return offlinePage;
           
-          // Fallback if offline page not cached
+          // Fallback if offline page somehow isn't in cache
           return new Response(
-            `<!DOCTYPE html>
-            <html>
-            <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Offline</title>
-              <style>
-                body {
-                  background: linear-gradient(180deg, #0b0f1a, #0e1330);
-                  color: #fff;
-                  font-family: 'Outfit', system-ui, sans-serif;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  height: 100vh;
-                  margin: 0;
-                  text-align: center;
-                  padding: 20px;
-                }
-                .icon { font-size: 80px; margin-bottom: 20px; }
-                h1 { color: #ff5c5c; margin: 0 0 10px; }
-                p { color: #9aa3c7; }
-              </style>
-            </head>
-            <body>
-              <div>
-                <div class="icon">📡</div>
-                <h1>You're Offline</h1>
-                <p>Check your internet connection and try again.</p>
-              </div>
-            </body>
-            </html>`,
-            { 
-              status: 503,
-              headers: { 'Content-Type': 'text/html' }
-            }
+            `<!DOCTYPE html><html><body><h1>You're Offline</h1></body></html>`,
+            { status: 503, headers: { 'Content-Type': 'text/html' } }
           );
         })
     );
     return;
   }
+
 
   // Handle games.json API request
   if (request.url.includes('games.json')) {
