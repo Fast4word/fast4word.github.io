@@ -490,7 +490,7 @@ body.playing #gameView {
 
 body.playing #gameView iframe {
   height: calc(100% - 60px);
-  margin-top: 60px;
+  
 }
 
 /* Adblock overlay */
@@ -549,6 +549,34 @@ body.playing #gameView iframe {
 .card:nth-child(4) { animation-delay: 0.2s; }
 .card:nth-child(5) { animation-delay: 0.25s; }
 .card:nth-child(6) { animation-delay: 0.3s; }
+/* Mobile Adjustments for Header */
+@media (max-width: 500px) {
+  .header-content {
+    gap: 8px; 
+    padding: 12px 10px;
+  }
+
+  header h1 {
+    font-size: 1.1rem;
+    flex: 0.6; /* Takes up less space */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adds '...' if the screen is incredibly small */
+  }
+
+  .search-container {
+    flex: 1.4; /* Gives the search bar the majority of the available space */
+  }
+
+  .search-container input {
+    font-size: 0.9rem; /* Slightly smaller text to fit the placeholder perfectly */
+    padding: 10px 12px 10px 34px;
+  }
+
+  .search-icon {
+    left: 10px;
+  }
+}
 </style>
 </head>
 <body>
