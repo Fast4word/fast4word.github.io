@@ -9,7 +9,6 @@
         })(window, document, "clarity", "script", "vs6xhorr8t");
     </script>
     <meta name="wot-verification" content="8b95623254cdde7ab451"/>
-    <script async src='https://static.mywot.com/website_owners_badges/websiteOwnersBadge.js'></script>
     <meta charset="UTF-8">
     <title>Dunah PlayZone</title>
     <meta name="msvalidate.01" content="857F68342483599FAEE9C91B916F668A" />
@@ -29,6 +28,11 @@
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://fast4word.github.io">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,
@@ -43,56 +47,175 @@
   --bg: #0b0f1a;
   --panel: #151a2d;
   --accent: #6cf2c2;
+  --accent-glow: rgba(108, 242, 194, 0.2);
   --text: #fff;
   --muted: #9aa3c7;
   --fav: #ff5c5c;
+  --border: rgba(154, 163, 199, 0.15);
 }
 
 * {
   box-sizing: border-box;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
 }
 
 body {
   margin: 0;
   background: linear-gradient(180deg, #0b0f1a, #0e1330);
   color: var(--text);
+  min-height: 100vh;
 }
 
-/* Header */
+/* Main Header */
 header {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: #0d1225;
-  padding: 14px;
+  background: rgba(13, 18, 37, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.header-content {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-.menu-btn, .search-btn {
-  font-size: 22px;
-  cursor: pointer;
-}
-header h1 {
-  margin: 0;
-  font-size: 1.2rem;
-  flex: 1;
+  padding: 14px;
 }
 
-/* Search */
-.search-wrap {
-  display: none;
-  padding: 12px;
+.menu-btn {
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text);
+  transition: color 0.2s;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
 }
-.search-wrap.active {
-  display: block;
+
+.menu-btn:hover {
+  color: var(--accent);
+  background: var(--accent-glow);
 }
-.search-wrap input {
+
+header h1 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  flex: 1;
+  background: linear-gradient(135deg, #fff, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Search in Header */
+.search-container {
+  flex: 1;
+  max-width: 500px;
+  position: relative;
+}
+
+.search-container input {
   width: 100%;
-  padding: 12px;
+  padding: 10px 14px 10px 40px;
   border-radius: 12px;
-  border: none;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: all 0.3s;
+}
+
+.search-container input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* Game Header (shows when playing) */
+#gameHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: rgba(13, 18, 37, 0.98);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: none;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+  z-index: 101;
+}
+
+#gameHeader .back-btn {
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text);
+  transition: all 0.2s;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+#gameHeader .back-btn:hover {
+  color: var(--accent);
+  background: var(--accent-glow);
+}
+
+#gameHeader .game-title {
+  flex: 1;
+  font-size: 1.1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#gameHeader .game-fav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #ccc;
+}
+
+#gameHeader .game-fav-btn:hover {
+  transform: scale(1.05);
+  border-color: var(--accent);
+}
+
+#gameHeader .game-fav-btn.active {
+  background: linear-gradient(135deg, rgba(255, 92, 92, 0.2), rgba(255, 92, 92, 0.1));
+  color: var(--fav);
+  border-color: var(--fav);
+  box-shadow: 0 0 20px rgba(255, 92, 92, 0.4);
 }
 
 /* Sidebar */
@@ -101,106 +224,185 @@ aside {
   top: 0;
   bottom: 0;
   left: 0;
-  width: 260px;
+  width: 280px;
   background: #0d1225;
-  padding: 18px;
+  padding: 20px;
   overflow-y: auto;
   transform: translateX(-100%);
-  transition: .25s;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 50;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
 }
+
 aside.active {
   transform: translateX(0);
 }
+
+.sidebar-header {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #fff, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, .6);
+  background: rgba(0, 0, 0, 0.7);
   display: none;
   z-index: 45;
+  backdrop-filter: blur(2px);
 }
+
 .backdrop.active {
   display: block;
 }
+
 .genre {
-  padding: 12px;
+  padding: 12px 16px;
   border-radius: 10px;
   margin-bottom: 6px;
   cursor: pointer;
   color: var(--muted);
+  font-weight: 500;
+  transition: all 0.2s;
+  border: 1px solid transparent;
 }
+
 .genre.active, .genre:hover {
   background: var(--panel);
   color: var(--accent);
+  border-color: var(--border);
+  transform: translateX(4px);
 }
 
 /* Sections */
 .section {
-  padding: 14px;
+  padding: 20px 16px;
 }
+
 .section h2 {
-  margin: 0 0 10px;
+  margin: 0 0 16px;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
 /* Grid */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+  gap: 16px;
 }
+
 @media (min-width: 600px) {
   .grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
 @media (min-width: 900px) {
   .grid {
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
+@media (min-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
 /* Cards */
 .card {
   background: var(--panel);
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
   position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border);
 }
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--accent-glow);
+  border-color: var(--accent);
+}
+
 .thumb {
   width: 100%;
-  height: 140px;
+  height: 150px;
   object-fit: cover;
+  background: linear-gradient(135deg, #1a1f3a, #0d1225);
 }
+
 .card-body {
-  padding: 10px;
+  padding: 12px;
 }
+
 .card-title {
   font-weight: 600;
-  font-size: .95rem;
+  font-size: 0.95rem;
+  line-height: 1.3;
 }
 
 /* Favourite */
 .fav-btn {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 34px;
-  height: 34px;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, .55);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 18px;
   color: #ccc;
-  transition: .15s;
+  transition: all 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+.fav-btn:hover {
+  transform: scale(1.1);
+}
+
 .fav-btn.active {
-  background: rgba(255, 92, 92, .15);
+  background: rgba(255, 92, 92, 0.25);
   color: var(--fav);
-  box-shadow: 0 0 10px rgba(255, 92, 92, .7);
+  box-shadow: 0 0 16px rgba(255, 92, 92, 0.6);
   transform: scale(1.15);
+  border-color: var(--fav);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+
+.empty-state .icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  opacity: 0.3;
+}
+
+.empty-state h3 {
+  font-size: 1.4rem;
+  margin: 0 0 12px;
+  color: var(--text);
+}
+
+.empty-state p {
+  font-size: 1rem;
+  margin: 0;
+  opacity: 0.8;
 }
 
 /* Game View */
@@ -211,6 +413,7 @@ aside.active {
   display: none;
   z-index: 100;
 }
+
 #gameView iframe {
   width: 100%;
   height: 100%;
@@ -223,13 +426,16 @@ aside.active {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 64px;
-  background: #0d1225;
+  height: 70px;
+  background: rgba(13, 18, 37, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border);
   display: flex;
   justify-content: space-around;
   align-items: center;
   z-index: 40;
 }
+
 .bottom-nav button {
   background: none;
   border: none;
@@ -237,21 +443,38 @@ aside.active {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: .7rem;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 12px;
+  transition: all 0.2s;
 }
+
 .bottom-nav button span {
-  font-size: 22px;
+  font-size: 24px;
+  transition: transform 0.2s;
 }
+
+.bottom-nav button:hover {
+  background: var(--accent-glow);
+}
+
 .bottom-nav button.active {
   color: var(--accent);
 }
 
-.page {
-  padding-bottom: 80px;
+.bottom-nav button.active span {
+  transform: scale(1.15);
 }
 
+.page {
+  padding-bottom: 90px;
+}
+
+/* Playing State */
 body.playing header,
-body.playing .search-wrap,
 body.playing .section,
 body.playing .bottom-nav,
 body.playing aside,
@@ -259,11 +482,24 @@ body.playing .backdrop {
   display: none;
 }
 
+body.playing #gameHeader {
+  display: flex;
+}
+
+body.playing #gameView {
+  padding-top: 60px;
+}
+
+body.playing #gameView iframe {
+  height: calc(100% - 60px);
+  margin-top: 60px;
+}
+
 /* Adblock overlay */
 #adblockOverlay {
   position: fixed;
   inset: 0;
-  background: #0b0f1a;
+  background: linear-gradient(135deg, #0b0f1a, #151a2d);
   color: #fff;
   display: none;
   z-index: 1000;
@@ -272,30 +508,75 @@ body.playing .backdrop {
   text-align: center;
   padding: 24px;
 }
+
+#adblockOverlay h2 {
+  font-size: 1.8rem;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--fav), #ff8a5c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+#adblockOverlay button {
+  margin-top: 24px;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), #4ec9a0);
+  color: #000;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.2s;
+}
+
+#adblockOverlay button:hover {
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  animation: fadeIn 0.4s ease;
+}
+
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.1s; }
+.card:nth-child(3) { animation-delay: 0.15s; }
+.card:nth-child(4) { animation-delay: 0.2s; }
+.card:nth-child(5) { animation-delay: 0.25s; }
+.card:nth-child(6) { animation-delay: 0.3s; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="menu-btn" onclick="openMenu()">☰</div>
-  <h1>Dunah PlayZone</h1>
-  <a id='wot-badge0' class='wot-badge_dark' href='https://www.mywot.com/scorecard/fast4word.github.io?wot_badge=0_black' target='_blank'>
-    <div class='wot-logo'></div>
-    <div class='wot-shield'></div>
-    <p class='wot-secured'>Verified Website</p>
-    <div class='wot-vertical'></div>
-    <p class='wot-report'>See Report</p>
-  </a>
-  <div class="search-btn" onclick="toggleSearch()">🔍</div>
+  <div class="header-content">
+    <div class="menu-btn" onclick="openMenu()">☰</div>
+    <h1>Dunah PlayZone</h1>
+    <div class="search-container">
+      <div class="search-icon">🔍</div>
+      <input id="search" placeholder="Search games..." oninput="render()">
+    </div>
+  </div>
 </header>
 
-<div class="search-wrap" id="searchWrap">
-  <input id="search" placeholder="Search games...">
+<!-- Game Header (appears when playing) -->
+<div id="gameHeader">
+  <div class="back-btn" onclick="closeGame()">←</div>
+  <div class="game-title" id="gameTitle">Game Title</div>
+  <div class="game-fav-btn" id="gameFavBtn" onclick="toggleCurrentGameFavourite()">🤍</div>
 </div>
 
 <div class="backdrop" id="backdrop" onclick="closeMenu()"></div>
 
 <aside id="sidebar">
+  <div class="sidebar-header">Categories</div>
   <div class="genre active" id="filterAll">All Games</div>
   <div class="genre" id="filterFav">⭐ Favourites</div>
   <div id="genreList"></div>
@@ -336,16 +617,7 @@ body.playing .backdrop {
       Dunah PlayZone is free thanks to ads.<br>
       Please disable your ad blocker to play games.
     </p>
-    <button onclick="location.reload()" style="
-      margin-top:20px;
-      padding:12px 18px;
-      border:none;
-      border-radius:10px;
-      background:#6cf2c2;
-      color:#000;
-      font-weight:600;
-      cursor:pointer;
-    ">
+    <button onclick="location.reload()">
       I Disabled My Ad Blocker
     </button>
   </div>
@@ -364,9 +636,11 @@ const sidebar = document.getElementById("sidebar");
 const backdrop = document.getElementById("backdrop");
 const genreList = document.getElementById("genreList");
 const search = document.getElementById("search");
-const searchWrap = document.getElementById("searchWrap");
 const gameView = document.getElementById("gameView");
 const gameFrame = document.getElementById("gameFrame");
+const gameHeader = document.getElementById("gameHeader");
+const gameTitle = document.getElementById("gameTitle");
+const gameFavBtn = document.getElementById("gameFavBtn");
 const adblockOverlay = document.getElementById("adblockOverlay");
 
 let games = [];
@@ -376,6 +650,7 @@ let allowedGenres = [];
 let tab = "home";
 let activeGenre = "all";
 let adBlocked = false;
+let currentGame = null;
 
 /* Adblock detect */
 function detectAdBlock() {
@@ -387,9 +662,15 @@ function detectAdBlock() {
 window.addEventListener("load", () => setTimeout(detectAdBlock, 300));
 
 /* UI */
-function toggleSearch() { searchWrap.classList.toggle("active"); }
-function openMenu() { sidebar.classList.add("active"); backdrop.classList.add("active"); }
-function closeMenu() { sidebar.classList.remove("active"); backdrop.classList.remove("active"); }
+function openMenu() { 
+  sidebar.classList.add("active"); 
+  backdrop.classList.add("active"); 
+}
+
+function closeMenu() { 
+  sidebar.classList.remove("active"); 
+  backdrop.classList.remove("active"); 
+}
 
 /* Tabs */
 function setTab(t) {
@@ -425,14 +706,33 @@ fetch("games.json").then(r => r.json()).then(data => {
 function buildGenres() {
   const c = {};
   games.forEach(g => (g.genres || []).forEach(x => {
-    // Exclude curated genres here
+    // Count all genres, excluding curated and internal ones
     if (!x.includes("curated") && !x.includes("_")) {
       c[x] = (c[x] || 0) + 1;
     }
   }));
-  allowedGenres = Object.entries(c).sort((a, b) => b[1] - a[1]).slice(0, 10).map(x => x[0]);
+  
+  // Get top 10 most popular genres
+  allowedGenres = Object.entries(c)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(x => x[0]);
 
+  console.log("Top genres:", allowedGenres); // Debug log
+  
   genreList.innerHTML = "";
+  
+  // Add genre divider
+  const divider = document.createElement("div");
+  divider.style.cssText = "height: 1px; background: rgba(154, 163, 199, 0.15); margin: 12px 0;";
+  genreList.appendChild(divider);
+  
+  const genreHeader = document.createElement("div");
+  genreHeader.style.cssText = "font-size: 0.75rem; color: var(--muted); padding: 8px 16px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;";
+  genreHeader.textContent = "Genres";
+  genreList.appendChild(genreHeader);
+  
+  // Add each genre
   allowedGenres.forEach(slug => {
     const d = document.createElement("div");
     d.className = "genre";
@@ -468,6 +768,16 @@ function getRecommended() {
 
 /* Render */
 function renderCards(list, el) {
+  if (list.length === 0) {
+    el.innerHTML = `
+      <div class="empty-state" style="grid-column: 1 / -1;">
+        <div class="icon">🎮</div>
+        <h3>No games found</h3>
+        <p>Try adjusting your search or browse other categories</p>
+      </div>`;
+    return;
+  }
+
   el.innerHTML = "";
   list.forEach(g => {
     const fav = favourites.includes(g.id);
@@ -478,7 +788,7 @@ function renderCards(list, el) {
         onclick="event.stopPropagation(); toggleFavourite('${g.id}')">
         ${fav ? "❤️" : "🤍"}
       </div>
-      <img class="thumb" src="${g.images?.[0] || ""}">
+      <img class="thumb" src="${g.images?.[0] || ""}" alt="${g.title}">
       <div class="card-body"><div class="card-title">${g.title}</div></div>`;
     c.onclick = () => openGame(g);
     el.appendChild(c);
@@ -489,10 +799,22 @@ function render() {
   const q = search.value.toLowerCase();
   if (tab === "home") {
     renderCards(getFeatured(), featuredGrid);
-    renderCards(getRecommended().filter(g => g.title.toLowerCase().includes(q)), recommendedGrid);
+    const recommended = getRecommended().filter(g => g.title.toLowerCase().includes(q));
+    renderCards(recommended, recommendedGrid);
   } else {
     let list = games.filter(g => g.title.toLowerCase().includes(q));
-    if (tab === "fav") list = list.filter(g => favourites.includes(g.id));
+    if (tab === "fav") {
+      list = list.filter(g => favourites.includes(g.id));
+      if (list.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <div class="icon">❤️</div>
+            <h3>No favourites yet</h3>
+            <p>Tap the heart on any game to add it to your favourites</p>
+          </div>`;
+        return;
+      }
+    }
     if (activeGenre !== "all" && activeGenre !== "favourites")
       list = list.filter(g => g.genres?.includes(activeGenre));
     renderCards(list, grid);
@@ -505,7 +827,28 @@ function toggleFavourite(id) {
     ? favourites.filter(x => x !== id)
     : [...favourites, id];
   localStorage.setItem("favourites", JSON.stringify(favourites));
+  
+  // Update game header if this is the current game
+  if (currentGame && currentGame.id === id) {
+    updateGameHeader();
+  }
+  
   render();
+}
+
+function toggleCurrentGameFavourite() {
+  if (currentGame) {
+    toggleFavourite(currentGame.id);
+  }
+}
+
+function updateGameHeader() {
+  if (currentGame) {
+    gameTitle.textContent = currentGame.title;
+    const isFav = favourites.includes(currentGame.id);
+    gameFavBtn.innerHTML = isFav ? "❤️" : "🤍";
+    gameFavBtn.className = "game-fav-btn" + (isFav ? " active" : "");
+  }
 }
 
 /* Game open (GATED) */
@@ -515,23 +858,32 @@ function openGame(game) {
     return;
   }
 
+  currentGame = game;
+  
   (game.genres || []).forEach(g => {
     if (allowedGenres.includes(g))
       genrePlays[g] = (genrePlays[g] || 0) + 1;
   });
   localStorage.setItem("genrePlays", JSON.stringify(genrePlays));
 
+  updateGameHeader();
   gameFrame.src = game.gameURL;
   gameView.style.display = "block";
   document.body.classList.add("playing");
   history.pushState(null, "");
 }
 
+function closeGame() {
+  document.body.classList.remove("playing");
+  gameView.style.display = "none";
+  gameFrame.src = "";
+  currentGame = null;
+  history.back();
+}
+
 window.addEventListener("popstate", () => {
   if (document.body.classList.contains("playing")) {
-    document.body.classList.remove("playing");
-    gameView.style.display = "none";
-    gameFrame.src = "";
+    closeGame();
   }
 });
 
