@@ -2,182 +2,102 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>WIFI RESPAWNING...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Signal Lost in Space</title>
     <style>
-        @import url('https://fonts.googleapis.com');
+        :root { --bg: #0b0e14; --text: #00ff41; --accent: #ff4141; }
+        body { 
+            background: var(--bg); color: var(--text); 
+            font-family: 'Courier New', Courier, monospace;
+            display: flex; flex-direction: column; align-items: center; 
+            justify-content: flex-start; height: 100vh; margin: 0; padding: 20px;
+            overflow: hidden; text-align: center; touch-action: manipulation;
+        }
+        h1 { font-size: 1.4rem; margin-top: 20px; text-transform: uppercase; }
+        p { color: #888; font-size: 0.9rem; max-width: 300px; margin-bottom: 20px; }
         
-        * { box-sizing: border-box; }
-        html, body {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: #000; color: #00e436;
-            font-family: 'Press Start 2P', cursive;
-            overflow: hidden; position: fixed;
+        /* Game Area */
+        #game-container {
+            position: relative; width: 90vw; height: 50vh;
+            border: 2px solid var(--text); border-radius: 8px;
+            background: #161b22; overflow: hidden;
         }
-
-        .respawn-banner {
-            position: absolute; top: 0; width: 100%; 
-            background: #ff004d; color: #fff;
-            padding: 20px 0; text-align: center;
-            font-size: clamp(0.8rem, 5vw, 1.2rem);
-            z-index: 100;
-        }
-
-        canvas { display: block; image-rendering: pixelated; }
-
-        .score-box {
-            position: absolute; top: 80px; left: 20px;
-            font-size: 1rem; color: #fff; z-index: 50;
-        }
-
-        /* MOBILE-ONLY D-PAD (Bottom-Right) */
-        .controller {
-            display: none; /* Hidden by default (Desktop) */
-            position: absolute;
-            bottom: 30px;
-            right: 20px;
-            grid-template-areas: ". up ." "left . right" ". down .";
-            gap: 8px;
-            z-index: 300;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            border-radius: 15px;
-            backdrop-filter: blur(5px);
-        }
-
-        /* Show only on touch devices/small screens */
-        @media (max-width: 1024px) {
-            .controller { display: grid; }
-        }
-
-        .d-pad {
-            width: 60px; height: 60px; background: #222;
-            border: 3px solid #444; color: #fff;
+        #target {
+            position: absolute; width: 50px; height: 50px;
+            background: var(--accent); border-radius: 4px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; border-radius: 8px;
-            touch-action: manipulation; user-select: none;
+            font-size: 20px; cursor: pointer; transition: transform 0.1s;
+            box-shadow: 0 0 15px var(--accent);
         }
-
-        .d-pad:active { background: #00e436; color: #000; }
-        .up { grid-area: up; } .left { grid-area: left; } .right { grid-area: right; } .down { grid-area: down; }
-
-        .overlay {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.95);
-            display: flex; flex-direction: column; justify-content: center;
-            align-items: center; z-index: 200; padding: 20px;
-        }
-
-        .start-btn {
-            background: #00e436; color: #000; border: none;
-            padding: 25px 40px; font-family: inherit;
-            font-size: 1.2rem; cursor: pointer;
+        .stats { margin-top: 15px; font-weight: bold; }
+        .btn-retry {
+            margin-top: 20px; padding: 12px 30px; 
+            background: var(--text); color: var(--bg);
+            border: none; border-radius: 25px; font-weight: bold;
+            text-transform: uppercase; cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-<div class="respawn-banner">⚡ WIFI RESPAWNING... ⚡</div>
-<div class="score-box">XP:<span id="scoreVal">000</span></div>
+    <h1>📡 404: Internet Nomaded</h1>
+    <p>Your Wi-Fi went to "find itself." While you wait for its spiritual return, try to catch this annoying square.</p>
 
-<canvas id="snakeGame"></canvas>
+    <div id="game-container">
+        <div id="target">🤡</div>
+    </div>
 
-<div id="overlay" class="overlay">
-    <h1 style="color:#ff004d; font-size: 1.5rem;">SIGNAL LOST</h1>
-    <p style="font-size: 0.6rem; margin: 20px 0 30px; text-align: center;">WIFI MODEM IS ASLEEP.</p>
-    <button class="start-btn" onclick="startGame()">START RECOVERY</button>
-</div>
-
-<div class="controller">
-    <div class="d-pad up" ontouchstart="changeDir('ArrowUp')">▲</div>
-    <div class="d-pad left" ontouchstart="changeDir('ArrowLeft')">◀</div>
-    <div class="d-pad right" ontouchstart="changeDir('ArrowRight')">▶</div>
-    <div class="d-pad down" ontouchstart="changeDir('ArrowDown')">▼</div>
-</div>
-
-<script>
-    const canvas = document.getElementById('snakeGame');
-    const ctx = canvas.getContext('2d');
-    const scoreElement = document.getElementById('scoreVal');
-    const overlay = document.getElementById('overlay');
+    <div class="stats">SCORE: <span id="score">0</span></div>
     
-    const grid = 25; 
-    let score = 0, count = 0, gameActive = false;
-    let snake = { x: 0, y: 0, dx: grid, dy: 0, cells: [], maxCells: 5 };
-    let apple = { x: 0, y: 0 };
+    <button class="btn-retry" onclick="window.location.reload()">Check Connection</button>
 
-    function resize() {
-        canvas.width = Math.floor(window.innerWidth / grid) * grid;
-        canvas.height = Math.floor(window.innerHeight / grid) * grid;
-    }
-    window.addEventListener('resize', resize);
-    resize();
+    <script>
+        const container = document.getElementById('game-container');
+        const target = document.getElementById('target');
+        const scoreEl = document.getElementById('score');
+        let score = 0;
 
-    function placeApple() {
-        apple.x = Math.floor(Math.random() * (canvas.width / grid)) * grid;
-        apple.y = Math.floor(Math.random() * (canvas.height / grid)) * grid;
-    }
-
-    function startGame() {
-        score = 0; scoreElement.innerHTML = "000";
-        snake = { x: grid * 4, y: grid * 4, dx: grid, dy: 0, cells: [], maxCells: 5 };
-        placeApple();
-        overlay.style.display = 'none';
-        gameActive = true;
-        requestAnimationFrame(loop);
-    }
-
-    function changeDir(key) {
-        if (key === 'ArrowLeft' && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
-        else if (key === 'ArrowUp' && snake.dy === 0) { snake.dy = -grid; snake.dx = 0; }
-        else if (key === 'ArrowRight' && snake.dx === 0) { snake.dx = grid; snake.dy = 0; }
-        else if (key === 'ArrowDown' && snake.dy === 0) { snake.dy = grid; snake.dx = 0; }
-    }
-
-    window.addEventListener("keydown", (e) => {
-        if(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-            e.preventDefault();
-            changeDir(e.key);
+        function moveTarget() {
+            const maxX = container.clientWidth - target.clientWidth;
+            const maxY = container.clientHeight - target.clientHeight;
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            target.style.left = randomX + 'px';
+            target.style.top = randomY + 'px';
         }
-    });
 
-    function loop() {
-        if (!gameActive) return;
-        requestAnimationFrame(loop);
-        if (++count < 8) return; 
-        count = 0;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        snake.x += snake.dx; snake.y += snake.dy;
-
-        if (snake.x < 0) snake.x = canvas.width - grid;
-        else if (snake.x >= canvas.width) snake.x = 0;
-        if (snake.y < 0) snake.y = canvas.height - grid;
-        else if (snake.y >= canvas.height) snake.y = 0;
-
-        snake.cells.unshift({x: snake.x, y: snake.y});
-        if (snake.cells.length > snake.maxCells) snake.cells.pop();
-
-        ctx.fillStyle = '#ff004d';
-        ctx.fillRect(apple.x, apple.y, grid-2, grid-2);
-
-        ctx.fillStyle = '#00e436';
-        snake.cells.forEach((cell, index) => {
-            ctx.fillRect(cell.x, cell.y, grid-2, grid-2);
-            if (cell.x === apple.x && cell.y === apple.y) {
-                snake.maxCells++; score += 10;
-                scoreElement.innerHTML = score.toString().padStart(3, '0');
-                placeApple();
-            }
-            for (let i = index + 1; i < snake.cells.length; i++) {
-                if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
-                    gameActive = false;
-                    overlay.style.display = 'flex';
-                }
-            }
+        // Touch/Click event
+        target.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Prevents ghost clicks on mobile
+            catchSquare();
         });
-    }
+        target.addEventListener('mousedown', catchSquare);
 
-    window.addEventListener('online', () => window.location.reload());
-</script>
+        function catchSquare() {
+            score++;
+            scoreEl.innerText = score;
+            target.style.transform = "scale(0.8)";
+            setTimeout(() => {
+                target.style.transform = "scale(1)";
+                moveTarget();
+            }, 100);
+        }
+
+        // Move target every 1.5 seconds if not caught
+        setInterval(() => {
+            if (Math.random() > 0.7) moveTarget(); 
+        }, 1500);
+
+        // Initial position
+        moveTarget();
+
+        // Auto-reconnect detector
+        window.addEventListener('online', () => {
+            document.body.innerHTML = "<h1>SHE'S ALIVE!</h1><p>Reconnecting you to civilization...</p>";
+            setTimeout(() => window.location.reload(), 1500);
+        });
+    </script>
 </body>
 </html>
