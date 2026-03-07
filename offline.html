@@ -99,5 +99,38 @@
             setTimeout(() => window.location.reload(), 1500);
         });
     </script>
+    <script>
+        // 1. Load the existing score (if any) when the page opens
+let currentScore = parseInt(localStorage.getItem('offlineScore')) || 0;
+
+// 2. Call this whenever the player scores points in your game
+function updateScore(points) {
+    currentScore += points;
+    localStorage.setItem('offlineScore', currentScore); // Persistent save
+    
+    // Update your UI element here
+    const display = document.getElementById('score-display');
+    if (display) display.innerText = currentScore;
+}
+
+// 3. The "Reset" trigger
+// This runs if the connection comes back while the page is open
+window.addEventListener('online', () => {
+    resetOfflineData();
+});
+
+// Also check on page load: if we are online right now, clear it
+if (navigator.onLine) {
+    resetOfflineData();
+}
+
+function resetOfflineData() {
+    currentScore = 0;
+    localStorage.removeItem('offlineScore');
+    console.log("Online: Offline score has been reset.");
+}
+
+    </script>
+
 </body>
 </html>
