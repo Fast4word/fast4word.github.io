@@ -1,5 +1,4 @@
-const CACHE_NAME = 'playzone-v2';
-const GAMES_CACHE = 'games-cache-v1';
+const CACHE_NAME = 'playzone-v3';
 const OFFLINE_URL = '/offline.html';
 
 // Core app files to cache for PWA
@@ -7,19 +6,15 @@ const CORE_CACHE = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/games.json'
+  '/games.json',
+  OFFLINE_URL
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    Promise.all([
-      // Cache core app files
-      caches.open(CACHE_NAME).then((cache) => {
-        return cache.addAll(CORE_CACHE.map(url => new Request(url, { cache: 'reload' })));
-      }),
-      // Create games cache
-      caches.open(GAMES_CACHE)
-    ])
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(CORE_CACHE.map(url => new Request(url, { cache: 'reload' })));
+    })
   );
   self.skipWaiting();
 });
@@ -29,8 +24,8 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
-          // Keep current caches, delete old ones
-          if (key !== CACHE_NAME && key !== GAMES_CACHE) {
+          // Delete old caches
+          if (key !== CACHE_NAME) {
             return caches.delete(key);
           }
         })
@@ -44,7 +39,7 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Handle navigation requests
+  // Handle navigation requests (page loads)
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
@@ -59,139 +54,57 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(async () => {
-          // Try cache first
-          const cachedResponse = await caches.match(request);
-          if (cachedResponse) {
-            return cachedResponse;
+          // No internet - show offline page
+          const offlinePage = await caches.match(OFFLINE_URL);
+          if (offlinePage) {
+            return offlinePage;
           }
           
-          // Check if we're in standalone/PWA mode by checking if there are any clients
-          const allClients = await clients.matchAll({ type: 'window' });
-          const isStandalone = allClients.length > 0 && (
-            allClients[0].url.includes('?standalone') ||
-            self.registration.scope.includes('standalone')
+          // Fallback if offline page not cached
+          return new Response(
+            `<!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Offline</title>
+              <style>
+                body {
+                  background: linear-gradient(180deg, #0b0f1a, #0e1330);
+                  color: #fff;
+                  font-family: 'Outfit', system-ui, sans-serif;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  height: 100vh;
+                  margin: 0;
+                  text-align: center;
+                  padding: 20px;
+                }
+                .icon { font-size: 80px; margin-bottom: 20px; }
+                h1 { color: #ff5c5c; margin: 0 0 10px; }
+                p { color: #9aa3c7; }
+              </style>
+            </head>
+            <body>
+              <div>
+                <div class="icon">📡</div>
+                <h1>You're Offline</h1>
+                <p>Check your internet connection and try again.</p>
+              </div>
+            </body>
+            </html>`,
+            { 
+              status: 503,
+              headers: { 'Content-Type': 'text/html' }
+            }
           );
-          
-          // In PWA mode, show main app; in browser mode, show offline page
-          const fallbackPage = isStandalone ? '/index.html' : OFFLINE_URL;
-          return caches.match(fallbackPage);
         })
     );
     return;
   }
 
-  // Handle game metadata requests
-  if (request.url.includes('game-meta-')) {
-    event.respondWith(
-      caches.match(request).then(response => response || fetch(request))
-    );
-    return;
-  }
-
-  // Handle game iframe requests (for downloaded games)
-  if (request.url.includes('gamepix.com') || request.url.includes('playgama.com')) {
-    event.respondWith(
-      caches.match(request)
-        .then(cachedResponse => {
-          if (cachedResponse) {
-            // Return cached version
-            return cachedResponse;
-          }
-          
-          // Try to fetch from network
-          return fetch(request).then(response => {
-            // Don't cache on-the-fly unless it's a deliberate download
-            return response;
-          }).catch(async () => {
-            // If offline and not cached, return error page
-            return new Response(
-              `<!DOCTYPE html>
-              <html>
-              <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <style>
-                  body {
-                    background: linear-gradient(180deg, #0b0f1a, #0e1330);
-                    color: #fff;
-                    font-family: system-ui, -apple-system, sans-serif;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    height: 100vh;
-                    margin: 0;
-                    text-align: center;
-                    padding: 20px;
-                  }
-                  .container {
-                    max-width: 400px;
-                  }
-                  h1 {
-                    color: #ff5c5c;
-                    font-size: 1.5rem;
-                    margin-bottom: 1rem;
-                  }
-                  p {
-                    color: #9aa3c7;
-                    line-height: 1.6;
-                  }
-                  .icon {
-                    font-size: 4rem;
-                    margin-bottom: 1rem;
-                  }
-                </style>
-              </head>
-              <body>
-                <div class="container">
-                  <div class="icon">⚠️</div>
-                  <h1>Game Not Available Offline</h1>
-                  <p>This game hasn't been downloaded yet.</p>
-                  <p>Connect to the internet and use the download button to play offline.</p>
-                </div>
-              </body>
-              </html>`,
-              { 
-                status: 503,
-                headers: { 'Content-Type': 'text/html' }
-              }
-            );
-          });
-        })
-    );
-    return;
-  }
-
-  // Handle game assets (JS, CSS, images from game servers)
-  if (request.url.match(/\.(js|css|woff2?|ttf|eot)$/i) && 
-      (request.url.includes('gamepix.com') || request.url.includes('playgama.com') || 
-       request.url.includes('googleapis.com') || request.url.includes('gstatic.com'))) {
-    event.respondWith(
-      caches.match(request)
-        .then(cachedResponse => {
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          return fetch(request).catch(() => {
-            // Return empty response for missing assets
-            const ext = request.url.split('.').pop().toLowerCase();
-            const contentTypes = {
-              'js': 'application/javascript',
-              'css': 'text/css',
-              'woff': 'font/woff',
-              'woff2': 'font/woff2',
-              'ttf': 'font/ttf',
-              'eot': 'application/vnd.ms-fontobject'
-            };
-            return new Response('', {
-              headers: { 'Content-Type': contentTypes[ext] || 'text/plain' }
-            });
-          });
-        })
-    );
-    return;
-  }
-
-  // Handle API requests (games.json)
+  // Handle games.json API request
   if (request.url.includes('games.json')) {
     event.respondWith(
       fetch(request)
@@ -205,8 +118,13 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(async () => {
+          // Try cache first
           const cached = await caches.match(request);
-          return cached || new Response('[]', {
+          if (cached) {
+            return cached;
+          }
+          // Return empty array if not cached
+          return new Response('[]', {
             headers: { 'Content-Type': 'application/json' }
           });
         })
@@ -214,15 +132,15 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Handle static assets (images, icons, etc.)
-  if (request.url.includes('/icons/') || request.url.match(/\.(png|jpg|jpeg|svg|gif|webp)$/)) {
+  // Handle static assets (images, icons, fonts)
+  if (request.url.includes('/icons/') || request.url.match(/\.(png|jpg|jpeg|svg|gif|webp|woff2?|ttf|eot)$/)) {
     event.respondWith(
       caches.match(request)
         .then(cachedResponse => {
           if (cachedResponse) {
             return cachedResponse;
           }
-          return fetch(request, { mode: 'cors' }).then(response => {
+          return fetch(request).then(response => {
             if (response.ok) {
               const responseClone = response.clone();
               caches.open(CACHE_NAME).then(cache => {
@@ -230,21 +148,16 @@ self.addEventListener('fetch', (event) => {
               });
             }
             return response;
-          }).catch(async () => {
-            // Try with no-cors as fallback
-            try {
-              const noCorsResponse = await fetch(request, { mode: 'no-cors' });
-              caches.open(CACHE_NAME).then(cache => {
-                cache.put(request, noCorsResponse.clone());
-              });
-              return noCorsResponse;
-            } catch (e) {
-              // Return a placeholder image if offline and not cached
+          }).catch(() => {
+            // Return placeholder for images if offline
+            if (request.url.match(/\.(png|jpg|jpeg|svg|gif|webp)$/)) {
               return new Response(
                 `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="#1a1f3a" width="100" height="100"/><text x="50" y="50" text-anchor="middle" dy=".3em" fill="#9aa3c7" font-size="14">?</text></svg>`,
                 { headers: { 'Content-Type': 'image/svg+xml' } }
               );
             }
+            // Return empty response for fonts
+            return new Response('', { status: 200 });
           });
         })
     );
@@ -264,7 +177,8 @@ self.addEventListener('fetch', (event) => {
         return response;
       })
       .catch(async () => {
-        return caches.match(request);
+        const cached = await caches.match(request);
+        return cached || new Response('Not found', { status: 404 });
       })
   );
 });
