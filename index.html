@@ -13,11 +13,8 @@
     <meta name="description" content="Best unblocked online games for free at Dunah Playzone! Play now top web and mobile games like Deadly Descent, Ball Burst, Stickman Clicker, and Hazmob FPS!">
     <meta name="keywords" content="games, fast4word, dunah, playzone, free, browser, gaming, unblocked, web, mobile">
     <meta name="robots" content="index, follow">
-    <meta name="theme-color" content="#0b0f1a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <!-- Open Graph Tags -->
+    <!-- Open Graph Tags (for social media) -->
     <meta property="og:title" content="Dunah Playzone - Play free online games unblocked!">
     <meta property="og:description" content="Best unblocked online games for free at Dunah Playzone! Play now top web and mobile games like Deadly Descent, Ball Burst, Stickman Clicker, and Hazmob FPS!">
     <meta property="og:image" content="https://fast4word.github.io/og-image.png">
@@ -25,9 +22,6 @@
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://fast4word.github.io">
-    
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" href="/icons/icon-192.png">
 </head>
 
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,
@@ -45,7 +39,6 @@
   --text: #fff;
   --muted: #9aa3c7;
   --fav: #ff5c5c;
-  --download: #4a9eff;
 }
 
 * {
@@ -57,7 +50,6 @@ body {
   margin: 0;
   background: linear-gradient(180deg, #0b0f1a, #0e1330);
   color: var(--text);
-  overflow-x: hidden;
 }
 
 /* Header */
@@ -70,15 +62,10 @@ header {
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 .menu-btn, .search-btn {
   font-size: 22px;
   cursor: pointer;
-  transition: transform 0.2s;
-}
-.menu-btn:active, .search-btn:active {
-  transform: scale(0.9);
 }
 header h1 {
   margin: 0;
@@ -90,11 +77,6 @@ header h1 {
 .search-wrap {
   display: none;
   padding: 12px;
-  animation: slideDown 0.3s ease;
-}
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 .search-wrap.active {
   display: block;
@@ -104,12 +86,6 @@ header h1 {
   padding: 12px;
   border-radius: 12px;
   border: none;
-  background: var(--panel);
-  color: var(--text);
-  font-size: 16px;
-}
-.search-wrap input::placeholder {
-  color: var(--muted);
 }
 
 /* Sidebar */
@@ -123,9 +99,8 @@ aside {
   padding: 18px;
   overflow-y: auto;
   transform: translateX(-100%);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: .25s;
   z-index: 50;
-  box-shadow: 2px 0 20px rgba(0,0,0,0.5);
 }
 aside.active {
   transform: translateX(0);
@@ -136,15 +111,9 @@ aside.active {
   background: rgba(0, 0, 0, .6);
   display: none;
   z-index: 45;
-  backdrop-filter: blur(2px);
 }
 .backdrop.active {
   display: block;
-  animation: fadeIn 0.3s;
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 .genre {
   padding: 12px;
@@ -152,32 +121,10 @@ aside.active {
   margin-bottom: 6px;
   cursor: pointer;
   color: var(--muted);
-  transition: all 0.2s;
 }
 .genre.active, .genre:hover {
   background: var(--panel);
   color: var(--accent);
-  transform: translateX(4px);
-}
-
-/* Connection Status */
-.connection-status {
-  padding: 8px 12px;
-  margin: 12px 0;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  text-align: center;
-  display: none;
-}
-.connection-status.offline {
-  background: rgba(255, 92, 92, 0.2);
-  color: var(--fav);
-  display: block;
-}
-.connection-status.online {
-  background: rgba(108, 242, 194, 0.2);
-  color: var(--accent);
-  display: block;
 }
 
 /* Sections */
@@ -186,12 +133,6 @@ aside.active {
 }
 .section h2 {
   margin: 0 0 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.section-icon {
-  font-size: 1.3rem;
 }
 
 /* Grid */
@@ -218,17 +159,11 @@ aside.active {
   overflow: hidden;
   cursor: pointer;
   position: relative;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(108, 242, 194, 0.2);
 }
 .thumb {
   width: 100%;
   height: 140px;
   object-fit: cover;
-  background: linear-gradient(135deg, #1a1f3a, #2a2f4a);
 }
 .card-body {
   padding: 10px;
@@ -237,28 +172,12 @@ aside.active {
   font-weight: 600;
   font-size: .95rem;
 }
-.card-badges {
-  display: flex;
-  gap: 4px;
-  margin-top: 6px;
-}
-.badge {
-  font-size: 0.7rem;
-  padding: 2px 6px;
-  border-radius: 4px;
-  background: rgba(108, 242, 194, 0.15);
-  color: var(--accent);
-}
 
-/* Action Buttons */
-.card-actions {
+/* Favourite */
+.fav-btn {
   position: absolute;
   top: 8px;
   right: 8px;
-  display: flex;
-  gap: 6px;
-}
-.action-btn {
   width: 34px;
   height: 34px;
   border-radius: 50%;
@@ -268,48 +187,13 @@ aside.active {
   justify-content: center;
   font-size: 18px;
   color: #ccc;
-  transition: all 0.2s;
-  backdrop-filter: blur(5px);
-}
-.action-btn:active {
-  transform: scale(0.9);
+  transition: .15s;
 }
 .fav-btn.active {
-  background: rgba(255, 92, 92, .25);
+  background: rgba(255, 92, 92, .15);
   color: var(--fav);
   box-shadow: 0 0 10px rgba(255, 92, 92, .7);
-}
-.download-btn.active {
-  background: rgba(74, 158, 255, .25);
-  color: var(--download);
-  box-shadow: 0 0 10px rgba(74, 158, 255, .7);
-}
-.download-btn.downloading {
-  animation: pulse 1.5s infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-/* Empty State */
-.empty-state {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--muted);
-}
-.empty-state-icon {
-  font-size: 4rem;
-  margin-bottom: 16px;
-  opacity: 0.5;
-}
-.empty-state h3 {
-  margin: 0 0 8px;
-  color: var(--text);
-}
-.empty-state p {
-  margin: 0;
-  font-size: 0.9rem;
+  transform: scale(1.15);
 }
 
 /* Game View */
@@ -319,29 +203,11 @@ aside.active {
   background: #000;
   display: none;
   z-index: 100;
-  flex-direction: column;
 }
 #gameView iframe {
-  flex: 1;
   width: 100%;
+  height: 100%;
   border: none;
-}
-.game-header {
-  background: #0d1225;
-  padding: 12px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.back-btn {
-  font-size: 24px;
-  cursor: pointer;
-  color: var(--accent);
-}
-.game-title {
-  flex: 1;
-  font-size: 1rem;
-  font-weight: 600;
 }
 
 /* Bottom Nav */
@@ -356,7 +222,6 @@ aside.active {
   justify-content: space-around;
   align-items: center;
   z-index: 40;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
 }
 .bottom-nav button {
   background: none;
@@ -366,20 +231,12 @@ aside.active {
   flex-direction: column;
   align-items: center;
   font-size: .7rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  padding: 8px 16px;
 }
 .bottom-nav button span {
   font-size: 22px;
-  margin-bottom: 4px;
 }
 .bottom-nav button.active {
   color: var(--accent);
-  transform: scale(1.05);
-}
-.bottom-nav button:active {
-  transform: scale(0.95);
 }
 
 .page {
@@ -395,10 +252,6 @@ body.playing .backdrop {
   display: none;
 }
 
-body.playing #gameView {
-  display: flex;
-}
-
 /* Adblock overlay */
 #adblockOverlay {
   position: fixed;
@@ -411,40 +264,6 @@ body.playing #gameView {
   justify-content: center;
   text-align: center;
   padding: 24px;
-}
-
-/* Loading indicator */
-.loading {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(108, 242, 194, 0.3);
-  border-radius: 50%;
-  border-top-color: var(--accent);
-  animation: spin 1s linear infinite;
-}
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Toast notifications */
-.toast {
-  position: fixed;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--panel);
-  color: var(--text);
-  padding: 12px 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-  z-index: 1001;
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-}
-.toast.show {
-  opacity: 1;
 }
 </style>
 </head>
@@ -464,26 +283,24 @@ body.playing #gameView {
 </header>
 
 <div class="search-wrap" id="searchWrap">
-  <input id="search" placeholder="Search games..." autocomplete="off">
+  <input id="search" placeholder="Search games...">
 </div>
 
 <div class="backdrop" id="backdrop" onclick="closeMenu()"></div>
 
 <aside id="sidebar">
-  <div class="connection-status" id="connectionStatus"></div>
   <div class="genre active" id="filterAll">All Games</div>
   <div class="genre" id="filterFav">⭐ Favourites</div>
-  <div class="genre" id="filterDownloaded">📥 Downloaded</div>
   <div id="genreList"></div>
 </aside>
 
 <div id="homeTab" class="page">
   <div class="section">
-    <h2><span class="section-icon">⭐</span>Featured</h2>
+    <h2>Featured</h2>
     <div class="grid" id="featuredGrid"></div>
   </div>
   <div class="section">
-    <h2><span class="section-icon">🎯</span>Recommended</h2>
+    <h2>Recommended</h2>
     <div class="grid" id="recommendedGrid"></div>
   </div>
 </div>
@@ -491,19 +308,10 @@ body.playing #gameView {
 <div id="gamesTab" class="page" style="display:none">
   <div class="section">
     <div class="grid" id="grid"></div>
-    <div class="empty-state" id="emptyState" style="display:none">
-      <div class="empty-state-icon">📭</div>
-      <h3>No games found</h3>
-      <p>Try adjusting your search or filters</p>
-    </div>
   </div>
 </div>
 
 <div id="gameView">
-  <div class="game-header">
-    <div class="back-btn" onclick="closeGame()">←</div>
-    <div class="game-title" id="currentGameTitle"></div>
-  </div>
   <iframe id="gameFrame" allow="autoplay; payment; fullscreen"></iframe>
 </div>
 
@@ -511,10 +319,7 @@ body.playing #gameView {
   <button onclick="setTab('games')"><span>🎮</span>Games</button>
   <button class="active" onclick="setTab('home')"><span>🏠</span>Home</button>
   <button onclick="setTab('fav')"><span>❤️</span>Favourites</button>
-  <button onclick="setTab('downloaded')"><span>📥</span>Downloaded</button>
 </div>
-
-<div id="toast" class="toast"></div>
 
 <!-- Adblock overlay -->
 <div id="adblockOverlay">
@@ -548,7 +353,6 @@ history.replaceState(null, "");
 const featuredGrid = document.getElementById("featuredGrid");
 const recommendedGrid = document.getElementById("recommendedGrid");
 const grid = document.getElementById("grid");
-const emptyState = document.getElementById("emptyState");
 const sidebar = document.getElementById("sidebar");
 const backdrop = document.getElementById("backdrop");
 const genreList = document.getElementById("genreList");
@@ -556,43 +360,15 @@ const search = document.getElementById("search");
 const searchWrap = document.getElementById("searchWrap");
 const gameView = document.getElementById("gameView");
 const gameFrame = document.getElementById("gameFrame");
-const currentGameTitle = document.getElementById("currentGameTitle");
 const adblockOverlay = document.getElementById("adblockOverlay");
-const connectionStatus = document.getElementById("connectionStatus");
-const toast = document.getElementById("toast");
 
 let games = [];
 let favourites = JSON.parse(localStorage.getItem("favourites") || "[]");
-let downloaded = JSON.parse(localStorage.getItem("downloaded") || "[]");
 let genrePlays = JSON.parse(localStorage.getItem("genrePlays") || "{}");
 let allowedGenres = [];
 let tab = "home";
 let activeGenre = "all";
 let adBlocked = false;
-let isOnline = navigator.onLine;
-let isPWA = window.matchMedia('(display-mode: standalone)').matches || 
-             window.navigator.standalone === true;
-
-/* Connection Status */
-function updateConnectionStatus() {
-  isOnline = navigator.onLine;
-  connectionStatus.className = 'connection-status ' + (isOnline ? 'online' : 'offline');
-  connectionStatus.textContent = isOnline ? '🟢 Online' : '🔴 Offline Mode';
-  render();
-}
-
-window.addEventListener('online', updateConnectionStatus);
-window.addEventListener('offline', updateConnectionStatus);
-updateConnectionStatus();
-
-/* Toast Notifications */
-function showToast(message, duration = 3000) {
-  toast.textContent = message;
-  toast.classList.add('show');
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, duration);
-}
 
 /* Adblock detect */
 function detectAdBlock() {
@@ -604,35 +380,15 @@ function detectAdBlock() {
 window.addEventListener("load", () => setTimeout(detectAdBlock, 300));
 
 /* UI */
-function toggleSearch() { 
-  searchWrap.classList.toggle("active"); 
-  if (searchWrap.classList.contains("active")) {
-    search.focus();
-  }
-}
-function openMenu() { 
-  sidebar.classList.add("active"); 
-  backdrop.classList.add("active"); 
-}
-function closeMenu() { 
-  sidebar.classList.remove("active"); 
-  backdrop.classList.remove("active"); 
-}
+function toggleSearch() { searchWrap.classList.toggle("active"); }
+function openMenu() { sidebar.classList.add("active"); backdrop.classList.add("active"); }
+function closeMenu() { sidebar.classList.remove("active"); backdrop.classList.remove("active"); }
 
 /* Tabs */
 function setTab(t) {
   tab = t;
-  
-  // Handle downloaded tab
-  if (t === 'downloaded') {
-    activeGenre = 'downloaded';
-    t = 'games';
-  }
-  
   document.querySelectorAll(".bottom-nav button").forEach(b => b.classList.remove("active"));
-  const btnIndex = activeGenre === 'downloaded' ? 4 : (t === "games" ? 1 : t === "home" ? 2 : 3);
-  document.querySelector(`.bottom-nav button:nth-child(${btnIndex})`).classList.add("active");
-  
+  document.querySelector(`.bottom-nav button:nth-child(${t === "games" ? 1 : t === "home" ? 2 : 3})`).classList.add("active");
   homeTab.style.display = t === "home" ? "block" : "none";
   gamesTab.style.display = t === "home" ? "none" : "block";
   render();
@@ -656,19 +412,13 @@ fetch("games.json").then(r => r.json()).then(data => {
 
   buildGenres();
   render();
-}).catch(err => {
-  console.error("Failed to load games:", err);
-  if (!isOnline) {
-    // Show only downloaded games when offline
-    activeGenre = 'downloaded';
-    setTab('downloaded');
-  }
 });
 
 /* Genres (top 10) */
 function buildGenres() {
   const c = {};
   games.forEach(g => (g.genres || []).forEach(x => {
+    // Exclude curated genres here
     if (!x.includes("curated") && !x.includes("_")) {
       c[x] = (c[x] || 0) + 1;
     }
@@ -686,7 +436,6 @@ function buildGenres() {
 
   filterAll.onclick = () => { activeGenre = "all"; setTab("games"); closeMenu(); };
   filterFav.onclick = () => { activeGenre = "favourites"; setTab("fav"); closeMenu(); };
-  filterDownloaded.onclick = () => { activeGenre = "downloaded"; setTab("downloaded"); closeMenu(); };
 }
 
 /* Featured */
@@ -710,94 +459,20 @@ function getRecommended() {
   return rec.slice(0, 6);
 }
 
-/* Download Game */
-async function toggleDownload(gameId, event) {
-  event.stopPropagation();
-  
-  if (!isOnline) {
-    showToast("❌ Must be online to download games");
-    return;
-  }
-  
-  const game = games.find(g => g.id === gameId);
-  if (!game) return;
-  
-  const isDownloaded = downloaded.includes(gameId);
-  
-  if (isDownloaded) {
-    // Remove from downloaded
-    downloaded = downloaded.filter(id => id !== gameId);
-    localStorage.setItem("downloaded", JSON.stringify(downloaded));
-    
-    // Remove from cache
-    try {
-      const cache = await caches.open('games-cache-v1');
-      await cache.delete(game.gameURL);
-      showToast("🗑️ Game removed from downloads");
-    } catch (err) {
-      console.error("Cache removal error:", err);
-    }
-  } else {
-    // Add to downloaded
-    const btn = event.target.closest('.download-btn');
-    btn.classList.add('downloading');
-    
-    try {
-      const cache = await caches.open('games-cache-v1');
-      await cache.add(game.gameURL);
-      
-      downloaded.push(gameId);
-      localStorage.setItem("downloaded", JSON.stringify(downloaded));
-      showToast("✅ Game downloaded for offline play");
-    } catch (err) {
-      console.error("Cache error:", err);
-      showToast("❌ Download failed");
-    } finally {
-      btn.classList.remove('downloading');
-    }
-  }
-  
-  render();
-}
-
 /* Render */
 function renderCards(list, el) {
   el.innerHTML = "";
-  
-  if (list.length === 0) {
-    emptyState.style.display = "block";
-    return;
-  }
-  
-  emptyState.style.display = "none";
-  
   list.forEach(g => {
     const fav = favourites.includes(g.id);
-    const isDownloaded = downloaded.includes(g.id);
     const c = document.createElement("div");
     c.className = "card";
-    
-    const badges = [];
-    if (isDownloaded) badges.push('<span class="badge">📥 Offline</span>');
-    
     c.innerHTML = `
-      <div class="card-actions">
-        ${isOnline ? `
-          <div class="action-btn download-btn ${isDownloaded ? "active" : ""}"
-            onclick="toggleDownload('${g.id}', event)">
-            ${isDownloaded ? "✓" : "⬇"}
-          </div>
-        ` : ''}
-        <div class="action-btn fav-btn ${fav ? "active" : ""}"
-          onclick="toggleFavourite('${g.id}', event)">
-          ${fav ? "❤️" : "🤍"}
-        </div>
+      <div class="fav-btn ${fav ? "active" : ""}"
+        onclick="event.stopPropagation(); toggleFavourite('${g.id}')">
+        ${fav ? "❤️" : "🤍"}
       </div>
-      <img class="thumb" src="${g.images?.[0] || ""}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect fill=%22%231a1f3a%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2250%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%239aa3c7%22 font-size=%2214%22%3E${g.title.charAt(0)}%3C/text%3E%3C/svg%3E'">
-      <div class="card-body">
-        <div class="card-title">${g.title}</div>
-        ${badges.length > 0 ? `<div class="card-badges">${badges.join('')}</div>` : ''}
-      </div>`;
+      <img class="thumb" src="${g.images?.[0] || ""}">
+      <div class="card-body"><div class="card-title">${g.title}</div></div>`;
     c.onclick = () => openGame(g);
     el.appendChild(c);
   });
@@ -805,28 +480,20 @@ function renderCards(list, el) {
 
 function render() {
   const q = search.value.toLowerCase();
-  
   if (tab === "home") {
     renderCards(getFeatured(), featuredGrid);
     renderCards(getRecommended().filter(g => g.title.toLowerCase().includes(q)), recommendedGrid);
   } else {
     let list = games.filter(g => g.title.toLowerCase().includes(q));
-    
-    if (tab === "fav" || activeGenre === "favourites") {
-      list = list.filter(g => favourites.includes(g.id));
-    } else if (activeGenre === "downloaded") {
-      list = list.filter(g => downloaded.includes(g.id));
-    } else if (activeGenre !== "all") {
+    if (tab === "fav") list = list.filter(g => favourites.includes(g.id));
+    if (activeGenre !== "all" && activeGenre !== "favourites")
       list = list.filter(g => g.genres?.includes(activeGenre));
-    }
-    
     renderCards(list, grid);
   }
 }
 
 /* Favourites */
-function toggleFavourite(id, event) {
-  event.stopPropagation();
+function toggleFavourite(id) {
   favourites = favourites.includes(id)
     ? favourites.filter(x => x !== id)
     : [...favourites, id];
@@ -834,18 +501,9 @@ function toggleFavourite(id, event) {
   render();
 }
 
-/* Game open */
+/* Game open (GATED) */
 function openGame(game) {
-  const isDownloaded = downloaded.includes(game.id);
-  
-  // Check if offline and game not downloaded
-  if (!isOnline && !isDownloaded) {
-    showToast("❌ This game requires an internet connection");
-    return;
-  }
-  
-  // Check adblock only when online
-  if (isOnline && adBlocked) {
+  if (adBlocked) {
     adblockOverlay.style.display = "flex";
     return;
   }
@@ -857,47 +515,30 @@ function openGame(game) {
   localStorage.setItem("genrePlays", JSON.stringify(genrePlays));
 
   gameFrame.src = game.gameURL;
-  currentGameTitle.textContent = game.title;
-  gameView.style.display = "flex";
+  gameView.style.display = "block";
   document.body.classList.add("playing");
   history.pushState(null, "");
 }
 
-function closeGame() {
-  document.body.classList.remove("playing");
-  gameView.style.display = "none";
-  gameFrame.src = "";
-  history.back();
-}
-
 window.addEventListener("popstate", () => {
   if (document.body.classList.contains("playing")) {
-    closeGame();
+    document.body.classList.remove("playing");
+    gameView.style.display = "none";
+    gameFrame.src = "";
   }
 });
 
 search.oninput = render;
-
-// Service Worker Registration
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(reg => {
-        console.log('Service Worker Registered!');
-        
-        // Check for updates
-        reg.addEventListener('updatefound', () => {
-          const newWorker = reg.installing;
-          newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              showToast('🔄 Update available! Refresh to update.', 5000);
-            }
-          });
-        });
-      })
-      .catch(err => console.log('SW Registration Failed:', err));
-  });
-}
+</script>
+<script>
+  // Check if the browser supports Service Workers
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('Service Worker Registered!'))
+        .catch(err => console.log('Registration Failed: ', err));
+    });
+  }
 </script>
 </body>
 </html>
