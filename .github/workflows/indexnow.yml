@@ -1,19 +1,126 @@
-name: IndexNow Submission
+name: IndexNow Submission 
 
 on:
   push:
     branches: ["main"]
 
 jobs:
-  submit-indexnow:
+  indexnow:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
 
-      - name: Submit URLs to IndexNow
+      - name: Get changed files with status
+        id: changes
+        run: |
+          git diff --name-status HEAD^ HEAD > changes.txt
+          echo "CHANGES=$(cat changes.txt | tr '\n' '|')" >> $GITHUB_OUTPUT
+
+      - name: Build URL list with permalink + deletion detection
+        id: urls
+        run: |
+          BASE="https://fast4word.github.io"
+          URLS=""
+
+          IFS='|' read -ra LINES <<< "${{ steps.changes.outputs.CHANGES }}"
+          for LINE in "${LINES[@]}"; do
+            STATUS=$(echo "$LINE" | awk '{print $1}')
+            OLD=$(echo "$LINE" | awk '{print $2}')
+            NEW=$(echo "$LINE" | awk '{print $3}')
+
+            # Handle deleted files
+            if [[ "$STATUS" == "D" ]]; then
+              # Only process markdown or HTML content files
+              case "$OLD" in
+                *.md|*.html)
+                  ;;
+                *)
+                  continue
+                  ;;
+              esac
+
+              # Extract old permalink
+              OLD_PERMALINK=$(git show HEAD^:"$OLD" 2>/dev/null | sed -n '/^---/,/^---/p' | grep '^permalink:' | awk '{print $2}')
+
+              if [[ -n "$OLD_PERMALINK" ]]; then
+                URLS="$URLS $BASE$OLD_PERMALINK"
+              else
+                CLEAN="${OLD%index.md}"
+                CLEAN="${CLEAN%index.html}"
+                CLEAN="${CLEAN%.md}"
+                CLEAN="${CLEAN%.html}"
+                URLS="$URLS $BASE/$CLEAN"
+              fi
+
+              continue
+            fi
+
+            # Handle renamed/moved files
+            if [[ "$STATUS" == R* ]]; then
+              OLD_URL="$BASE/${OLD%.md}"
+              OLD_URL="${OLD_URL%.html}"
+              URLS="$URLS $OLD_URL"
+              FILE="$NEW"
+            else
+              FILE="$OLD"
+            fi
+
+            # Skip non-content files
+            case "$FILE" in
+              _layouts/*|_includes/*|_sass/*|assets/*|css/*|js/*|images/*|img/*)
+                continue
+                ;;
+              _site/*|sitemap.xml|feed.xml|robots.txt)
+                continue
+                ;;
+              _data/*.yml|_data/*.yaml|_data/*.json)
+                continue
+                ;;
+            esac
+
+            # Only process markdown or HTML content files
+            case "$FILE" in
+              *.md|*.html)
+                ;;
+              *)
+                continue
+                ;;
+            esac
+
+            # Extract old and new permalinks
+            OLD_PERMALINK=$(git show HEAD^:"$FILE" 2>/dev/null | sed -n '/^---/,/^---/p' | grep '^permalink:' | awk '{print $2}')
+            NEW_PERMALINK=$(git show HEAD:"$FILE" 2>/dev/null | sed -n '/^---/,/^---/p' | grep '^permalink:' | awk '{print $2}')
+
+            # If permalink changed, submit old URL
+            if [[ "$OLD_PERMALINK" != "$NEW_PERMALINK" ]]; then
+              if [[ -n "$OLD_PERMALINK" ]]; then
+                URLS="$URLS $BASE$OLD_PERMALINK"
+              fi
+            fi
+
+            # Build new URL
+            if [[ -n "$NEW_PERMALINK" ]]; then
+              URLS="$URLS $BASE$NEW_PERMALINK"
+            else
+              CLEAN="${FILE%index.md}"
+              CLEAN="${CLEAN%index.html}"
+              CLEAN="${CLEAN%.md}"
+              CLEAN="${CLEAN%.html}"
+              URLS="$URLS $BASE/$CLEAN"
+            fi
+
+          done
+
+          echo "URLS=$URLS" >> $GITHUB_OUTPUT
+
+      - name: Submit to IndexNow
         uses: bojieyang/indexnow-action@v2
         with:
-          sitemap-location: "https://fast4word.github.io/sitemap.xml"
           key: ${{ secrets.INDEXNOW_KEY }}
-          key-location: "https://fast4word.github.io/e35e81129843452c977be55750e60966.txt"
+          key-location: "https://fast4word.github.io/<your-key>.txt"
+          url-list: ${{ steps.urls.outputs.URLS }}
+          sitemap-location: "https://fast4word.github.io/sitemap.xml"
