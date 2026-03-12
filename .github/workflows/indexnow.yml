@@ -1,0 +1,19 @@
+name: IndexNow Submission
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  submit-indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Submit URLs to IndexNow
+        uses: bojieyang/indexnow-action@v2
+        with:
+          sitemap-location: "https://<username>.github.io/sitemap.xml"
+          key: ${{ secrets.INDEXNOW_KEY }}
+          key-location: "https://<username>.github.io/<your-key>.txt"
