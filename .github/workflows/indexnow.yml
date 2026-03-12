@@ -14,6 +14,6 @@ jobs:
       - name: Submit URLs to IndexNow
         uses: bojieyang/indexnow-action@v2
         with:
-          sitemap-location: "https://<username>.github.io/sitemap.xml"
+          sitemap-location: "https://fast4word.github.io/sitemap.xml"
           key: ${{ secrets.INDEXNOW_KEY }}
-          key-location: "https://<username>.github.io/<your-key>.txt"
+          key-location: "https://fast4word.github.io/e35e81129843452c977be55750e60966.txt"
