@@ -1,8 +1,8 @@
 {
-  "id": "dunah.playzone-pwa",
-  "name": "Dunah PlayZone",
-  "short_name": "PlayZone",
-  "start_url": "/",
+  "id": "dunah.playzone.apkpure",
+  "name": "Dunah Playzone",
+  "short_name": "Playzone",
+  "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
