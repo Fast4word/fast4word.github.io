@@ -720,13 +720,6 @@ fetch("games.json").then(r => r.json()).then(data => {
     genres: ["arcade", "mobile", "puzzle", "skill"],
     gameURL: "https://play.gamepix.com/ball-burst/embed?sid=1"
   });
-    
-  games.unshift({
-    id: "ball-burst",
-    title: "Ball Burst",
-    images: [""],
-    genres: ["arcade", "3d", "puzzle", "skill"],
-    gameURL: "https://itch.io/embed/3866759"
 
   buildGenres();
   render();
