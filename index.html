@@ -721,6 +721,14 @@ fetch("games.json").then(r => r.json()).then(data => {
     gameURL: "https://play.gamepix.com/ball-burst/embed?sid=1"
   });
 
+  games.unshift({
+    id: "flipcraft_dunah",
+    title: "FlipCraft",
+    images: ["https://img.gamepix.com/games/ball-burst/icon/ball-burst.png?w=105"],
+    genres: ["strategy", "mobile", "puzzle", "skill"],
+    gameURL: "flip-craft.page.gd"
+  });
+
   buildGenres();
   render();
 });
