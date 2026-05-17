@@ -1,0 +1,10 @@
+{
+  "appId": "",
+  "platforms": {},
+  "ads": {
+    "interstitial": {
+      "intervalInSeconds": 60
+    }
+  },
+  "payments": {}
+}

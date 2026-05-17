@@ -1,0 +1,10 @@
+{
+  "name": "FlipCraft: Daily Tile Puzzle",
+  "short_name": "FlipCraft",
+  "theme_color": "#2196f3",
+  "background_color": "#2196f3",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/"
+}
