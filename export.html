@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Move Your Save Data – Dunah PlayZone</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --panel: #151a2d;
+      --accent: #6cf2c2;
+      --accent-glow: rgba(108, 242, 194, 0.18);
+      --text: #fff;
+      --muted: #9aa3c7;
+      --border: rgba(154, 163, 199, 0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(108, 242, 194, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(108, 242, 194, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px 36px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+      animation: up 0.4s ease both;
+    }
+
+    @keyframes up {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .site-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent), #4ec9a0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.55;
+      margin-bottom: 28px;
+    }
+
+    .summary {
+      background: rgba(108, 242, 194, 0.05);
+      border: 1px solid rgba(108, 242, 194, 0.14);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    .summary-label { color: var(--muted); }
+    .summary-value { font-weight: 600; color: var(--accent); }
+
+    .no-data-msg {
+      text-align: center;
+      padding: 8px 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), #4ec9a0);
+      color: #0b0f1a;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 20px rgba(108, 242, 194, 0.25);
+    }
+
+    .btn:hover  { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(108, 242, 194, 0.35); }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .note {
+      margin-top: 16px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="site-name">Dunah PlayZone</div>
+  <h1>Move your save data to <em>the new site</em></h1>
+  <p class="subtitle">
+    Your favourites and game history are stored on this domain.
+    Click the button below to carry them over to the new Dunah PlayZone — it only takes a second.
+  </p>
+
+  <div class="summary" id="summary"></div>
+
+  <button class="btn" id="exportBtn" onclick="doExport()">Take me to the new site →</button>
+
+  <p class="note">Your data on this site won't be deleted — this just copies it across.</p>
+</div>
+
+<script>
+  // ── CONFIG ────────────────────────────────────────────────────────────────
+  // Update this to the new domain's import page URL once it's ready.
+  const NEW_IMPORT_URL = "https://dunah.pages.dev/import.html";
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const SAVE_KEYS = ["favourites", "genrePlays"];
+
+  function loadSaveData() {
+    const out = {};
+    SAVE_KEYS.forEach(function(k) {
+      try {
+        var raw = localStorage.getItem(k);
+        if (raw !== null) out[k] = JSON.parse(raw);
+      } catch (e) { /* skip malformed entries */ }
+    });
+    return out;
+  }
+
+  function buildSummary() {
+    var data = loadSaveData();
+    var summary = document.getElementById("summary");
+    var favs  = data.favourites;
+    var plays = data.genrePlays;
+    var hasFavs  = Array.isArray(favs) && favs.length > 0;
+    var hasPlays = plays && Object.keys(plays).length > 0;
+
+    if (!hasFavs && !hasPlays) {
+      summary.innerHTML = '<p class="no-data-msg">No save data found on this domain.</p>';
+      document.getElementById("exportBtn").disabled = true;
+      return;
+    }
+
+    var html = "";
+    if (hasFavs) {
+      html += '<div class="summary-row">'
+            + '<span class="summary-label">❤️ Favourite games</span>'
+            + '<span class="summary-value">' + favs.length + '</span>'
+            + '</div>';
+    }
+    if (hasPlays) {
+      var totalPlays = Object.values(plays).reduce(function(a, b) { return a + b; }, 0);
+      html += '<div class="summary-row">'
+            + '<span class="summary-label">🎮 Genre play history</span>'
+            + '<span class="summary-value">' + totalPlays + ' plays</span>'
+            + '</div>';
+    }
+    summary.innerHTML = html;
+  }
+
+  function doExport() {
+    var data = loadSaveData();
+
+    // Encode as base64 URL fragment — never touches a server, survives the redirect.
+    var payload = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+    window.location.href = NEW_IMPORT_URL + "#import=" + payload;
+  }
+
+  buildSummary();
+</script>
+
+</body>
+</html>
