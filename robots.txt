@@ -1,6 +1,2 @@
 User-agent: *
-Disallow: /robots.txt
-Disallow: /sitemap.xml
-Disallow: /sign-in.html
-
-Sitemap: https://fast4word.github.io/sitemap.xml
+Disallow: /
