@@ -1,6 +1,31 @@
-<! doctype html>
-<html>
-  <script>
-    window.location.href = "https://dunah-playzone.pages.dev";
-  </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to New Domain...</title>
+
+    <!-- 1. Hide old page from search results, but follow links to pass SEO ranking -->
+    <meta name="robots" content="noindex, follow" />
+
+    <!-- 2. Point Google to the official new URL -->
+    <link rel="canonical" href="https://dunah-playzone.pages.dev" />
+
+    <!-- 3. Instantly redirect browsers if JavaScript is disabled -->
+    <meta http-equiv="refresh" content="0;url=https://dunah-playzone.pages.dev" />
+
+    <!-- 4. Instantly redirect via JavaScript with full path and query string strings -->
+    <script type="text/javascript">
+        window.location.href = "https://dunah-playzone.pages.dev" + window.location.pathname + window.location.search;
+    </script>
+</head>
+<body>
+    <!-- Fallback content for users if automatic redirection takes a moment -->
+    <div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
+        <h2>We have moved!</h2>
+        <p>If you are not redirected automatically, 
+           <a href="https://dunah-playzone.pages.dev">click here to visit our new site</a>.
+        </p>
+    </div>
+</body>
 </html>
